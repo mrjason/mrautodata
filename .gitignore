@@ -1,0 +1,27 @@
+# It is not recommended to modify this file in your
+# local clone. Instead, use .git/info/exclude and add
+# new records there as needed.
+#
+# See gitignore(5) man page for more details
+#
+*~
+*.swp
+/.patches/
+/.idea/
+/nbproject/
+CVS
+.DS_Store
+/.settings/
+/.project
+/.buildpath
+/.cache
+/vendor
+/composer.phar
+/phpunit.xml
+/bin/*
+!/bin/auto*
+/data_auto_bash_cfg.sh
+/batches
+/src/Auto/Resources/Yaml/ConfigSites.yml
+/src/Auto/Resources/Yaml/ConfigUsers.yml
+/src/Auto/Resources/Yaml/ConfigEmailAdmins.yml

@@ -1,0 +1,24 @@
+server:
+  delay: 3
+  host: localhost
+  driver: selenium
+
+dirs:
+  file: "../files/"
+  log: "~/logs/selenium/"
+  download: "~/Downloads/selenium/"
+
+notifications:
+  verbose: 0
+  emaillogs: 0
+
+conduit:
+  token: "token"
+  enabled: 1
+
+mail:
+ host: "smtp.gmail.com"
+ port: 465
+ secure: "ssl"
+ username: ""
+ password: ""

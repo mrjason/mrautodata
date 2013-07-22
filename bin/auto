@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+require_once(dirname(__DIR__).'/bootstrap.php');
+
+use Auto\Console\Application;
+
+$application = new Application();
+
+$application->setCatchExceptions(false);
+$application->run();

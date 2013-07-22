@@ -1,0 +1,454 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \Auto\Activity\GlossaryActivity</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/Auto.html"><i class="icon-th"></i> Auto</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Activity.html"><i class="icon-folder-open"></i> Activity</a></li>
+<li><a href="../packages/Auto.html"><i class="icon-folder-open"></i> Auto</a></li>
+<li><a href="../packages/Command.html"><i class="icon-folder-open"></i> Command</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Helper.html"><i class="icon-folder-open"></i> Helper</a></li>
+<li><a href="../packages/Question.html"><i class="icon-folder-open"></i> Question</a></li>
+<li><a href="../packages/symfony.html"><i class="icon-folder-open"></i> symfony</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">81</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">12</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public inherited"><a href="#method___construct" title="__construct :: Consturctor for the class"><span class="description">Consturctor for the class</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method_access" title="access :: Access the activity based on the location that is being requested."><span class="description">Access the activity based on the location that is being requested.</span><pre>access()</pre></a></li>
+<li class="method public inherited"><a href="#method_complete" title="complete :: Mark the activity as completed or not completed by clicking on the activity completion icon if it exists."><span class="description">Mark the activity as completed or not completed by clicking on the activity completion icon if it exists.</span><pre>complete()</pre></a></li>
+<li class="method public inherited"><a href="#method_create" title="create :: Create the activity by filling out the activity create form."><span class="description">Create the activity by filling out the activity create form.</span><pre>create()</pre></a></li>
+<li class="method public inherited"><a href="#method_fillOutCreateForm" title="fillOutCreateForm :: Add values to the general fields in the create activity form."><span class="description">Add values to the general fields in the create activity form.</span><pre>fillOutCreateForm()</pre></a></li>
+<li class="method public inherited"><a href="#method_getCourseLink" title="getCourseLink :: Locate the link to the activity in the course."><span class="description">Locate the link to the activity in the course.</span><pre>getCourseLink()</pre></a></li>
+<li class="method public inherited"><a href="#method_getCssId" title="getCssId :: Returns the CSS id for the link to the activity in the course."><span class="description">Returns the CSS id for the link to the activity in the course.</span><pre>getCssId()</pre></a></li>
+<li class="method public inherited"><a href="#method_getId" title="getId :: Return the current id for the activity"><span class="description">Return the current id for the activity</span><pre>getId()</pre></a></li>
+<li class="method public inherited"><a href="#method_getNavLink" title="getNavLink :: Locate the activity link in the navigation bar."><span class="description">Locate the activity link in the navigation bar.</span><pre>getNavLink()</pre></a></li>
+<li class="method public inherited"><a href="#method_getTitle" title="getTitle :: Return the title of the activity"><span class="description">Return the title of the activity</span><pre>getTitle()</pre></a></li>
+<li class="method public inherited"><a href="#method_grade" title="grade :: Grade the activity."><span class="description">Grade the activity.</span><pre>grade()</pre></a></li>
+<li class="method public inherited"><a href="#method_interact" title="interact :: Interact with the activity, usually view and post."><span class="description">Interact with the activity, usually view and post.</span><pre>interact()</pre></a></li>
+<li class="method public "><a href="#method_post" title="post :: View the gloassary and then create a new entry based on a random word."><span class="description">View the gloassary and then create a new entry based on a random word.</span><pre>post()</pre></a></li>
+<li class="method public inherited"><a href="#method_setCssId" title="setCssId :: Set the CSS id for the link to the activity in the course."><span class="description">Set the CSS id for the link to the activity in the course.</span><pre>setCssId()</pre></a></li>
+<li class="method public inherited"><a href="#method_setId" title="setId :: Set the activity's id."><span class="description">Set the activity's id.</span><pre>setId()</pre></a></li>
+<li class="method public inherited"><a href="#method_setTitle" title="setTitle :: Set the title of the activity"><span class="description">Set the title of the activity</span><pre>setTitle()</pre></a></li>
+<li class="method public inherited"><a href="#method_view" title="view :: View the activity."><span class="description">View the activity.</span><pre>view()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="method protected inherited"><a href="#method_fillOutRequiredFields" title="fillOutRequiredFields :: Add values to the required field for the activity."><span class="description">Add values to the required field for the activity.</span><pre>fillOutRequiredFields()</pre></a></li></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected inherited"><a href="#property_c" title="$c :: "><span class="description">containing all variables for the session, page, log helper and content helper.</span><pre>$c</pre></a></li>
+<li class="property protected inherited"><a href="#property_cssid" title="$cssid :: "><span class="description">the value for the id attribute for the link in the course</span><pre>$cssid</pre></a></li>
+<li class="property protected inherited"><a href="#property_id" title="$id :: "><span class="description">the activity's id used int eh moodle database in in most links to the activity.</span><pre>$id</pre></a></li>
+<li class="property protected inherited"><a href="#property_title" title="$title :: "><span class="description">the title of the activity</span><pre>$title</pre></a></li>
+<li class="property protected "><a href="#property_type" title="$type :: "><span class="description">The activity type.</span><pre>$type</pre></a></li>
+<li class="property protected inherited"><a href="#property_url" title="$url :: "><span class="description">url to the activity</span><pre>$url</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Auto\Activity\GlossaryActivity"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Auto.html">Auto</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Auto.Activity.html">Activity</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Auto.Activity.GlossaryActivity.html">GlossaryActivity</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Glossary activity class</p>
+<div class="details">
+<div class="long_description"><p>With the base functions that a class will need.</p></div>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Consturctor for the class</h2>
+<pre>__construct($options) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::__construct()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4><p>mixed And array of variables that will be set for the activity.  Must include the Container c variable to work.  Array should be array('variable name'=> $value).</p>
+</div>
+</div></div>
+</div>
+<a id="method_access"></a><div class="element clickable method public method_access" data-toggle="collapse" data-target=".method_access .collapse">
+<h2>Access the activity based on the location that is being requested.</h2>
+<pre>access(string $type) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Locations are the course or the navigation bar.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::access()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_complete"></a><div class="element clickable method public method_complete" data-toggle="collapse" data-target=".method_complete .collapse">
+<h2>Mark the activity as completed or not completed by clicking on the activity completion icon if it exists.</h2>
+<pre>complete() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::complete()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_create"></a><div class="element clickable method public method_create" data-toggle="collapse" data-target=".method_create .collapse">
+<h2>Create the activity by filling out the activity create form.</h2>
+<pre>create() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::create()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_fillOutCreateForm"></a><div class="element clickable method public method_fillOutCreateForm" data-toggle="collapse" data-target=".method_fillOutCreateForm .collapse">
+<h2>Add values to the general fields in the create activity form.</h2>
+<pre>fillOutCreateForm() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::fillOutCreateForm()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_getCourseLink"></a><div class="element clickable method public method_getCourseLink" data-toggle="collapse" data-target=".method_getCourseLink .collapse">
+<h2>Locate the link to the activity in the course.</h2>
+<pre>getCourseLink() : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::getCourseLink()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Return the link object or false if the link doesn't exist on the page.</div>
+</div></div>
+</div>
+<a id="method_getCssId"></a><div class="element clickable method public method_getCssId" data-toggle="collapse" data-target=".method_getCssId .collapse">
+<h2>Returns the CSS id for the link to the activity in the course.</h2>
+<pre>getCssId() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::getCssId()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The id attribute for the course link to the activity</div>
+</div></div>
+</div>
+<a id="method_getId"></a><div class="element clickable method public method_getId" data-toggle="collapse" data-target=".method_getId .collapse">
+<h2>Return the current id for the activity</h2>
+<pre>getId() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::getId()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a id="method_getNavLink"></a><div class="element clickable method public method_getNavLink" data-toggle="collapse" data-target=".method_getNavLink .collapse">
+<h2>Locate the activity link in the navigation bar.</h2>
+<pre>getNavLink() : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::getNavLink()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code>Return the link object or false if the link can't be found.</div>
+</div></div>
+</div>
+<a id="method_getTitle"></a><div class="element clickable method public method_getTitle" data-toggle="collapse" data-target=".method_getTitle .collapse">
+<h2>Return the title of the activity</h2>
+<pre>getTitle() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::getTitle()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The title of the activity</div>
+</div></div>
+</div>
+<a id="method_grade"></a><div class="element clickable method public method_grade" data-toggle="collapse" data-target=".method_grade .collapse">
+<h2>Grade the activity.</h2>
+<pre>grade($grade) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This should be overridden by the activity.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::grade()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$grade</h4><p>The grade the student should receive</p></div>
+</div></div>
+</div>
+<a id="method_interact"></a><div class="element clickable method public method_interact" data-toggle="collapse" data-target=".method_interact .collapse">
+<h2>Interact with the activity, usually view and post.</h2>
+<pre>interact() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>THis should be overridden by the activity unless all that the activity needs is to be viewed.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::interact()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_post"></a><div class="element clickable method public method_post" data-toggle="collapse" data-target=".method_post .collapse">
+<h2>View the gloassary and then create a new entry based on a random word.</h2>
+<pre>post() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>This should be overridden by the activity unless all it needs to do is be viewed.</p></div></div></div>
+</div>
+<a id="method_setCssId"></a><div class="element clickable method public method_setCssId" data-toggle="collapse" data-target=".method_setCssId .collapse">
+<h2>Set the CSS id for the link to the activity in the course.</h2>
+<pre>setCssId(string $cssid) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::setCssId()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cssid</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_setId"></a><div class="element clickable method public method_setId" data-toggle="collapse" data-target=".method_setId .collapse">
+<h2>Set the activity's id.</h2>
+<pre>setId(string $id) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::setId()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_setTitle"></a><div class="element clickable method public method_setTitle" data-toggle="collapse" data-target=".method_setTitle .collapse">
+<h2>Set the title of the activity</h2>
+<pre>setTitle(string $title) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::setTitle()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$title</h4>
+<code>string</code><p>The title of the activity to be set.</p></div>
+</div></div>
+</div>
+<a id="method_view"></a><div class="element clickable method public method_view" data-toggle="collapse" data-target=".method_view .collapse">
+<h2>View the activity.</h2>
+<pre>view() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::view()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_fillOutRequiredFields"></a><div class="element clickable method protected method_fillOutRequiredFields" data-toggle="collapse" data-target=".method_fillOutRequiredFields .collapse">
+<h2>Add values to the required field for the activity.</h2>
+<pre>fillOutRequiredFields() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>This is not used if the activity has no required fields.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::fillOutRequiredFields()</td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_c"> </a><div class="element clickable property protected property_c" data-toggle="collapse" data-target=".property_c .collapse">
+<h2>containing all variables for the session, page, log helper and content helper.</h2>
+<pre>$c : \Auto\Activity\Container</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::$$c</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_cssid"> </a><div class="element clickable property protected property_cssid" data-toggle="collapse" data-target=".property_cssid .collapse">
+<h2>the value for the id attribute for the link in the course</h2>
+<pre>$cssid : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::$$cssid</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_id"> </a><div class="element clickable property protected property_id" data-toggle="collapse" data-target=".property_id .collapse">
+<h2>the activity's id used int eh moodle database in in most links to the activity.</h2>
+<pre>$id : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::$$id</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_title"> </a><div class="element clickable property protected property_title" data-toggle="collapse" data-target=".property_title .collapse">
+<h2>the title of the activity</h2>
+<pre>$title : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::$$title</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_type"> </a><div class="element clickable property protected property_type" data-toggle="collapse" data-target=".property_type .collapse">
+<h2>The activity type.</h2>
+<pre>$type : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_url"> </a><div class="element clickable property protected property_url" data-toggle="collapse" data-target=".property_url .collapse">
+<h2>url to the activity</h2>
+<pre>$url : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Activity\Activity::$$url</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-07-22T12:31:42-07:00.<br></footer></div>
+</div>
+</body>
+</html>

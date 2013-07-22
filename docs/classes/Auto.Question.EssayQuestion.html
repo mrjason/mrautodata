@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \Auto\Question\EssayQuestion</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/Auto.html"><i class="icon-th"></i> Auto</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Activity.html"><i class="icon-folder-open"></i> Activity</a></li>
+<li><a href="../packages/Auto.html"><i class="icon-folder-open"></i> Auto</a></li>
+<li><a href="../packages/Command.html"><i class="icon-folder-open"></i> Command</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/Helper.html"><i class="icon-folder-open"></i> Helper</a></li>
+<li><a href="../packages/Question.html"><i class="icon-folder-open"></i> Question</a></li>
+<li><a href="../packages/symfony.html"><i class="icon-folder-open"></i> symfony</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">81</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">12</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public inherited"><a href="#method___construct" title="__construct :: Constructor for Question"><span class="description">Constructor for Question</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_answer" title="answer :: Answer the question with a random paragraph."><span class="description">Answer the question with a random paragraph.</span><pre>answer()</pre></a></li>
+<li class="method public inherited"><a href="#method_check" title="check :: Press the check button if it exists for the question."><span class="description">Press the check button if it exists for the question.</span><pre>check()</pre></a></li>
+<li class="method public inherited"><a href="#method_flag" title="flag :: Flag the question using the flag button"><span class="description">Flag the question using the flag button</span><pre>flag()</pre></a></li>
+<li class="method public inherited"><a href="#method_getAnswer" title="getAnswer :: Get the answer value that has been added to the question text or return false if it can't be found."><span class="description">Get the answer value that has been added to the question text or return false if it can't be found.</span><pre>getAnswer()</pre></a></li>
+<li class="method public inherited"><a href="#method_getCheckButton" title="getCheckButton :: Get the Mink object for the check button to check the answer if it exists on the page."><span class="description">Get the Mink object for the check button to check the answer if it exists on the page.</span><pre>getCheckButton()</pre></a></li>
+<li class="method public "><a href="#method_getField" title="getField :: Return the field that will be used to answer the question"><span class="description">Return the field that will be used to answer the question</span><pre>getField()</pre></a></li>
+<li class="method public inherited"><a href="#method_getFlag" title="getFlag :: Get the flag Mink object from within the question."><span class="description">Get the flag Mink object from within the question.</span><pre>getFlag()</pre></a></li>
+<li class="method public inherited"><a href="#method_getTitle" title="getTitle :: Get the title of the question, this is mostly the question number."><span class="description">Get the title of the question, this is mostly the question number.</span><pre>getTitle()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul>
+<li class="property protected inherited"><a href="#property_answer" title="$answer :: "><span class="description">Answer to be set for the question.</span><pre>$answer</pre></a></li>
+<li class="property protected inherited"><a href="#property_c" title="$c :: "><span class="description">containing all variables for the session, page, log helper and content helper.</span><pre>$c</pre></a></li>
+<li class="property protected inherited"><a href="#property_cbtn" title="$cbtn :: "><span class="description">Mink object for the check button</span><pre>$cbtn</pre></a></li>
+<li class="property protected inherited"><a href="#property_fbtn" title="$fbtn :: "><span class="description">Mink object for the flag button</span><pre>$fbtn</pre></a></li>
+<li class="property protected inherited"><a href="#property_field" title="$field :: "><span class="description">Mink object for field used to answer the question.</span><pre>$field</pre></a></li>
+<li class="property protected inherited"><a href="#property_qclasses" title="$qclasses :: "><span class="description">Array of classes associated with the question area</span><pre>$qclasses</pre></a></li>
+<li class="property protected inherited"><a href="#property_qdiv" title="$qdiv :: "><span class="description">Mink object for the question area.</span><pre>$qdiv</pre></a></li>
+<li class="property protected inherited"><a href="#property_title" title="$title :: "><span class="description">The title of the question.</span><pre>$title</pre></a></li>
+<li class="property protected inherited"><a href="#property_tograde" title="$tograde :: "><span class="description">The grade we want the student to get.</span><pre>$tograde</pre></a></li>
+<li class="property protected "><a href="#property_type" title="$type :: "><span class="description">The type of question.</span><pre>$type</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\Auto\Question\EssayQuestion"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/Auto.html">Auto</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/Auto.Question.html">Question</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Auto.Question.EssayQuestion.html">EssayQuestion</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">Essay question type class.</p>
+<div class="details">
+<div class="long_description"><p>This denotes all of the functions that are mandatory for a question.</p></div>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Constructor for Question</h2>
+<pre>__construct($options) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::__construct()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$options</h4><p>mixed And array of variables that will be set for the question.  Must include the container C variable to work.  Array should be array('variable name'=> $value).</p>
+</div>
+</div></div>
+</div>
+<a id="method_answer"></a><div class="element clickable method public method_answer" data-toggle="collapse" data-target=".method_answer .collapse">
+<h2>Answer the question with a random paragraph.</h2>
+<pre>answer() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"><p>10% of the time try to add a file if the filepicker is available..</p></div></div></div>
+</div>
+<a id="method_check"></a><div class="element clickable method public method_check" data-toggle="collapse" data-target=".method_check .collapse">
+<h2>Press the check button if it exists for the question.</h2>
+<pre>check() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::check()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_flag"></a><div class="element clickable method public method_flag" data-toggle="collapse" data-target=".method_flag .collapse">
+<h2>Flag the question using the flag button</h2>
+<pre>flag() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::flag()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_getAnswer"></a><div class="element clickable method public method_getAnswer" data-toggle="collapse" data-target=".method_getAnswer .collapse">
+<h2>Get the answer value that has been added to the question text or return false if it can't be found.</h2>
+<pre>getAnswer() : bool | string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::getAnswer()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code>string</code>Locate the answer value in the question and set that in the object and return it. Return false if it doesn't exist.</div>
+</div></div>
+</div>
+<a id="method_getCheckButton"></a><div class="element clickable method public method_getCheckButton" data-toggle="collapse" data-target=".method_getCheckButton .collapse">
+<h2>Get the Mink object for the check button to check the answer if it exists on the page.</h2>
+<pre>getCheckButton() : bool | \Behat\Mink\Element</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Return false if it doesn't exist.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::getCheckButton()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code>\Behat\Mink\Element</code>Locate the check button in the question and set that in the object and return it. Return false if it doesn't exist.</div>
+</div></div>
+</div>
+<a id="method_getField"></a><div class="element clickable method public method_getField" data-toggle="collapse" data-target=".method_getField .collapse">
+<h2>Return the field that will be used to answer the question</h2>
+<pre>getField() : bool | \Behat\Mink\Element</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code>\Behat\Mink\Element</code>The field to put the answer in.</div>
+</div></div>
+</div>
+<a id="method_getFlag"></a><div class="element clickable method public method_getFlag" data-toggle="collapse" data-target=".method_getFlag .collapse">
+<h2>Get the flag Mink object from within the question.</h2>
+<pre>getFlag() : bool | \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Set it internally and return it.  Return false if it can't be found.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::getFlag()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code>\Behat\Mink\NodeElement</code>Locate the flag field in the question and set that in the object and return it. Return false if it doesn't exist.</div>
+</div></div>
+</div>
+<a id="method_getTitle"></a><div class="element clickable method public method_getTitle" data-toggle="collapse" data-target=".method_getTitle .collapse">
+<h2>Get the title of the question, this is mostly the question number.</h2>
+<pre>getTitle() : bool | \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Return false if it can't be found.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::getTitle()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>bool</code><code>\Behat\Mink\NodeElement</code>Locate the question title in the question and set that in the object and return it. Return false if it doesn't exist.</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_answer"> </a><div class="element clickable property protected property_answer" data-toggle="collapse" data-target=".property_answer .collapse">
+<h2>Answer to be set for the question.</h2>
+<pre>$answer : string | array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$answer</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_c"> </a><div class="element clickable property protected property_c" data-toggle="collapse" data-target=".property_c .collapse">
+<h2>containing all variables for the session, page, log helper and content helper.</h2>
+<pre>$c : \Auto\Question\Container</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$c</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_cbtn"> </a><div class="element clickable property protected property_cbtn" data-toggle="collapse" data-target=".property_cbtn .collapse">
+<h2>Mink object for the check button</h2>
+<pre>$cbtn : \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$cbtn</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_fbtn"> </a><div class="element clickable property protected property_fbtn" data-toggle="collapse" data-target=".property_fbtn .collapse">
+<h2>Mink object for the flag button</h2>
+<pre>$fbtn : \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$fbtn</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_field"> </a><div class="element clickable property protected property_field" data-toggle="collapse" data-target=".property_field .collapse">
+<h2>Mink object for field used to answer the question.</h2>
+<pre>$field : \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$field</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_qclasses"> </a><div class="element clickable property protected property_qclasses" data-toggle="collapse" data-target=".property_qclasses .collapse">
+<h2>Array of classes associated with the question area</h2>
+<pre>$qclasses : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$qclasses</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_qdiv"> </a><div class="element clickable property protected property_qdiv" data-toggle="collapse" data-target=".property_qdiv .collapse">
+<h2>Mink object for the question area.</h2>
+<pre>$qdiv : \Behat\Mink\NodeElement</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$qdiv</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_title"> </a><div class="element clickable property protected property_title" data-toggle="collapse" data-target=".property_title .collapse">
+<h2>The title of the question.</h2>
+<pre>$title : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$title</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_tograde"> </a><div class="element clickable property protected property_tograde" data-toggle="collapse" data-target=".property_tograde .collapse">
+<h2>The grade we want the student to get.</h2>
+<pre>$tograde : int</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\Auto\Question\Question::$$tograde</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property_type"> </a><div class="element clickable property protected property_type" data-toggle="collapse" data-target=".property_type .collapse">
+<h2>The type of question.</h2>
+<pre>$type : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-07-22T12:31:43-07:00.<br></footer></div>
+</div>
+</body>
+</html>

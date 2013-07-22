@@ -1,0 +1,10 @@
+#!/usr/bin/env php
+<?php
+
+require_once(dirname(__DIR__).'/bootstrap.php');
+
+use Auto\Console\Application;
+use Symfony\Component\Console\Shell;
+
+$shell = new Shell(new Application());
+$shell->run();

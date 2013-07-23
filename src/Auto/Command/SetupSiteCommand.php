@@ -1,33 +1,31 @@
 <?php
 /**
  * Site setup for nightly data generation command file
- *
- * @package Command
+ * @package    Command
  * @subpackage SetupSite
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Command;
 
-use Auto\Command\Command,
-    Auto\Joule2,
-    Auto\Container,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Output\Output;
+use Auto\Command\Command;
+use Auto\Container;
+use Auto\Joule2;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * SetupSiteCommand enrolls the users in the correct courses for the nightly sales process.
  */
-class SetupSiteCommand extends Command{
+class SetupSiteCommand extends Command {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used (should be a alias)', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'sales')
@@ -37,7 +35,7 @@ class SetupSiteCommand extends Command{
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'user')
             ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'The role the user is assigned in a course', 'student')
             ->addOption('onlycourses', 'o', InputOption::VALUE_NONE, 'only courses')
-            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created','')
+            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created', '')
             ->setName('setupsite')
             ->setAliases(array('su'))
             ->setDescription('%command.name% executes a series of Conduit RestFul web service requests to setup a site to work with the sales nightly command. The script also logs in as the user and upload a user profile picture.')
@@ -79,85 +77,90 @@ EOF
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
-        $batch = $input->getOption('type');
+        $batch     = $input->getOption('type');
 
-        if($sitesused == 'all'){
+        if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
         $onlycourses = $input->getOption('onlycourses');
-        $conduit = $this->getHelper('conduit');
-        $username = $input->getOption('username');
-        $role = $input->getOption('role');
+        $conduit     = $this->getHelper('conduit');
+        $role        = $input->getOption('role');
         $inputcourse = $input->getOption('course');
-		$courses = explode(',', $inputcourse);
-        $content = $this->getHelper('content');
-        $password = $input->getOption('password');
-        $groups = array('Group A', 'Group B', 'Group C');
+        $courses     = explode(',', $inputcourse);
+        $content     = $this->getHelper('content');
+        $groups      = array('Group A', 'Group B', 'Group C');
+        $begin       = $input->getOption('userbegin');
+        $end         = $input->getOption('userend');
+        $log         = $this->getHelper('log');
+        $cfg         = $this->getHelper('config');
+        $j2          = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
+        $username    = $input->getOption('username');
 
-        $begin =$input->getOption('userbegin');
-        $end = $input->getOption('userend');
-        if(!$onlycourses){
-            $j2 = new Joule2(new Container($this->getHelper('config'),$this->getHelper('content'),$this->getHelper('log')));
+        if (!$password = $input->getOption('password')) {
+            $password = $cfg->get('users', $username);
         }
-        foreach($sites as $site){
-            print('Setting up site '.$site->url."\n");
+
+        $conduit->setToken($cfg->get('conduit', 'token'));
+
+        foreach ($sites as $site) {
+            print('Setting up site ' . $site->url . "\n");
 
             $conduit->setUrl($site->url);
             $user = $this->getHelper('user');
-            if($begin != $end){
+            if ($begin != $end) {
                 $user->setUserIds(array($begin, $end));
             }
             $user->setUsername($username);
             $user->setPassword($password);
             $user->setRole($role);
             $users = $user->getUsers();
-            foreach($courses as $useless => $course){
-                foreach($groups as $userless => $group){
+            foreach ($courses as $useless => $course) {
+                foreach ($groups as $userless => $group) {
                     $conduit->groups($course, $group);
                 }
             }
-            if(!$onlycourses){
+            if (!$onlycourses) {
                 $j2->setSite($site);
             }
 
-            foreach($users as $user){
-                if(!$onlycourses){
-                    $conduituser = array('username'  => $user->username,
-                                    'password'  => $password,
-                                    'firstname' => $content ->getNameByID($user->index),
-                                    'lastname'  => $content ->getNameByID($user->index, 'l'),
-                                    'idnumber'  => $user->id,
-                                    'email'     => $user->email,
-                                    'city'      => 'Baltimore, MD',
-                                    'country'   => 'US',
-                                    'htmleditor'=> '1',
-                                    'trackforums'=> '1');
-                    $conduit->user($conduituser,'update');
-                    if($j2->login($user)){
-                        $j2->addProfilePicture('userpix/'.$user->username.'.jpg');
+            foreach ($users as $user) {
+                if (!$onlycourses) {
+                    $conduituser = array(
+                        'username'    => $user->username,
+                        'password'    => $password,
+                        'firstname'   => $content->getNameByID($user->index),
+                        'lastname'    => $content->getNameByID($user->index, 'l'),
+                        'idnumber'    => $user->id,
+                        'email'       => $user->email,
+                        'city'        => 'Baltimore, MD',
+                        'country'     => 'US',
+                        'htmleditor'  => '1',
+                        'trackforums' => '1'
+                    );
+                    $conduit->user($conduituser, 'update');
+                    if ($j2->login($user)) {
+                        $j2->addProfilePicture('userpix/' . $user->username . '.jpg');
                         $j2->logout();
                     }
                 }
-                
-				foreach($courses as $useless => $course){
-					$conduit->enroll($user->username,$course,$role);
-                    if(isset($user->group)){
+
+                foreach ($courses as $useless => $course) {
+                    $conduit->enroll($user->username, $course, $role);
+                    if (isset($user->group)) {
                         $conduit->groups_members($course, $user->group, $user->username);
                     }
-				}
+                }
             }
 
-            if(!$onlycourses){
+            if (!$onlycourses) {
                 $j2->teardown();
             }
         }

@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/data_auto_bash_cfg.sh
+source ./data_auto_bash_cfg.sh
 
 AUTO=$BASEDIR$DIR/bin/auto
 for i in {1..11}

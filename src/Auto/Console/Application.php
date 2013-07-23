@@ -13,8 +13,7 @@ class Application extends BaseApplication {
      */
     protected $Auto;
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct('Auto', Auto::VERSION);
         $this->setAuto(new Auto());
 
@@ -22,11 +21,11 @@ class Application extends BaseApplication {
         $helperSet = $this->getHelperSet();
 
         $finder = new Finder();
-        $finder->files()->name('*.php')->in(dirname(__DIR__).'/Helper');
+        $finder->files()->name('*.php')->in(dirname(__DIR__) . '/Helper');
 
         /** @var $file \Symfony\Component\Finder\SplFileInfo */
         foreach ($finder as $file) {
-            $class = 'Auto\Helper\\'.$file->getBasename('.php');
+            $class = 'Auto\Helper\\' . $file->getBasename('.php');
             $helperSet->set(new $class());
         }
 
@@ -42,11 +41,11 @@ class Application extends BaseApplication {
         }
 
         $finder = new Finder();
-        $finder->files()->name('/\w+Command\.php$/')->in(dirname(__DIR__).'/Command');
+        $finder->files()->name('/\w+Command\.php$/')->in(dirname(__DIR__) . '/Command');
 
         /** @var $file \Symfony\Component\Finder\SplFileInfo */
         foreach ($finder as $file) {
-            $class = 'Auto\Command\\'.$file->getBasename('.php');
+            $class = 'Auto\Command\\' . $file->getBasename('.php');
             $this->add(new $class());
         }
 
@@ -63,6 +62,7 @@ class Application extends BaseApplication {
 
     /**
      * @param \Auto\Auto $Auto
+     *
      * @return Application
      */
     public function setAuto($Auto) {

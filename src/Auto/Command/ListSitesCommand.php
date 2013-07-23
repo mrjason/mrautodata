@@ -2,31 +2,29 @@
 
 /**
  * List sites command file
- *
- * @package Command
+ * @package    Command
  * @subpackage ListSites
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Command;
 
-use Auto\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Output\Output;
+use Auto\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * ListSitesCommand lists the sites in the site configuration file.
  */
-class ListSitesCommand extends Command{
+class ListSitesCommand extends Command {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site alias to list the url for', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific group of sites to list', 'nightly')
@@ -53,34 +51,33 @@ EOF
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
-        $type = $input->getOption('type');
-        $urlonly = $input->getOption('url');
+        $type      = $input->getOption('type');
+        $urlonly   = $input->getOption('url');
         $aliasonly = $input->getOption('alias');
-       
-        if($sitesused == 'all'){
+
+        if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($type);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
         $list = '';
-        foreach($sites as $alias => $site){
-            if($urlonly){
-                $list .= $site->url."\n";
-            } else if($aliasonly){
+        foreach ($sites as $alias => $site) {
+            if ($urlonly) {
+                $list .= $site->url . "\n";
+            } else if ($aliasonly) {
                 $list .= "$alias \n";
             } else {
-                $list .= 'alias: '.$alias.'   url: '.$site->url."\n";
+                $list .= 'alias: ' . $alias . '   url: ' . $site->url . "\n";
             }
         }
         print $list;
     }
 }
+
 ?>

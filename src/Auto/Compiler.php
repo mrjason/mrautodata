@@ -5,18 +5,16 @@ namespace Auto;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
-class Compiler
-{
+class Compiler {
     protected $version;
 
     /**
      * Compiles Auto into a single phar file
-     *
      * @throws \RuntimeException
+     *
      * @param string $pharFile The full path to the file to create
      */
-    public function compile($pharFile = 'Auto.phar')
-    {
+    public function compile($pharFile = 'Auto.phar') {
         if (file_exists($pharFile)) {
             unlink($pharFile);
         }
@@ -38,7 +36,7 @@ class Compiler
             ->ignoreVCS(true)
             ->notName('Compiler.php')
             ->notName('.DS_Store')
-            ->in(__DIR__.'/..');
+            ->in(__DIR__ . '/..');
 
         foreach ($finder as $file) {
             $this->addFile($phar, $file);
@@ -49,14 +47,14 @@ class Compiler
         $finder->files()
             ->ignoreVCS(true)
             ->name('*.php')
-            ->in(__DIR__.'/../../vendor/');
+            ->in(__DIR__ . '/../../vendor/');
 
         foreach ($finder as $file) {
             $this->addFile($phar, $file);
         }
 
         // Adding miscellaneous
-        $this->addFile($phar, new \SplFileInfo(__DIR__.'/../../bootstrap.php'));
+        $this->addFile($phar, new \SplFileInfo(__DIR__ . '/../../bootstrap.php'));
 
         // Adding bin script
         $this->addAutoBin($phar);
@@ -72,9 +70,8 @@ class Compiler
         unset($phar);
     }
 
-    private function addFile(\Phar $phar, \SplFileInfo $file, $strip = true)
-    {
-        $path = str_replace(dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR, '', $file->getRealPath());
+    private function addFile(\Phar $phar, \SplFileInfo $file, $strip = true) {
+        $path = str_replace(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR, '', $file->getRealPath());
 
         if ($file->getExtension() !== 'php') {
             $phar->addFile($path);
@@ -82,7 +79,7 @@ class Compiler
             if ($strip) {
                 $content = php_strip_whitespace($file);
             } else {
-                $content = "\n".file_get_contents($file)."\n";
+                $content = "\n" . file_get_contents($file) . "\n";
             }
             $content = str_replace('@package_version@', $this->version, $content);
 
@@ -90,15 +87,13 @@ class Compiler
         }
     }
 
-    private function addAutoBin(\Phar $phar)
-    {
-        $content = file_get_contents(__DIR__.'/../../bin/Auto');
+    private function addAutoBin(\Phar $phar) {
+        $content = file_get_contents(__DIR__ . '/../../bin/Auto');
         $content = preg_replace('{^#!/usr/bin/env php\s*}', '', $content);
         $phar->addFromString('bin/Auto', $content);
     }
 
-    private function getStub()
-    {
+    private function getStub() {
         return <<<'EOF'
 #!/usr/bin/env php
 <?php

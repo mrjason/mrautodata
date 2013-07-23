@@ -1,11 +1,10 @@
 <?php
 /**
  * Page activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Page
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Activity;
@@ -25,7 +24,7 @@ class PageActivity extends Activity {
     /**
      * Add the required fields for the page activity type in the resource creation screen
      */
-    public function fillOutRequiredFields(){
+    public function fillOutRequiredFields() {
         $field = $this->c->p->findField('id_page');
         $field->setValue($this->c->ch->getRandParagraph());
     }

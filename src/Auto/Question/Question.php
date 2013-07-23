@@ -1,15 +1,11 @@
 <?php
 /**
  * Question base class
- *
  * To provide the answer to a question use the following HTML in the question text. Replace answervalue with the actual answer to the question.
- *
  * <div class="mrqueanswer">answervalue</div>
- *
  * This code should be placed into each question in match question types.
- *
- * @package Question
- * @author Jason Hardin <jason@moodlerooms.com>
+ * @package   Question
+ * @author    Jason Hardin <jason@moodlerooms.com>
  * @copyright Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Question;
@@ -17,8 +13,7 @@ namespace Auto\Question;
 /**
  * Base class for all Quiz question types.  This denotes all of the functions that are mandatory for a question.
  */
-class Question
-{
+class Question {
     /**
      * @var Container containing all variables for the session, page, log helper and content helper.
      */
@@ -68,28 +63,28 @@ class Question
      *
      * @param $options mixed And array of variables that will be set for the question.  Must include the container C variable to work.  Array should be array('variable name'=> $value).
      */
-    public function __construct($options){
-        foreach($options as $title => $value){
+    public function __construct($options) {
+        foreach ($options as $title => $value) {
             $this->{$title} = $value;
         }
 
-        if(!isset($this->title)){
+        if (!isset($this->title)) {
             $this->getTitle();
         }
 
-        if(!isset($this->fbtn)){
+        if (!isset($this->fbtn)) {
             $this->getFlag();
         }
 
-        if(!isset($this->cbtn)){
+        if (!isset($this->cbtn)) {
             $this->getCheckButton();
         }
 
-        if(!isset($this->answer)){
+        if (!isset($this->answer)) {
             $this->getAnswer();
         }
 
-        if(!isset($this->field)){
+        if (!isset($this->field)) {
             $this->getField();
         }
     }
@@ -97,11 +92,11 @@ class Question
     /**
      * Flag the question using the flag button
      */
-    public function flag(){
-        if(!isset($this->fbtn)){
+    public function flag() {
+        if (!isset($this->fbtn)) {
             $this->getFlag();
         }
-        if(isset($this->fbtn)){
+        if (isset($this->fbtn)) {
             $this->fbtn->click();
         }
     }
@@ -109,11 +104,11 @@ class Question
     /**
      * Press the check button if it exists for the question.
      */
-    public function check(){
-        if(!isset($this->cbtn)){
+    public function check() {
+        if (!isset($this->cbtn)) {
             $this->getCheckButon();
         }
-        if(isset($this->cbtn)){
+        if (isset($this->cbtn)) {
             $this->cbtn->press();
             $this->reloadPage();
         }
@@ -121,11 +116,10 @@ class Question
 
     /**
      * Get the flag Mink object from within the question.  Set it internally and return it.  Return false if it can't be found.
-     *
      * @return bool|\Behat\Mink\NodeElement Locate the flag field in the question and set that in the object and return it. Return false if it doesn't exist.
      */
-    public function getFlag(){
-        if($flag = $this->qdiv->find('css','.questionflagimage')){
+    public function getFlag() {
+        if ($flag = $this->qdiv->find('css', '.questionflagimage')) {
             $this->fbtn = $flag;
             return $this->fbtn;
         }
@@ -134,13 +128,12 @@ class Question
 
     /**
      * Get the answer value that has been added to the question text or return false if it can't be found.
-     *
      * @return bool|string Locate the answer value in the question and set that in the object and return it. Return false if it doesn't exist.
      */
-    public function getAnswer(){
-        if($answer = $this->qdiv->find('css','.mrqueanswer')){
+    public function getAnswer() {
+        if ($answer = $this->qdiv->find('css', '.mrqueanswer')) {
             $this->answer = $answer->getText();
-            $this->c->l->action($this->title.': Found mrqueanswer set to '.$this->answer);
+            $this->c->l->action($this->title . ': Found mrqueanswer set to ' . $this->answer);
             return $this->answer;
         }
         return false;
@@ -148,11 +141,10 @@ class Question
 
     /**
      * Get the Mink object for the check button to check the answer if it exists on the page. Return false if it doesn't exist.
-     *
      * @return bool|\Behat\Mink\Element Locate the check button in the question and set that in the object and return it. Return false if it doesn't exist.
      */
-    public function getCheckButton(){
-        if($btn = $this->qdiv->findButton('Check')){
+    public function getCheckButton() {
+        if ($btn = $this->qdiv->findButton('Check')) {
             $this->cbtn = $btn;
             return $this->cbtn;
         }
@@ -161,11 +153,10 @@ class Question
 
     /**
      * Get the title of the question, this is mostly the question number. Return false if it can't be found.
-     *
      * @return bool|\Behat\Mink\NodeElement Locate the question title in the question and set that in the object and return it. Return false if it doesn't exist.
      */
-    public function getTitle(){
-        if($el = $this->qdiv->find('css','.info .no')){
+    public function getTitle() {
+        if ($el = $this->qdiv->find('css', '.info .no')) {
             $this->title = $el->getText();
             return $this->title;
         }
@@ -175,12 +166,13 @@ class Question
     /**
      *  Answer the question in the form using the field value.
      */
-    public function answer(){}
+    public function answer() {
+    }
 
     /**
      * Return the field that will be used to answer the question
-     *
      * @return bool|\Behat\Mink\Element The field to put the answer in.
      */
-    public function getField(){}
+    public function getField() {
+    }
 }

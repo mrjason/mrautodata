@@ -39,10 +39,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">81</span></a></li>
+                <span class="label label-info">43</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">12</span>
+                <span class="label label-info">11</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -67,31 +67,22 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method_course" title="course :: Course Conduit web service interactions happen in this method"><span class="description">Course Conduit web service interactions happen in this method</span><pre>course()</pre></a></li>
-<li class="method public "><a href="#method_enroll" title="enroll :: "><span class="description">enroll()
-        </span><pre>enroll()</pre></a></li>
+<li class="method public "><a href="#method_enroll" title="enroll :: Enroll a user in a course with a role"><span class="description">Enroll a user in a course with a role</span><pre>enroll()</pre></a></li>
 <li class="method public "><a href="#method_getName" title="getName :: Returns the canonical name of this helper."><span class="description">Returns the canonical name of this helper.</span><pre>getName()</pre></a></li>
-<li class="method public "><a href="#method_groups" title="groups :: "><span class="description">groups()
-        </span><pre>groups()</pre></a></li>
-<li class="method public "><a href="#method_groups_members" title="groups_members :: "><span class="description">groups_members()
-        </span><pre>groups_members()</pre></a></li>
+<li class="method public "><a href="#method_groups" title="groups :: Create, update or delete a group in a course"><span class="description">Create, update or delete a group in a course</span><pre>groups()</pre></a></li>
+<li class="method public "><a href="#method_groups_members" title="groups_members :: Create, Update or delete group membership in a course."><span class="description">Create, Update or delete group membership in a course.</span><pre>groups_members()</pre></a></li>
 <li class="method public "><a href="#method_setMethod" title="setMethod :: Set the Conduit method to process the request with"><span class="description">Set the Conduit method to process the request with</span><pre>setMethod()</pre></a></li>
-<li class="method public "><a href="#method_setToken" title="setToken :: "><span class="description">setToken()
-        </span><pre>setToken()</pre></a></li>
+<li class="method public "><a href="#method_setToken" title="setToken :: Set the token to be passed to Conduit's web services for authorization"><span class="description">Set the token to be passed to Conduit's web services for authorization</span><pre>setToken()</pre></a></li>
 <li class="method public "><a href="#method_setUrl" title="setUrl :: Set the url to send the Conduit request to"><span class="description">Set the url to send the Conduit request to</span><pre>setUrl()</pre></a></li>
-<li class="method public "><a href="#method_user" title="user :: "><span class="description">user()
-        </span><pre>user()</pre></a></li>
+<li class="method public "><a href="#method_user" title="user :: Create, update or delete a user from the Moodle site"><span class="description">Create, update or delete a user from the Moodle site</span><pre>user()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="method private "><a href="#method_addPostFields" title="addPostFields :: "><span class="description">addPostFields()
-        </span><pre>addPostFields()</pre></a></li>
-<li class="method private "><a href="#method_send" title="send :: "><span class="description">send()
-        </span><pre>send()</pre></a></li>
-<li class="method private "><a href="#method_setBasePostFields" title="setBasePostFields :: "><span class="description">setBasePostFields()
-        </span><pre>setBasePostFields()</pre></a></li>
-<li class="method private "><a href="#method_setXML" title="setXML :: "><span class="description">setXML()
-        </span><pre>setXML()</pre></a></li>
+<li class="method private "><a href="#method_addPostFields" title="addPostFields :: Add fields to the post"><span class="description">Add fields to the post</span><pre>addPostFields()</pre></a></li>
+<li class="method private "><a href="#method_send" title="send :: Send the webservice request"><span class="description">Send the webservice request</span><pre>send()</pre></a></li>
+<li class="method private "><a href="#method_setBasePostFields" title="setBasePostFields :: Set the base fields for the post to the webservice"><span class="description">Set the base fields for the post to the webservice</span><pre>setBasePostFields()</pre></a></li>
+<li class="method private "><a href="#method_setXML" title="setXML :: Gnerate the XML for the webservice call"><span class="description">Gnerate the XML for the webservice call</span><pre>setXML()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -153,8 +144,7 @@
 </div></div>
 </div>
 <a id="method_enroll"></a><div class="element clickable method public method_enroll" data-toggle="collapse" data-target=".method_enroll .collapse">
-<h2>enroll()
-        </h2>
+<h2>Enroll a user in a course with a role</h2>
 <pre>enroll($user, $course, $role, int $start, int $end) : bool | string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -198,8 +188,7 @@
 </div></div>
 </div>
 <a id="method_groups"></a><div class="element clickable method public method_groups" data-toggle="collapse" data-target=".method_groups .collapse">
-<h2>groups()
-        </h2>
+<h2>Create, update or delete a group in a course</h2>
 <pre>groups($course, $group) : bool | string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -219,8 +208,7 @@
 </div></div>
 </div>
 <a id="method_groups_members"></a><div class="element clickable method public method_groups_members" data-toggle="collapse" data-target=".method_groups_members .collapse">
-<h2>groups_members()
-        </h2>
+<h2>Create, Update or delete group membership in a course.</h2>
 <pre>groups_members($course, $group, $user) : bool | string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -253,12 +241,15 @@
 </div></div>
 </div>
 <a id="method_setToken"></a><div class="element clickable method public method_setToken" data-toggle="collapse" data-target=".method_setToken .collapse">
-<h2>setToken()
-        </h2>
+<h2>Set the token to be passed to Conduit's web services for authorization</h2>
 <pre>setToken($token) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:jason@moodlerooms.com">Jason Hardin</a></td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$token</h4></div>
 </div></div>
@@ -276,8 +267,7 @@
 </div></div>
 </div>
 <a id="method_user"></a><div class="element clickable method public method_user" data-toggle="collapse" data-target=".method_user .collapse">
-<h2>user()
-        </h2>
+<h2>Create, update or delete a user from the Moodle site</h2>
 <pre>user($fields, string $action) : bool | string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -300,8 +290,7 @@
 </div></div>
 </div>
 <a id="method_addPostFields"></a><div class="element clickable method private method_addPostFields" data-toggle="collapse" data-target=".method_addPostFields .collapse">
-<h2>addPostFields()
-        </h2>
+<h2>Add fields to the post</h2>
 <pre>addPostFields($fields) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -311,8 +300,7 @@
 </div></div>
 </div>
 <a id="method_send"></a><div class="element clickable method private method_send" data-toggle="collapse" data-target=".method_send .collapse">
-<h2>send()
-        </h2>
+<h2>Send the webservice request</h2>
 <pre>send() : bool | string</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -324,15 +312,13 @@
 </div></div>
 </div>
 <a id="method_setBasePostFields"></a><div class="element clickable method private method_setBasePostFields" data-toggle="collapse" data-target=".method_setBasePostFields .collapse">
-<h2>setBasePostFields()
-        </h2>
+<h2>Set the base fields for the post to the webservice</h2>
 <pre>setBasePostFields() </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_setXML"></a><div class="element clickable method private method_setXML" data-toggle="collapse" data-target=".method_setXML .collapse">
-<h2>setXML()
-        </h2>
+<h2>Gnerate the XML for the webservice call</h2>
 <pre>setXML($action, $fields) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -387,7 +373,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-07-22T12:31:42-07:00.<br></footer></div>
+            generated on 2013-07-23T16:29:03-07:00.<br></footer></div>
 </div>
 </body>
 </html>

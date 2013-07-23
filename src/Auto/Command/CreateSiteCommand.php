@@ -2,32 +2,30 @@
 
 /**
  * Create site command file
- *
- * @package Command
+ * @package    Command
  * @subpackage CreateSite
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Command;
 
-use Auto\Command\Command,
-    Auto\Joule2,
-    Auto\Container,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Output\Output;
+use Auto\Command\Command;
+use Auto\Container;
+use Auto\Joule2;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * CreateSiteCommand creates a site with all the courses and user enrollments.
  */
-class CreateSiteCommand extends Command{
+class CreateSiteCommand extends Command {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used (should be a alias)', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'sales')
@@ -57,118 +55,121 @@ You can also request the program to print out debug informaiton to the console b
 
   <info>%application.name% %command.name% --debug</info>
 EOF
-        );
+            );
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
      * @return int|null|void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
-        $batch = $input->getOption('type');
+        $batch     = $input->getOption('type');
 
-        if($sitesused == 'all'){
+        if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
-        $debug = $input->getOption('debug');
+        $debug       = $input->getOption('debug');
         $onlycourses = $input->getOption('onlycourses');
-        $conduit = $this->getHelper('conduit');
-        $randtext = new ContentHelper();
-        $courses = array();
-        if(!$onlycourses){
-            $j2 = new Joule2(new Container($this->getHelper('config'),$this->getHelper('content'),$this->getHelper('log')));
+        $conduit     = $this->getHelper('conduit');
+        $randtext    = new ContentHelper();
+        $courses     = array();
+        if (!$onlycourses) {
+            $j2 = new Joule2(new Container($this->getHelper('config'), $this->getHelper('content'), $this->getHelper('log')));
         }
-        foreach($sites as $site){
+        foreach ($sites as $site) {
             $cfg = $this->getHelper('config')->getConfig($site);
-            if(!$onlycourses){
+            if (!$onlycourses) {
                 $j2->setUp($cfg);
             }
 
             $conduit->setUrl($site->url);
 
             $studentHelper = $this->getHelper('user');
-            $studentHelper->setUserIds(0,10);
+            $studentHelper->setUserIds(0, 10);
             $studentHelper->setUsername('student');
             $students = $studentHelper->getUsers();
 
-            $years = array('2010', '2011','2012');
-            $semesters = array('Fall','Spring','Summer');
-            $departments = array ('English', 'Math', 'Biology','Art');
-            foreach($years as $year){
-                foreach($semesters as $semester){
-                    foreach($departments as $department){
+            $years       = array('2010', '2011', '2012');
+            $semesters   = array('Fall', 'Spring', 'Summer');
+            $departments = array('English', 'Math', 'Biology', 'Art');
+            foreach ($years as $year) {
+                foreach ($semesters as $semester) {
+                    foreach ($departments as $department) {
 
                     }
                 }
             }
 
-            foreach($courses as $course){
+            foreach ($courses as $course) {
                 $conduit->createCourse($course);
             }
 
-            foreach($students as $user){
-                if(!$onlycourses){
-                    $conduituser = array('username'  => $user->username,
-                        'password'  => '',
-                        'firstname' => $randtext ->getNameByID($user->id),
-                        'lastname'  => $randtext ->getNameByID($user->id, 'l'),
-                        'idnumber'  => $user->id,
-                        'email'     => $user->email,
-                        'city'      => 'Baltimore, MD',
-                        'country'   => 'US',
-                        'htmleditor'=> '1');
+            foreach ($students as $user) {
+                if (!$onlycourses) {
+                    $conduituser = array(
+                        'username'   => $user->username,
+                        'password'   => '',
+                        'firstname'  => $randtext->getNameByID($user->id),
+                        'lastname'   => $randtext->getNameByID($user->id, 'l'),
+                        'idnumber'   => $user->id,
+                        'email'      => $user->email,
+                        'city'       => 'Baltimore, MD',
+                        'country'    => 'US',
+                        'htmleditor' => '1'
+                    );
                     $conduit->updateUser($conduituser);
-                    if($j2->login($user)){
-                        $j2->addProfilePicture('userpix/'.$user->username.'.jpg');
+                    if ($j2->login($user)) {
+                        $j2->addProfilePicture('userpix/' . $user->username . '.jpg');
                         $j2->goToSocial();
                         $j2->logout();
                     }
                 }
 
-                foreach($courses as $useless => $course){
-                    $conduit->enroll($user->username,$course,'student');
+                foreach ($courses as $useless => $course) {
+                    $conduit->enroll($user->username, $course, 'student');
                 }
             }
 
             $teacherHelper = $this->getHelper('user');
-            $teacherHelper->setUserIds(array(50,51));
+            $teacherHelper->setUserIds(array(50, 51));
             $teacherHelper->setUsername('teacher');
             $teacherHelper->setRole('editingteacher');
             $teachers = $teacherHelper->getUsers();
 
-            foreach($teachers as $user){
-                if(!$onlycourses){
-                    $conduituser = array('username'  => $user->username,
-                        'password'  => '',
-                        'firstname' => $randtext ->getNameByID($user->id),
-                        'lastname'  => $randtext ->getNameByID($user->id, 'l'),
-                        'idnumber'  => $user->id,
-                        'email'     => $user->email,
-                        'city'      => 'Baltimore, MD',
-                        'country'   => 'US',
-                        'htmleditor'=> '1');
+            foreach ($teachers as $user) {
+                if (!$onlycourses) {
+                    $conduituser = array(
+                        'username'   => $user->username,
+                        'password'   => '',
+                        'firstname'  => $randtext->getNameByID($user->id),
+                        'lastname'   => $randtext->getNameByID($user->id, 'l'),
+                        'idnumber'   => $user->id,
+                        'email'      => $user->email,
+                        'city'       => 'Baltimore, MD',
+                        'country'    => 'US',
+                        'htmleditor' => '1'
+                    );
                     $conduit->updateUser($conduituser);
-                    if($j2->login($user)){
-                        $j2->addProfilePicture('userpix/'.$user->username.'.jpg');
+                    if ($j2->login($user)) {
+                        $j2->addProfilePicture('userpix/' . $user->username . '.jpg');
                         $j2->goToSocial();
                         $j2->logout();
                     }
                 }
 
-                foreach($courses as $useless => $course){
-                    $conduit->enroll($user->username,$course,'editingteacher');
+                foreach ($courses as $useless => $course) {
+                    $conduit->enroll($user->username, $course, 'editingteacher');
                 }
             }
 
-            if(!$onlycourses){
+            if (!$onlycourses) {
                 $j2->teardown();
             }
         }

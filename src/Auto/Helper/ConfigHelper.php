@@ -1,30 +1,36 @@
 <?php
+/**
+ * Gets config data from the config file
+ * @throws \Exception
+ * @author     Mark Nielsen <mark@moodlerooms.com>
+ * @package    Helper
+ * @subpackage Congif
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
+ */
 
 namespace Auto\Helper;
 
 use \Symfony\Component\Console\Helper\Helper;
 use \Symfony\Component\Yaml\Yaml;
 
+
+
 /**
- * Gets config data from the config file
- *
- * @throws \Exception
- * @author Mark Nielsen <mark@moodlerooms.com>
- * @package Helper
- * @subpackage Congif
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * Class ConfigHelper
+ * @package Auto\Helper
+ * @author     Mark Nielsen <mark@moodlerooms.com>
  */
 class ConfigHelper extends Helper {
     /**
+     * Array of configuration options
+     *
      * @var array
      */
     protected $config = array();
 
     /**
      * Returns the canonical name of this helper.
-     *
      * @return string The canonical name
-     *
      * @api
      */
     public function getName() {
@@ -32,7 +38,10 @@ class ConfigHelper extends Helper {
     }
 
     /**
+     * Set the configuration array
+     *
      * @param array $config
+     *
      * @return \Kow\Helper\ConfigHelper
      */
     public function setConfig(array $config) {
@@ -41,6 +50,8 @@ class ConfigHelper extends Helper {
     }
 
     /**
+     * Return the config variable
+     *
      * @return array
      */
     public function getConfig() {
@@ -49,10 +60,11 @@ class ConfigHelper extends Helper {
 
     /**
      * Get a configuration value
-     *
      * @throws \Exception
+     *
      * @param string $section The config section name
-     * @param string $name The config name within the section name
+     * @param string $name    The config name within the section name
+     *
      * @return string
      */
     public function get($section, $name) {
@@ -69,6 +81,7 @@ class ConfigHelper extends Helper {
      * Get a section of configs
      *
      * @param string $section The config section name
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -80,4 +93,5 @@ class ConfigHelper extends Helper {
         return $this->config[$section];
     }
 }
+
 ?>

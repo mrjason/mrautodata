@@ -1,16 +1,14 @@
 <?php
 /**
  * Folder activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Folder
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Activity;
 
 use Auto\Activity\Activity;
-
 
 /**
  * Folder activity class. Extends the activity and does everything by default.
@@ -25,7 +23,7 @@ class FolderActivity extends Activity {
     /**
      * Add a file to the folder resource in the creation screen
      */
-    public function fillOutRequiredFields(){
-        $this->c->ch->uploadRandFile($this->c->cf->filedir,'math','pdf');
+    public function fillOutRequiredFields() {
+        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
     }
 }

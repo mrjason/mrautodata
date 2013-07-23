@@ -39,10 +39,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">81</span></a></li>
+                <span class="label label-info">43</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">12</span>
+                <span class="label label-info">11</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -67,18 +67,12 @@
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
 <li class="method public "><a href="#method_getName" title="getName :: Returns the canonical name of this helper."><span class="description">Returns the canonical name of this helper.</span><pre>getName()</pre></a></li>
-<li class="method public "><a href="#method_getUsers" title="getUsers :: "><span class="description">getUsers()
-        </span><pre>getUsers()</pre></a></li>
-<li class="method public "><a href="#method_setIndex" title="setIndex :: "><span class="description">setIndex()
-        </span><pre>setIndex()</pre></a></li>
-<li class="method public "><a href="#method_setPassword" title="setPassword :: "><span class="description">setPassword()
-        </span><pre>setPassword()</pre></a></li>
-<li class="method public "><a href="#method_setRole" title="setRole :: "><span class="description">setRole()
-        </span><pre>setRole()</pre></a></li>
-<li class="method public "><a href="#method_setUserIds" title="setUserIds :: "><span class="description">setUserIds()
-        </span><pre>setUserIds()</pre></a></li>
-<li class="method public "><a href="#method_setUsername" title="setUsername :: "><span class="description">setUsername()
-        </span><pre>setUsername()</pre></a></li>
+<li class="method public "><a href="#method_getUsers" title="getUsers :: Return An array of users based on the ids assigned or the current username."><span class="description">Return An array of users based on the ids assigned or the current username.</span><pre>getUsers()</pre></a></li>
+<li class="method public "><a href="#method_setIndex" title="setIndex :: Set the current index for creating ids"><span class="description">Set the current index for creating ids</span><pre>setIndex()</pre></a></li>
+<li class="method public "><a href="#method_setPassword" title="setPassword :: Set the user's password"><span class="description">Set the user's password</span><pre>setPassword()</pre></a></li>
+<li class="method public "><a href="#method_setRole" title="setRole :: Set the user's Moodle shortname role"><span class="description">Set the user's Moodle shortname role</span><pre>setRole()</pre></a></li>
+<li class="method public "><a href="#method_setUserIds" title="setUserIds :: Set the array of ids to use for creating users."><span class="description">Set the array of ids to use for creating users.</span><pre>setUserIds()</pre></a></li>
+<li class="method public "><a href="#method_setUsername" title="setUsername :: Set the current username to create users from."><span class="description">Set the current username to create users from.</span><pre>setUsername()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -87,13 +81,13 @@
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="property private "><a href="#property_groups" title="$groups :: "><span class="description"></span><pre>$groups</pre></a></li>
-<li class="property private "><a href="#property_ids" title="$ids :: "><span class="description"></span><pre>$ids</pre></a></li>
-<li class="property private "><a href="#property_index" title="$index :: "><span class="description"></span><pre>$index</pre></a></li>
-<li class="property private "><a href="#property_password" title="$password :: "><span class="description"></span><pre>$password</pre></a></li>
-<li class="property private "><a href="#property_role" title="$role :: "><span class="description"></span><pre>$role</pre></a></li>
-<li class="property private "><a href="#property_studentroles" title="$studentroles :: "><span class="description"></span><pre>$studentroles</pre></a></li>
-<li class="property private "><a href="#property_username" title="$username :: "><span class="description"></span><pre>$username</pre></a></li>
+<li class="property private "><a href="#property_groups" title="$groups :: Groups in a course"><span class="description"></span><pre>$groups</pre></a></li>
+<li class="property private "><a href="#property_ids" title="$ids :: ids to append to the username"><span class="description"></span><pre>$ids</pre></a></li>
+<li class="property private "><a href="#property_index" title="$index :: Number of user's to create"><span class="description"></span><pre>$index</pre></a></li>
+<li class="property private "><a href="#property_password" title="$password :: The user's password to login with"><span class="description"></span><pre>$password</pre></a></li>
+<li class="property private "><a href="#property_role" title="$role :: The user's role in the Moodle courses"><span class="description"></span><pre>$role</pre></a></li>
+<li class="property private "><a href="#property_studentroles" title="$studentroles :: The Moodle role shortname for a student in a course."><span class="description"></span><pre>$studentroles</pre></a></li>
+<li class="property private "><a href="#property_username" title="$username :: The username for the user also login"><span class="description"></span><pre>$username</pre></a></li>
 </ul>
 </li>
 </ul>
@@ -133,19 +127,18 @@
 </div></div>
 </div>
 <a id="method_getUsers"></a><div class="element clickable method public method_getUsers" data-toggle="collapse" data-target=".method_getUsers .collapse">
-<h2>getUsers()
-        </h2>
+<h2>Return An array of users based on the ids assigned or the current username.</h2>
 <pre>getUsers() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
+<div class="subelement response">
+<code>array</code>Array of User objects.</div>
 </div></div>
 </div>
 <a id="method_setIndex"></a><div class="element clickable method public method_setIndex" data-toggle="collapse" data-target=".method_setIndex .collapse">
-<h2>setIndex()
-        </h2>
+<h2>Set the current index for creating ids</h2>
 <pre>setIndex($index) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -155,30 +148,30 @@
 </div></div>
 </div>
 <a id="method_setPassword"></a><div class="element clickable method public method_setPassword" data-toggle="collapse" data-target=".method_setPassword .collapse">
-<h2>setPassword()
-        </h2>
+<h2>Set the user's password</h2>
 <pre>setPassword($password) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$password</h4></div>
+<div class="subelement argument">
+<h4>$password</h4><p>User's password plaintext.</p>
+</div>
 </div></div>
 </div>
 <a id="method_setRole"></a><div class="element clickable method public method_setRole" data-toggle="collapse" data-target=".method_setRole .collapse">
-<h2>setRole()
-        </h2>
+<h2>Set the user's Moodle shortname role</h2>
 <pre>setRole($role) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$role</h4></div>
+<div class="subelement argument">
+<h4>$role</h4><p>Moodle shortname role</p></div>
 </div></div>
 </div>
 <a id="method_setUserIds"></a><div class="element clickable method public method_setUserIds" data-toggle="collapse" data-target=".method_setUserIds .collapse">
-<h2>setUserIds()
-        </h2>
+<h2>Set the array of ids to use for creating users.</h2>
 <pre>setUserIds(array $ids, bool $continuous) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -186,23 +179,22 @@
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$ids</h4>
-<code>array</code>
-</div>
+<code>array</code><p>Ids to be added to the end of the username</p></div>
 <div class="subelement argument">
 <h4>$continuous</h4>
-<code>bool</code>
+<code>bool</code><p>Are the id's continuous and can be looped through?</p>
 </div>
 </div></div>
 </div>
 <a id="method_setUsername"></a><div class="element clickable method public method_setUsername" data-toggle="collapse" data-target=".method_setUsername .collapse">
-<h2>setUsername()
-        </h2>
+<h2>Set the current username to create users from.</h2>
 <pre>setUsername($username) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$username</h4></div>
+<div class="subelement argument">
+<h4>$username</h4><p>The username or prefix to create users from.</p></div>
 </div></div>
 </div>
 <h3>
@@ -256,7 +248,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-07-22T12:31:42-07:00.<br></footer></div>
+            generated on 2013-07-23T16:29:03-07:00.<br></footer></div>
 </div>
 </body>
 </html>

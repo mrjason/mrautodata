@@ -1,11 +1,10 @@
 <?php
 /**
-* Calculated question type class.
-*
-* @package Question
-* @subpackage Calculated
-* @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * Calculated question type class.
+ * @package    Question
+ * @subpackage Calculated
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Question;
 

@@ -1,11 +1,10 @@
 <?php
 /**
  * Imscp activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Imscp
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Activity;
@@ -25,7 +24,7 @@ class ImscpActivity extends Activity {
     /**
      * Add the imscp file to the imscp creation screen
      */
-    public function fillOutRequiredFields(){
-        $this->c->ch->uploadRandFile($this->c->cf->filedir,'imscp','zip');
+    public function fillOutRequiredFields() {
+        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'imscp', 'zip');
     }
 }

@@ -1,9 +1,8 @@
 <?php
 /**
  * Course class
- *
- * @package Course
- * @author Jason Hardin <jason@moodlerooms.com>
+ * @package   Course
+ * @author    Jason Hardin <jason@moodlerooms.com>
  * @copyright Copyright (c) 2012, Moodlerooms Inc
  */
 

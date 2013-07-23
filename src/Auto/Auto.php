@@ -3,9 +3,8 @@
 namespace Auto;
 
 /**
- *
- * @package Auto
- * @author Jason Hardin <jason@moodlerooms.com>
+ * @package   Auto
+ * @author    Jason Hardin <jason@moodlerooms.com>
  * @copyright Copyright (c) 2012, Moodlerooms Inc
  */
 class Auto {
@@ -25,15 +24,16 @@ class Auto {
         if (empty($configDir) or !is_dir($configDir)) {
             throw new \RuntimeException('Failed to find a directory to store the config file, refer to the README.md');
         }
-        $this->setConfigFile($configDir.'/.Autoconfig.yml')
-             ->setDefaultConfigFile(__DIR__.'/Resources/Yaml/ConfigDefault.yml')
-             ->setStaticConfigFile(__DIR__.'/Resources/Yaml/ConfigStatic.yml')
-             ->setSitesConfigFile(__DIR__.'/Resources/Yaml/ConfigSites.yml')
-             ->setUsersConfigFile(__DIR__.'/Resources/Yaml/ConfigUsers.yml');
+        $this->setConfigFile($configDir . '/.Autoconfig.yml')
+            ->setDefaultConfigFile(__DIR__ . '/Resources/Yaml/ConfigDefault.yml')
+            ->setStaticConfigFile(__DIR__ . '/Resources/Yaml/ConfigStatic.yml')
+            ->setSitesConfigFile(__DIR__ . '/Resources/Yaml/ConfigSites.yml')
+            ->setUsersConfigFile(__DIR__ . '/Resources/Yaml/ConfigUsers.yml');
     }
 
     /**
      * @param $configFile
+     *
      * @return Auto
      */
     public function setConfigFile($configFile) {
@@ -50,6 +50,7 @@ class Auto {
 
     /**
      * @param $defaultConfigFile
+     *
      * @return Auto
      */
     public function setDefaultConfigFile($defaultConfigFile) {
@@ -66,6 +67,7 @@ class Auto {
 
     /**
      * @param $staticConfigFile
+     *
      * @return Auto
      */
     public function setStaticConfigFile($staticConfigFile) {
@@ -82,6 +84,7 @@ class Auto {
 
     /**
      * @param $sitesConfigFile
+     *
      * @return Auto
      */
     public function setSitesConfigFile($sitesConfigFile) {
@@ -98,6 +101,7 @@ class Auto {
 
     /**
      * @param $usersConfigFile
+     *
      * @return Auto
      */
     public function setUsersConfigFile($usersConfigFile) {

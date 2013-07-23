@@ -1,11 +1,10 @@
 <?php
 /**
  * Calculatedmulti question type class
- *
- * @package Question
+ * @package    Question
  * @subpackage Calculatedmulti
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Question;
 

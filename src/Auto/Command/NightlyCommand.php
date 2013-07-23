@@ -2,33 +2,31 @@
 
 /**
  * Nightly data generation for sales command file
- *
- * @package Command
+ * @package    Command
  * @subpackage Nightly
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Command;
 
-use Auto\Command\Command,
-    Auto\Joule2,
-    Auto\Container,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Output\Output;
+use Auto\Command\Command;
+use Auto\Container;
+use Auto\Joule2;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * NightlyCommand executes the nightly sales processes to add data base don user interactions.
  */
-class NightlyCommand extends Command{
+class NightlyCommand extends Command {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used, use an alias', 'all')
             ->addOption('batch', 'b', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'nightly')
@@ -60,93 +58,93 @@ EOF
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
-        $batch = $input->getOption('batch');
-       
-        if($sitesused == 'all'){
+        $batch     = $input->getOption('batch');
+
+        if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
-        $log = $this->getHelper('log');
-        $cfg = $this->getHelper('config');
-        $j2 = new Joule2(new Container($cfg,$this->getHelper('content'),$log));
-        if($cfg->get('conduit','enabled')){
-            $conduit = $this->getHelper('conduit')->setToken($cfg->get('conduit','token'));
+        $log        = $this->getHelper('log');
+        $cfg        = $this->getHelper('config');
+        $j2         = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
+        $useconduit = $cfg->get('conduit', 'enabled');
+        if ($useconduit) {
+            $conduit = $this->getHelper('conduit');
+            $conduit->setToken($cfg->get('conduit', 'token'));
         }
         $username = $input->getOption('username');
-        if(!$password = $input->getOption('password')){
-            $password = $cfg->get('users',$username);
+        if (!$password = $input->getOption('password')) {
+            $password = $cfg->get('users', $username);
         }
-        
-        foreach($sites as $site){
-            try{
-                if(!empty($conduit)){
+
+        foreach ($sites as $site) {
+            try {
+                if ($useconduit) {
                     $conduit->setUrl($site->url);
                 }
 
                 $j2->setSite($site);
                 $user = $this->getHelper('user');
 
-                $numusers = $input->getOption('totalusers')/7;
-                $dayofweek = date('w')+1;
+                $numusers  = $input->getOption('totalusers') / 7;
+                $dayofweek = date('w') + 1;
                 $startuser = $numusers * $dayofweek;
-                $enduser = $numusers * $dayofweek + $numusers;
-                $userIds = array($startuser, $enduser);
+                $enduser   = $numusers * $dayofweek + $numusers;
+                $userIds   = array($startuser, $enduser);
                 $user->setUserIds($userIds);
                 $user->setUsername($username);
                 $user->setPassword($password);
 
                 $users = $user->getUsers();
 
-                foreach($users as $user){
-                    $fields = array('username'=>$user->username, 'htmleditor'=>'0');
-                    if(!empty($conduit)){
-                        try{
-                            $conduit->user($fields,'update');
-                        } catch(Exception $e) {
+                foreach ($users as $user) {
+                    $fields = array('username' => $user->username, 'htmleditor' => '0');
+                    if ($useconduit) {
+                        try {
+                            $conduit->user($fields, 'update');
+                        } catch (Exception $e) {
                             print_r($e);
                             /// hopefully this continues without doing anything.
                         }
                     }
-                    if($j2->login($user)){
-                        $courses = $j2->getCourses();  // Might want to cache this for all users if we can assume they are enrolled in the same courses.
+                    if ($j2->login($user)) {
+                        $courses = $j2->getCourses(); // Might want to cache this for all users if we can assume they are enrolled in the same courses.
 
-                        foreach($courses as $course){
+                        foreach ($courses as $course) {
                             $course->view();
                             $activities = $course->getActivities();
-                            foreach($activities as $activity){
+                            foreach ($activities as $activity) {
                                 $interact = !rand(0, 4);
-                                if($interact){
+                                if ($interact) {
                                     $grade = rand(60, 100);
-                                    $j2->interactWithActivity($activity,$grade);
+                                    $j2->interactWithActivity($activity, $grade);
                                     $course->view();
                                 } else {
-                                    $log->action($site->url. ': Skipped activity '.$activity->getTitle());
+                                    $log->action($site->url . ': Skipped activity ' . $activity->getTitle());
                                 }
                             }
                         }
                         $j2->logout();
                     }
                     $fields['htmleditor'] = '1';
-                    if(!empty($conduit)){
-                        try{
-                            $conduit->user($fields,'update');
-                        } catch(Exception $e) {
+                    if ($useconduit) {
+                        try {
+                            $conduit->user($fields, 'update');
+                        } catch (Exception $e) {
                             /// hopefully this continues without doing anything.
                         }
                     }
 
                 }
                 $j2->teardown();
-            } catch (Exception $e){
+            } catch (Exception $e) {
                 print $e;
             }
         }

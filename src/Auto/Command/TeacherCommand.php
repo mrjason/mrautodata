@@ -2,42 +2,40 @@
 
 /**
  * Teacher command file
- *
- * @package Command
+ * @package    Command
  * @subpackage Teacher
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Command;
 
-use Auto\Command\Command,
-    Auto\Joule2,
-    Auto\Container,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Output\Output;
+use Auto\Command\Command;
+use Auto\Container;
+use Auto\Joule2;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * TeacherCommand which executes processes on the site or batch of sites as a teacher. Used for grading activities
  */
-class TeacherCommand extends Command{
+class TeacherCommand extends Command {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used, this is the alias int he sites file use the ls command to find all sites available', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'nightly')
             ->addOption('userbegin', 'b', InputOption::VALUE_OPTIONAL, 'User id start to perform actions with', 0)
             ->addOption('userend', 'e', InputOption::VALUE_OPTIONAL, 'User id end to perform actions with', 1)
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'teacher')
-            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created','')
+            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created', '')
             ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Sets this execution into debug mode only using 1 student and 1 course')
             ->setName('teacher')
-            ->setAliases(array('t')) 
+            ->setAliases(array('t'))
             ->setDescription('Intereacts with 50% of all activities in a all courses a teacher is enrolled in for a site. Also attempts to grade the student submissions for interacted with activities.')
             ->setHelp(<<<EOF
 You can request actions be taken on a specific site using the <comment>--site</comment> option:
@@ -69,38 +67,38 @@ EOF
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {   
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
-        $batch = $input->getOption('type');
-       
-        if($sitesused == 'all'){
+        $batch     = $input->getOption('type');
+
+        if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
-        $debug = $input->getOption('debug');
-        $log = $this->getHelper('log');
-        $cfg = $this->getHelper('config');
-        $j2 = new Joule2(new Container($cfg,$this->getHelper('content'),$log));
-        if($cfg->get('conduit','enabled')){
-            $conduit = $this->getHelper('conduit')->setToken($cfg->get('conduit','token'));
+        $debug      = $input->getOption('debug');
+        $log        = $this->getHelper('log');
+        $cfg        = $this->getHelper('config');
+        $j2         = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
+        $useconduit = $cfg->get('conduit', 'enabled');
+        if ($useconduit) {
+            $conduit = $this->getHelper('conduit');
+            $conduit->setToken($cfg->get('conduit', 'token'));
         }
         $username = $input->getOption('username');
-        if(!$password = $input->getOption('password')){
-            $password = $cfg->get('users',$username);
+        if (!$password = $input->getOption('password')) {
+            $password = $cfg->get('users', $username);
         }
-        
-        foreach($sites as $site){
-            if(!empty($conduit)){
+
+        foreach ($sites as $site) {
+            if ($useconduit) {
                 $conduit->setUrl($site->url);
             }
-            
+
             $j2->setSite($site);
             $user = $this->getHelper('user');
 
@@ -112,42 +110,42 @@ EOF
             $user->setPassword($password);
 
             $users = $user->getUsers();
-            if($debug){
+            if ($debug) {
                 $users = array($users[0]);
             }
-            foreach($users as $user){
-                if(!empty($conduit)){
-                    $fields = array('username'=>$user->username, 'htmleditor'=>'0');
+            foreach ($users as $user) {
+                if ($useconduit) {
+                    $fields = array('username' => $user->username, 'htmleditor' => '0');
                     $conduit->updateUser($fields);
                 }
 
-                if($j2->login($user)){
-                    $courses = $j2->getCourses();  // Might want to cache this for all users if we can assume they are enrolled in the same courses.
+                if ($j2->login($user)) {
+                    $courses = $j2->getCourses(); // Might want to cache this for all users if we can assume they are enrolled in the same courses.
 
-                    if($debug && isset($courses[0])){
+                    if ($debug && isset($courses[0])) {
                         $courses = array($courses[0]);
                     }
-                    foreach($courses as $course){
+                    foreach ($courses as $course) {
                         $course->view();
                         $activities = $course->getActivities();
 
-                        foreach($activities as $activity){
+                        foreach ($activities as $activity) {
                             $grade = rand(60, 100);
-                            $j2->interactWithActivity($activity,$grade);
+                            $j2->interactWithActivity($activity, $grade);
                             $course->view();
                         }
                     }
                     $j2->logout();
                 }
-                
-                $fields['htmleditor'] = '1';
-                if(!empty($conduit)){
+
+                if ($useconduit) {
+                    $fields['htmleditor'] = '1';
                     $conduit->updateUser($fields);
                 }
             }
 
             $j2->teardown();
-        }  
+        }
         $j2->cleanup();
     }
 }

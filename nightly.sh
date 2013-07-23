@@ -2,7 +2,7 @@
 FILENAME=$1
 B=batches
 
-source ~/data_auto_bash_cfg.sh
+source ./data_auto_bash_cfg.sh
 
 cd $BASEDIR/$DIR
 pwd

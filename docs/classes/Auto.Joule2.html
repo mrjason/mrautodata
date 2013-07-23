@@ -39,10 +39,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">81</span></a></li>
+                <span class="label label-info">43</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">12</span>
+                <span class="label label-info">11</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -72,8 +72,8 @@
 <li class="method public "><a href="#method_createCourse" title="createCourse :: Create a course based on the currently set course."><span class="description">Create a course based on the currently set course.</span><pre>createCourse()</pre></a></li>
 <li class="method public "><a href="#method_getCourses" title="getCourses :: This method returns the courses the user is enrolled in that show either on the My Moodle or site course pages."><span class="description">This method returns the courses the user is enrolled in that show either on the My Moodle or site course pages.</span><pre>getCourses()</pre></a></li>
 <li class="method public "><a href="#method_goToSitePage" title="goToSitePage :: This method clicks on the Home link in the navigation breadcrumb."><span class="description">This method clicks on the Home link in the navigation breadcrumb.</span><pre>goToSitePage()</pre></a></li>
-<li class="method public "><a href="#method_interactWithActivity" title="interactWithActivity :: This method determines which action to take based on the class of the LI tag for the activity based on the CMID passed."><span class="description">This method determines which action to take based on the class of the LI tag for the activity based on the CMID passed.</span><pre>interactWithActivity()</pre></a></li>
-<li class="method public "><a href="#method_login" title="login :: This method logs the user into the site and requires that the current user has been set."><span class="description">This method logs the user into the site and requires that the current user has been set.</span><pre>login()</pre></a></li>
+<li class="method public "><a href="#method_interactWithActivity" title="interactWithActivity :: Executes the interact method of the activity object passed."><span class="description">Executes the interact method of the activity object passed.</span><pre>interactWithActivity()</pre></a></li>
+<li class="method public "><a href="#method_login" title="login :: The function logs the user into the site"><span class="description">The function logs the user into the site</span><pre>login()</pre></a></li>
 <li class="method public "><a href="#method_logout" title="logout :: This method logs the user out from the site."><span class="description">This method logs the user out from the site.</span><pre>logout()</pre></a></li>
 <li class="method public "><a href="#method_manualMarkAllActivitiesComplete" title="manualMarkAllActivitiesComplete :: This method marks all activities in a course complete by the user."><span class="description">This method marks all activities in a course complete by the user.</span><pre>manualMarkAllActivitiesComplete()</pre></a></li>
 <li class="method public "><a href="#method_manualMarkRandomActivityComplete" title="manualMarkRandomActivityComplete :: Marks a random activity in the course as completed by a student"><span class="description">Marks a random activity in the course as completed by a student</span><pre>manualMarkRandomActivityComplete()</pre></a></li>
@@ -172,46 +172,40 @@
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_interactWithActivity"></a><div class="element clickable method public method_interactWithActivity" data-toggle="collapse" data-target=".method_interactWithActivity .collapse">
-<h2>This method determines which action to take based on the class of the LI tag for the activity based on the CMID passed.</h2>
-<pre>interactWithActivity(\Auto\stdClass $activity, $grade) : boolean</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Behaviors are:</p>
-
-<ul>
-<li>forum: create discussion</li>
-<li>assignment: post to assignment</li>
-<li>quiz: attempt quiz</li>
-<li>resource: view resource</li>
-</ul></div>
-<table class="table table-bordered"><tr>
-<th>access</th>
-<td>public</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$activity</h4>
-<code>\Auto\stdClass</code><p>the cmid of the module that is being interacted with</p></div>
-<div class="subelement argument"><h4>$grade</h4></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>boolean</code>Return if the activity was interacted iwht or not.</div>
-</div></div>
-</div>
-<a id="method_login"></a><div class="element clickable method public method_login" data-toggle="collapse" data-target=".method_login .collapse">
-<h2>This method logs the user into the site and requires that the current user has been set.</h2>
-<pre>login(\Auto\stdClass $user) </pre>
+<h2>Executes the interact method of the activity object passed.</h2>
+<pre>interactWithActivity($activity, $grade) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <table class="table table-bordered"><tr>
-<th>access</th>
-<td>public</td>
+<th>author</th>
+<td><a href="mailto:jason@moodlerooms.com">Jason Hardin</a></td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$activity</h4><p>The activity object to interact with.</p></div>
+<div class="subelement argument">
+<h4>$grade</h4><p>The grade to give the activity.</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_login"></a><div class="element clickable method public method_login" data-toggle="collapse" data-target=".method_login .collapse">
+<h2>The function logs the user into the site</h2>
+<pre>login(string $user) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>author</th>
+<td><a href="mailto:jason@moodlerooms.com">Jason Hardin</a></td>
 </tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$user</h4>
-<code>\Auto\stdClass</code><p>The current user to be used. see the User variable.</p></div>
+<code>string</code><p>The user to login as</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
 </div></div>
 </div>
 <a id="method_logout"></a><div class="element clickable method public method_logout" data-toggle="collapse" data-target=".method_logout .collapse">
@@ -324,7 +318,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-07-22T12:31:42-07:00.<br></footer></div>
+            generated on 2013-07-23T16:29:03-07:00.<br></footer></div>
 </div>
 </body>
 </html>

@@ -1,11 +1,10 @@
 <?php
 /**
  * Url activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Url
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Activity;
 
@@ -24,7 +23,7 @@ class UrlActivity extends Activity {
     /**
      * Add values to the required fields for the url resource type in the resource creation screen
      */
-    public function fillOutRequiredFields(){
+    public function fillOutRequiredFields() {
         $field = $this->c->p->findField('externalurl');
         $field->setValue('http://www.moodlerooms.com');
     }

@@ -1,11 +1,10 @@
 <?php
 /**
  * ValidateHelper class
- *
- * @package Helper
+ * @package    Helper
  * @subpackage Validate
- * @copyright Copyright (c) 2012, Moodlerooms Inc
- * @author Mark Nielsen <mark@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
+ * @author     Mark Nielsen <mark@moodlerooms.com>
  */
 namespace Auto\Helper;
 
@@ -18,9 +17,7 @@ use \Symfony\Component\Console\Helper\Helper;
 class ValidateHelper extends Helper {
     /**
      * Returns the canonical name of this helper.
-     *
      * @return string The canonical name
-     *
      * @api
      */
     function getName() {
@@ -28,7 +25,10 @@ class ValidateHelper extends Helper {
     }
 
     /**
+     * Validate teh path provided is a directory
+     *
      * @param $path
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      */
@@ -47,7 +47,10 @@ class ValidateHelper extends Helper {
     }
 
     /**
+     * Make sure the value is not empty
+     *
      * @param $value
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      */
@@ -59,7 +62,10 @@ class ValidateHelper extends Helper {
     }
 
     /**
+     * Validate the name passed has valid characters for a database.
+     *
      * @param $name
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      */

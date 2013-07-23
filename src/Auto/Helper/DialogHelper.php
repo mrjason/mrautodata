@@ -1,11 +1,10 @@
 <?php
 /**
  * DialogHelper Class
- *
- * @package Helper
+ * @package    Helper
  * @subpackage DialogHelper
- * @copyright Copyright (c) 2012, Moodlerooms Inc
- * @author Mark Nielsen <mark@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
+ * @author     Mark Nielsen <mark@moodlerooms.com>
  */
 
 namespace Auto\Helper;
@@ -18,29 +17,32 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DialogHelper extends BaseDialogHelper {
     /**
-     * @param $question
-     * @param $default
+     * Get the question for the dialog
+     *
+     * @param        $question
+     * @param        $default
      * @param string $sep
+     *
      * @return string
      */
-    public function getQuestion($question, $default, $sep = ':')
-    {
+    public function getQuestion($question, $default, $sep = ':') {
         return $default ? sprintf('<info>%s</info> [<comment>%s</comment>]%s ', $question, $default, $sep) : sprintf('<info>%s</info>%s ', $question, $sep);
     }
 
     /**
+     * Write the dialogue out.
+     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param $text
-     * @param string $style
+     * @param                                                   $text
+     * @param string                                            $style
      */
-    public function writeSection(OutputInterface $output, $text, $style = 'bg=blue;fg=white')
-    {
+    public function writeSection(OutputInterface $output, $text, $style = 'bg=blue;fg=white') {
         /** @var $formatter \Symfony\Component\Console\Helper\FormatterHelper */
         $formatter = $this->getHelperSet()->get('formatter');
         $output->writeln(array(
-            '',
-            $formatter->formatBlock($text, $style, true),
-            '',
-        ));
+                              '',
+                              $formatter->formatBlock($text, $style, true),
+                              '',
+                         ));
     }
 }

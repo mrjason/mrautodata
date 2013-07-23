@@ -1,11 +1,10 @@
 <?php
 /**
  * Scorm activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Scorm
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Activity;
@@ -25,7 +24,7 @@ class ScormActivity extends Activity {
     /**
      * Add the scorm file to the scorm creation screen
      */
-    public function fillOutRequiredFields(){
-        $this->c->ch->uploadRandFile($this->c->cf->filedir,'scorm','zip');
+    public function fillOutRequiredFields() {
+        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'scorm', 'zip');
     }
 }

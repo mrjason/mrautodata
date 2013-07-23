@@ -1,11 +1,10 @@
 <?php
 /**
  * Book activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Book
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 namespace Auto\Activity;
 
@@ -24,10 +23,10 @@ class BookActivity extends Activity {
     /**
      * View the book and click the next link until there are no more next links. This will page through chapters.
      */
-    public function post(){
+    public function post() {
         $this->view();
-        while($el = $this->c->p->findLink('Next')){
-            $this->c->l->action($this->title.': Going to the next chapter of the book');
+        while ($el = $this->c->p->findLink('Next')) {
+            $this->c->l->action($this->title . ': Going to the next chapter of the book');
             $el->click();
             $this->c->reloadPage();
         }

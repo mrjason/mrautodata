@@ -1,11 +1,10 @@
 <?php
 /**
  * Survey activity class
- *
- * @package Activity
+ * @package    Activity
  * @subpackage Survey
- * @author Jason Hardin <jason@moodlerooms.com>
- * @copyright Copyright (c) 2012, Moodlerooms Inc
+ * @author     Jason Hardin <jason@moodlerooms.com>
+ * @copyright  Copyright (c) 2012, Moodlerooms Inc
  */
 
 namespace Auto\Activity;
@@ -25,8 +24,8 @@ class SurveyActivity extends Activity {
     /**
      * Add the survey type required field to the survey creation screen.
      */
-    public function fillOutRequiredFields(){
+    public function fillOutRequiredFields() {
         $select = $this->c->p->findField('template');
-        $select->selectOption(rand(1,5));
+        $select->selectOption(rand(1, 5));
     }
 }

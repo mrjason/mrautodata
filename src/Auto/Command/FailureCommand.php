@@ -66,7 +66,7 @@ EOF
                 $failure = new \stdClass();
                 $failure->site = $site->url;
                 $failure->reason = $log->getFailureReason();
-                $failures[] = $site->url;
+                $failures[] = $failure;
             } else {
                 $log->delete();
             }

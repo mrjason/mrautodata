@@ -189,6 +189,9 @@ class LogHelper extends Helper {
 
     /**
      * Given a site object check if there the site failed.  Failure is defined by a site not having created an action file or having created a failure log file.
+     *
+     * @return bool
+     * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function failed() {
         if (!file_exists($this->site->afile) || file_exists($this->site->ffile)) {
@@ -196,6 +199,21 @@ class LogHelper extends Helper {
         }
 
         return false;
+    }
+
+    /**
+     * Return the reason for the failure.
+     *
+     * @return string
+     * @author Jason Hardin <jason@moodlerooms.com>
+     */
+    public function getFailureReason(){
+        if (!file_exists($this->site->afile)) {
+            return 'action file doesn\'t exist named: '. $this->site->afile;
+        }
+        if(file_exists($this->site->ffile)) {
+            return 'failure file does exist named: '.$this->site->ffile;
+        }
     }
 
     /**
@@ -236,23 +254,18 @@ class LogHelper extends Helper {
             $subject = 'Nightly Data Generation Action Log For ' . $this->site->url . ' Ran on ' . date('l F j, Y');
             $text    = 'This is the Moodlerooms nightly data generation action log for ' . $this->site->url . ' that ran on ' . date('l F j, Y') . ".\n";
 
-            /// Always email the script admin
-            $address        = new \stdClass();
-            $address->email = 'jason@moodlerooms.com';
-            $address->name  = 'Jason Hardin';
-            $to[]           = $address;
-
             if (isset($this->site->owner)) {
                 $address        = new \stdClass();
                 $address->email = $this->site->owner['email'];
                 $address->name  = $this->site->owner['name'];
                 $to[]           = $address;
             }
+            $admins = $this->cfg->getSection('emailadmins');
 
-            if (in_array('sales', $this->site->type)) {
+            foreach ($admins as $admin) {
                 $address        = new \stdClass();
-                $address->email = 'abraden@moodlerooms.com';
-                $address->name  = 'Andy Braden';
+                $address->email = $admin['email'];
+                $address->name  = $admin['name'];
                 $to[]           = $address;
             }
 

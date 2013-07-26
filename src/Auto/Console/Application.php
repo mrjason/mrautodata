@@ -35,6 +35,7 @@ class Application extends BaseApplication {
             $config = $helperSet->get('config');
             $config->setConfig(array_merge(
                 Yaml::parse($this->getAuto()->getConfigFile()),
+                Yaml::parse($this->getAuto()->getEmailAdminsConfigFile()),
                 Yaml::parse($this->getAuto()->getSitesConfigFile()),
                 Yaml::parse($this->getAuto()->getUsersConfigFile())
             ));

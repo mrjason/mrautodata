@@ -36,7 +36,7 @@ The install process assumes that you have setup selenium, zombie or goute to run
       teacher: "password"
       admin: "password"
 # Add a YAML file titled ConfigEmailAdmins.yml for the admin users that need to recieve emails of the logs when failures happen.
-    email:
+    emailadmins:
       admin1:
         email: "email@email.com"
         name: "User's Name"

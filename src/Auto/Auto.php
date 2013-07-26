@@ -12,6 +12,7 @@ class Auto {
 
     protected $configFile;
     protected $defaultConfigFile;
+    protected $emailAdminsConfigFile;
     protected $staticConfigFile;
     protected $sitesConfigFile;
     protected $usersConfigFile;
@@ -26,6 +27,7 @@ class Auto {
         }
         $this->setConfigFile($configDir . '/.Autoconfig.yml')
             ->setDefaultConfigFile(__DIR__ . '/Resources/Yaml/ConfigDefault.yml')
+            ->setEmailAdminsConfigFile(__DIR__ . '/Resources/Yaml/ConfigEmailAdmins.yml')
             ->setStaticConfigFile(__DIR__ . '/Resources/Yaml/ConfigStatic.yml')
             ->setSitesConfigFile(__DIR__ . '/Resources/Yaml/ConfigSites.yml')
             ->setUsersConfigFile(__DIR__ . '/Resources/Yaml/ConfigUsers.yml');
@@ -46,6 +48,23 @@ class Auto {
      */
     public function getConfigFile() {
         return $this->configFile;
+    }
+
+    /**
+     * @param $emailAdminsConfigFile
+     *
+     * @return Auto
+     */
+    public function setEmailAdminsConfigFile($emailAdminsConfigFile) {
+        $this->emailAdminsConfigFile = $emailAdminsConfigFile;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailAdminsConfigFile() {
+        return $this->emailAdminsConfigFile;
     }
 
     /**

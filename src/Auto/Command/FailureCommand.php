@@ -63,6 +63,9 @@ EOF
         foreach ($sites as $site) {
             $log->setSite($site);
             if ($log->failed()) {
+                $failure = new \stdClass();
+                $failure->site = $site->url;
+                $failure->reason = $log->getFailureReason();
                 $failures[] = $site->url;
             } else {
                 $log->delete();
@@ -71,21 +74,22 @@ EOF
 
         /// Create the email to send the process admins for the failed sites.
         if (count($failures) > 0) {
-            $admins = $this->getHelper('config')->getSection('admins');
+            $admins = $this->getHelper('config')->getSection('emailadmins');
             $to     = array();
+
             foreach ($admins as $admin) {
                 $address        = new \stdClass();
-                $address->email = $admin->email;
-                $address->name  = $admin->name;
+                $address->email = $admin['email'];
+                $address->name  = $admin['name'];
                 $to[]           = $address;
             }
 
             $subject = 'Nightly Data Generation Failures for ' . date('l F j, Y');
 
-            $msg = '<p>The following sites have failure logs:</p><ul>';
+            $msg = '<p>The following sites failed for the listed reason:</p><ul>';
 
-            foreach ($failures as $f) {
-                $msg .= '<li>' . $f . '</il>';
+            foreach ($failures as $failure) {
+                $msg .= '<li>' . $failure->site . ' failed because '.$failure->reason.'</il>';
             }
             $msg .= '</ul>';
             $log->send($subject, $msg, $to);

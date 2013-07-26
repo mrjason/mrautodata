@@ -53,7 +53,7 @@ class UserHelper extends Helper {
     private $index = 0;
     /**
      * The Moodle role shortname for a student in a course.
-     * 
+     *
      * @var array
      */
     private $studentroles = array('student');

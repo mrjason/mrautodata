@@ -62,10 +62,10 @@ EOF
         $failures = array();
         foreach ($sites as $site) {
             $log->setSite($site);
-            if ($log->failed()) {
+            if ($reason = $log->failed()) {
                 $failure = new \stdClass();
                 $failure->site = $site->url;
-                $failure->reason = $log->getFailureReason();
+                $failure->reason = $reason;
                 $failures[] = $failure;
             } else {
                 $log->delete();

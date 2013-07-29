@@ -190,30 +190,18 @@ class LogHelper extends Helper {
     /**
      * Given a site object check if there the site failed.  Failure is defined by a site not having created an action file or having created a failure log file.
      *
-     * @return bool
+     * @return bool|string
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function failed() {
-        if (!file_exists($this->site->afile) || file_exists($this->site->ffile)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Return the reason for the failure.
-     *
-     * @return string
-     * @author Jason Hardin <jason@moodlerooms.com>
-     */
-    public function getFailureReason(){
         if (!file_exists($this->site->afile)) {
             return 'action file doesn\'t exist named: '. $this->site->afile;
         }
         if(file_exists($this->site->ffile)) {
             return 'failure file does exist named: '.$this->site->ffile;
         }
+
+        return false;
     }
 
     /**

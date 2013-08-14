@@ -91,7 +91,7 @@ class Joule2 {
             $this->user = $user;
         }
         $this->c->visit('/login/index.php');
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->site->url);
         if ($username = $this->c->p->findField('username')) {
             $username->setValue($this->user->username);
             if ($password = $this->c->p->findField('password')) {
@@ -109,7 +109,7 @@ class Joule2 {
             $this->c->l->failure($this->site->url . ': Could not find username field in the login area');
             return false;
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->site->url);
         if ($this->c->p->find('css', 'div.loginerrors')) {
             $this->c->l->failure($this->site->url . ': Error in Login for ' . $this->user->username . ' ' . $this->c->p->find('css', 'div.loginerrors > span')->getText());
             return false;
@@ -123,7 +123,7 @@ class Joule2 {
     public function logout() {
         try {
             $this->c->visit('/login/logout.php');
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->site->url);
             if ($continue = $this->c->p->findButton('Continue')) {
                 $continue->click();
             }
@@ -177,7 +177,7 @@ class Joule2 {
         if ($el = $this->c->p->findLink('Home')) {
             $this->c->l->action($this->site->url . ': Clicked Home link');
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->site->url);
         } else {
             $this->c->l->action($this->site->url . ': Going to the base page');
             $this->c->visit();
@@ -201,7 +201,7 @@ class Joule2 {
                 $activity->grade($grade);
             }
         }
-        $this->c->reloadPage();
+        //$this->c->reloadPage($this->site->url);
         return true;
     }
 
@@ -239,16 +239,17 @@ class Joule2 {
      * @param $filename The file to be uploaded in the demo files directory
      */
     public function addProfilePicture($filename) {
-        $this->c->l->action($this->site->url . ': Editing Profile');
-        $this->c->visit('/user/edit.php');
-        $this->c->ch->addFile($this->c->cf->filedir . '/' . $filename);
-        $button = $this->c->p->findButton('Update profile');
         try {
+            $this->c->l->action($this->site->url . ': Editing Profile');
+            $this->c->visit('/user/edit.php');
+            $this->c->ch->addFile($this->c->cf->filedir . '/' . $filename);
+            $button = $this->c->p->findButton('Update profile');
+
             $button->press();
         } catch (Exception $e) {
             //do nothing because the likely issue is an alert that we can't handle.
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->site->url);
     }
 
     /**

@@ -49,7 +49,7 @@ class Activity {
         foreach ($options as $name => $value) {
             $this->{$name} = $value;
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
     }
 
     /**
@@ -61,7 +61,7 @@ class Activity {
         if ($save = $this->c->p->findButton('Save and return to course')) {
             $this->c->l->action($this->title . ': Saving ' . $this->type . ' and returning to the course.');
             $save->press();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             if ($error = $this->c->p->find('css', '.error')) {
                 $this->c->l->error($this->title . ': Error in create activity form for ' . $this->type . '. Error is ' . $error->getText());
             }
@@ -95,10 +95,10 @@ class Activity {
      * View the activity.
      */
     public function view() {
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         $this->access('course');
-        $this->c->l->action($this->title . ': Viewing ' . $this->title . ' activity type ' . $this->type);
-        $this->c->reloadPage();
+        $this->c->l->action($this->title . ': Viewing');
+        $this->c->reloadPage($this->title);
     }
 
     /**
@@ -109,7 +109,7 @@ class Activity {
             if ($el = $li->find('css', 'input[type="image"]')) {
                 $this->c->l->action($this->title . ': Marking complete');
                 $el->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
                 $this->c->l->action($el->getAttribute('title'));
             }
         }
@@ -132,14 +132,14 @@ class Activity {
                 break;
         }
         if (!empty($link)) {
-            $this->c->l->action($this->title . ': Clicked on activity ' . $logarea . ' link titled ' . $this->title . ' activity type ' . $this->type);
+            $this->c->l->action($this->title . ': Clicked on activity ' . $logarea . ' link');
             $link->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         } else if (isset($this->url)) {
-            $this->c->l->action($this->title . ': Returning to activity ' . $this->title . ' with url ' . $this->url);
+            $this->c->l->action($this->title . ': Returning to activity using url ' . $this->url);
             $this->c->visit($this->url);
         } else {
-            $this->c->l->action($this->title . ': Could not find link to ' . $logarea . ' and the url was not set for ' . $this->title);
+            $this->c->l->action($this->title . ': Could not find link to ' . $logarea . ' and the url was not set');
         }
     }
 

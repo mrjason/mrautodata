@@ -28,7 +28,7 @@ class BookActivity extends Activity {
         while ($el = $this->c->p->findLink('Next')) {
             $this->c->l->action($this->title . ': Going to the next chapter of the book');
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 }

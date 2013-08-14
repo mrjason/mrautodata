@@ -115,14 +115,17 @@ class Container {
     /**
      * Simple function to get the page content into the internal page variable. This also checks for a PLD alert dialog and closes it.
      */
-    public function reloadPage() {
+    public function reloadPage($pageTitle ='') {
         $this->p = $this->s->getPage();
 
         if ($plddlg = $this->p->find('css', '#local_pld_alert')) {
-            $this->p->pressButton('Close');
+            if($btn = $plddlg->findButton('Close')){
+                $this->l->action($pageTitle.': Closing PLD Alert');
+                $btn->press();
+                $this->l->action('Closing PLD Alert after');
+            }
             $this->p = $this->s->getPage();
         }
-        //$this->l->action('Current url is '.$this->s->getCurrentUrl());
     }
 
     /**
@@ -138,15 +141,5 @@ class Container {
         $this->l->action('Visiting ' . $url);
         $this->s->visit($url);
         $this->reloadPage();
-
-        /* Debugging info
-                $replace = array($this->burl,'/', '.php');
-                $with = array('','','.html');
-                $file = str_replace($replace, $with,$url);
-                if(empty($file)){
-                    $file = 'baseurl.html';
-                }
-                $this->l->genHTML($file,$this->s->getPage()->getContent());
-        */
     }
 }

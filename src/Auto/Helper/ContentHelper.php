@@ -655,17 +655,16 @@ class ContentHelper extends Helper {
      * @param $type The type of file to be getting, math, english, scorm, imscp
      * @param $ext  The file's extension also a directory, pdf, zip, docx
      *
-     * @return string The file location and name if it exists or essay.txt if it does not
+     * @return string|bool
      */
     public function getRandFile($dir, $type, $ext) {
         $filedir = $dir . $type . '/' . $ext . '/';
-print_r($filedir);
         if (is_dir($filedir)) {
             $files  = scandir($filedir, 1);
             $picked = rand(0, (count($files) - 3));
             return $filedir . $files[$picked];
         } else {
-            return 'essay.txt';
+            return false;
         }
     }
 
@@ -686,9 +685,9 @@ print_r($filedir);
      * @param string $saveas The name to save the file as
      */
     public function uploadRandFile($dir, $type, $ext, $saveas = '') {
-        print_r($dir);
-        $filename = $this->getRandFile($dir, $type, $ext);
-        $this->addFile($filename, $saveas);
+        if($filename = $this->getRandFile($dir, $type, $ext)){
+            $this->addFile($filename, $saveas);
+        }
     }
 
     /**
@@ -700,6 +699,7 @@ print_r($filedir);
      */
     public function addFile($file, $saveas = '') {
         if (file_exists($file)) {
+            $el = 0;
             $this->c->reloadPage();
             if ($div = $this->c->p->find('css', '.fp-btn-add')) {
                 sleep($this->c->cf->delay); // it seems some javascript is running to update the file manager.  The add button can be found and then hidden when the .fm-maxfiles class is applied.
@@ -720,7 +720,8 @@ print_r($filedir);
                 if ($repoarea = $this->c->p->find('css', '.fp-list')) {
                     if ($uploadrepo = $repoarea->findLink('Upload a file')) {
                         $uploadrepo->click();
-                        sleep($this->c->cf->delay); // Need to delay looking for AJAX to process and part of the page to be unhidden or added.
+                    /// Need to delay looking for AJAX to process and part of the page to be unhidden or added.
+                        sleep($this->c->cf->delay);
                         if ($upload = $this->c->p->findField('repo_upload_file')) {
                             $this->c->l->action('Attaching file ' . $file . ' in upload repository');
                             $upload->attachFile($file);

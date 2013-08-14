@@ -42,7 +42,7 @@ class QuizActivity extends Activity {
             if ($btn = $this->c->p->findButton($button)) {
                 $btn->click();
 
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
                 while ($next = $this->c->p->findButton('Next')) {
                     $questions = $this->getQuestions();
                     $this->c->l->action($this->title . ': Answering all questions');
@@ -54,7 +54,7 @@ class QuizActivity extends Activity {
                         }
                     }
                     $next->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 }
                 $this->finishAttempt();
             }
@@ -96,21 +96,21 @@ class QuizActivity extends Activity {
             if ($confirmdlg = $this->c->p->find('css', '#confirmdialog_c')) {
                 $confirmdlg->pressButton('Submit all and finish');
                 $this->c->l->action($this->title . ':Confirming Submitting and finishing ' . $this->title);
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
             if ($continue = $this->c->p->findButton('Continue')) {
                 $this->c->l->action($this->title . ':Found continue button for an error not sure why');
                 $continue->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             } else {
                 while ($next = $this->c->p->findLink('Next')) {
                     $next->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 }
                 if ($finish = $this->c->p->findLink('Finish review')) {
                     $this->c->l->action($this->title . ':Finishing review');
                     $finish->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 }
             }
         } else {
@@ -126,12 +126,12 @@ class QuizActivity extends Activity {
     public function grade() {
         $el = $this->c->p->find('css', 'div#quizattemptcounts a');
         $el->click();
-        $this->c->reloadPage();
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
+        $this->c->reloadPage($this->title);
         $el->click("link=Manual grading");
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         $el->click("//table[@id='attempts']/tbody/tr[2]/td[4]/strong[2]/a");
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         $questions = $this->selenium->getXpathCount("//form/div");
         for ($i = 1; $i < $questions; $i++) {
             $basexpath = "//form/div[$i]/fieldset/div";
@@ -141,7 +141,7 @@ class QuizActivity extends Activity {
 
             $button = $this->c->p->findButton('Save Changes');
             $button->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 }

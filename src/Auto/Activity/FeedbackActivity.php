@@ -31,7 +31,7 @@ class FeedbackActivity extends Activity {
     public function post() {
         if ($el = $this->c->p->findLink('Answer the questions...')) {
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             $textfields = $this->c->p->findAll('css', '.feedback_item_textfield input');
             foreach ($textfields as $textfield) {
                 $textfield->setValue($this->c->ch->getRandSentence());
@@ -53,11 +53,11 @@ class FeedbackActivity extends Activity {
             }
             if ($button = $this->c->p->findButton('Submit your answers')) {
                 $button->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
             if ($button = $this->c->p->findButton('Continue')) {
                 $button->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
         }
     }

@@ -53,7 +53,7 @@ class Course {
         foreach ($options as $name => $value) {
             $this->{$name} = $value;
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->fullname);
     }
 
     /**
@@ -67,12 +67,12 @@ class Course {
         }
         if ($el = $this->c->p->find('css', 'div.topiclistlink > a')) {
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->fullname);
         }
 
         if ($expand = $this->c->p->findLink('Expand All')) {
             $expand->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->fullname);
         }
 
         $activitiesLi = $this->c->p->findAll('css', 'li.activity');
@@ -133,7 +133,7 @@ class Course {
         if ($el = $this->c->p->findLink($this->fullname)) {
             $this->c->l->action("Clicked on " . $this->fullname);
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->fullname);
         } else {
             if ($this->c->cf->debug) {
                 $this->c->l->action("Can't find current course link " . $this->fullname);
@@ -154,7 +154,7 @@ class Course {
             if ($el = $navbar->findLink($this->fullname)) {
                 $this->c->l->action('Clicked on Course Nav link ' . $this->fullname);
                 $el->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->fullname);
             }
         } else if (isset($this->url)) {
             $this->c->l->action('Returning to course' . $this->fullname . ' with url ' . $this->url);
@@ -172,7 +172,7 @@ class Course {
         $this->c->l->action('Adding course');
         if ($btn = $this->c->p->findButton('Add a new course')) {
             $btn->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->fullname);
             do {
                 $fullname  = $this->fullname . $i;
                 $shortname = $this->shortname . $i;
@@ -188,7 +188,7 @@ class Course {
                 }
                 $btn = $this->c->p->findButton('Save changes');
                 $btn->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->fullname);
                 $i++;
             } while ($error = $this->c->p->find('css', '.error'));
             $this->fullname  = $fullname;
@@ -239,7 +239,7 @@ class Course {
                 if ($el = $this->getCreateAcitivty($activity)) {
                     $this->c->l->action($this->fullname . ': Creating ' . $activity->getTitle());
                     $el->doubleClick();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->fullname);
                     $activity->create();
                 }
             }
@@ -270,7 +270,7 @@ class Course {
         if ($chooser = $this->c->p->findLink('Activity chooser on')) {
             $this->c->l->action($this->fullname . ': Changing to activity chooser');
             $chooser->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->fullname);
         }
         if ($addActivity = $this->c->p->find('css', '.section-modchooser-link a')) {
             $this->c->l->error($this->fullname . ': Clicking on add activity link');
@@ -289,14 +289,14 @@ class Course {
             $this->c->l->error($this->fullname . ': Turning editing on');
             $btn->click();
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->fullname);
     }
 
     /**
      * View the course page via the url
      */
     public function view() {
-        $this->c->l->action('Viewing ' . $this->fullname);
+        $this->c->l->action($this->fullname . ': Viewing');
         $this->c->s->visit($this->url);
     }
 

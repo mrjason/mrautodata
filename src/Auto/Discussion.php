@@ -93,7 +93,7 @@ class Discussion {
         if (!empty($btn)) {
             $this->c->l->action($msg);
             $btn->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             $this->post($type, $subject);
         } else {
             $this->c->l->action('Could not find any discussion button to click on');
@@ -139,11 +139,11 @@ class Discussion {
         }
         if ($btn = $this->c->p->findButton('id_submitbutton')) {
             $btn->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
         if ($continue = $this->c->p->findLink('Continue')) {
             $continue->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 
@@ -157,7 +157,7 @@ class Discussion {
             $this->c->l->action('Replying to the ' . $rand . ' reply link on the page');
             if ($reply = $posts[$rand]->findLink('Reply')) {
                 $reply->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
                 $this->post('reply');
             } else {
                 $this->c->l->action($this->title . ': Could not find a reply link');
@@ -195,17 +195,17 @@ class Discussion {
                 for ($j = 1; $j < $next; $j++) {
                     if ($el = $this->c->p->find("link=Next")) {
                         $el->click("link=Next");
-                        $this->c->reloadPage();
+                        $this->c->reloadPage($this->title);
                     }
                 }
                 if ($el = $this->c->p->find($link)) {
-                    $this->c->l->action("Clicked on forum link " . $link);
+                    $this->c->l->action($this->title . ': Clicked on link ' . $link);
                     $el->click($link);
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                     $this->rateDiscussionPosts();
                     if ($el = $this->c->p->find("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a")) {
                         $el->click("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a");
-                        $this->c->reloadPage();
+                        $this->c->reloadPage($this->title);
                     }
                 }
             }
@@ -213,7 +213,7 @@ class Discussion {
             if ($el = $this->c->p->find("link=Next")) {
                 $this->c->l->action($this->title . ': Clicked on Next page');
                 $el->click("link=Next");
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
                 $next++;
             } else {
                 $next = false;
@@ -230,7 +230,7 @@ class Discussion {
         /// We need to make sure that the view of the forum is consistant.
         if ($this->selenium->getSelectedLabel("mode_jump") != "Display replies flat, with newest first") {
             $this->selenium->select("mode_jump", "label=Display replies flat, with newest first");
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
 
         $tables = $this->selenium->getXpathCount("//table");
@@ -248,9 +248,9 @@ class Discussion {
         /// Skip the forum if there is no button to rate the posts. probably means ajax ratings
         if ($el = $this->c->p->find("//input[@value='Send in my latest ratings']")) {
             $el->click("//input[@value='Send in my latest ratings']");
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             $el->click("link=Continue");
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 
@@ -281,7 +281,11 @@ class Discussion {
         if ($el = $this->c->p->findLink($this->aurl)) {
             $this->c->l->action($this->title . ': Visiting ' . $this->author . '\'s profile page');
             $el->click();
-            $this->c->reloadpage();
+            $this->c->reloadPage($this->title);
         }
+    }
+
+    public function getTitle(){
+        return $this->title;
     }
 }

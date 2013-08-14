@@ -29,7 +29,7 @@ class GlossaryActivity extends Activity {
         if ($el = $this->c->p->findButton('Add a new entry')) {
             $el->click();
             $this->c->l->action($this->title . ': Ading glossary entry to ' . $this->title);
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             if ($concept = $this->c->p->findField('concept')) {
                 $concept->setValue($this->c->ch->getRandWord());
             }
@@ -41,7 +41,7 @@ class GlossaryActivity extends Activity {
             }
             if ($button = $this->c->p->findButton('Save changes')) {
                 $button->click();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
         }
     }

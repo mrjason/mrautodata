@@ -36,30 +36,30 @@ class AssignmentActivity extends Activity {
             $this->onlineText($btn);
         } else if ($btn = $this->c->p->findButton('Upload a file')) { /// single file upload
             $btn->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             $el = $this->c->p->findButton('Choose a file...');
             $el->click();
             $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
             $save = $this->c->p->findButton('Save changes');
             $save->press();
-            $this->c->reloadPage(); // single file upload has a continue screen we need to wait for reload on this.
+            $this->c->reloadPage($this->title); // single file upload has a continue screen we need to wait for reload on this.
             if ($continue = $this->c->p->findButton('Continue')) {
                 $continue->press();
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
         } else if ($btn = $this->c->p->findButton('Upload files')) { /// advanced file upload
             $this->advancedFile($btn);
         } else if ($btn = $this->c->p->findButton('Edit these files')) { /// advanced file upload second submission
             $this->advancedFile($btn);
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
 
         if ($sendBtn = $this->c->p->findButton('Send for marking')) {
             $sendBtn->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
             $continue = $this->c->p->findButton('Continue');
             $continue->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 
@@ -70,7 +70,7 @@ class AssignmentActivity extends Activity {
      */
     private function onlineText($btn) {
         $btn->click();
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         if ($editor = $this->c->p->findField('id_text_editor')) {
             if ($editor->isVisible()) {
                 $editor->setValue($this->c->ch->getRandEssay('html'));
@@ -81,7 +81,7 @@ class AssignmentActivity extends Activity {
         if ($submit = $this->c->p->findButton('id_submitbutton')) {
             $submit->click();
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
     }
 
     /**
@@ -91,12 +91,12 @@ class AssignmentActivity extends Activity {
      */
     private function advancedFile($btn) {
         $btn->click();
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
         if ($save = $this->c->p->findButton('Save changes')) {
             $save->press();
         }
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
     }
 
     /**
@@ -105,17 +105,17 @@ class AssignmentActivity extends Activity {
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function grade() {
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
         if ($el = $this->c->p->find('css', 'div.reportlink > a')) {
             $el->click();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
 
         if (!$btn = $this->c->p->findLink('Update')) {
             $btn = $this->c->p->findLink('Grade');
         }
         $btn->click();
-        $this->c->reloadPage();
+        $this->c->reloadPage($this->title);
 
         $next = true;
         $this->c->l->action($this->title . ': Grading ' . $this->title);
@@ -136,12 +136,12 @@ class AssignmentActivity extends Activity {
                 }
                 if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
                     $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 } else {
                     $next   = false;
                     $button = $this->c->p->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                     break;
                 }
             } else if ($el = $this->c->p->find('css', 'div#checklist-advancedgrading')) { /// Checklist grading
@@ -168,12 +168,12 @@ class AssignmentActivity extends Activity {
 
                 if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
                     $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 } else {
                     $next   = false;
                     $button = $this->c->p->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                     break;
                 }
             } else {
@@ -193,12 +193,12 @@ class AssignmentActivity extends Activity {
 
                 if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
                     $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                 } else {
                     $next   = false;
                     $button = $this->c->p->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage();
+                    $this->c->reloadPage($this->title);
                     break;
                 }
             }

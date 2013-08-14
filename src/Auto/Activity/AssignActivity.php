@@ -26,15 +26,18 @@ class AssignActivity extends Activity {
      */
     public function post() {
         $this->view();
-        $btn = $this->c->p->findButton('Add submission');
+        $btnname = 'Add submission';
+        $btn = $this->c->p->findButton($btnname);
 
         if (!$btn) {
-            $btn = $this->c->p->findButton('Edit my submission');
+            $btnname = 'Edit my submission';
+            $btn = $this->c->p->findButton($btnname);
         }
 
         if ($btn) {
             $btn->press();
-            $this->c->reloadPage();
+            $this->c->l->action($this->title . ': Clicked button '.$btnname);
+            $this->c->reloadPage($this->title);
             if ($editor = $this->c->p->findField('id_onlinetext_editor')) {
                 if ($editor->isVisible()) {
                     $editor->setValue($this->c->ch->getRandEssay('html'));
@@ -46,9 +49,9 @@ class AssignActivity extends Activity {
             if ($save = $this->c->p->findButton('Save changes')) {
                 $save->press();
             }
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         } else {
-            $this->c->l->action($this->title . ': Could not find Add or Edit submission button for ' . $this->title);
+            $this->c->l->action($this->title . ': Could not find Add or Edit submission button');
         }
     }
 

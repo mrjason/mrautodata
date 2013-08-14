@@ -30,7 +30,7 @@ class ChoiceActivity extends Activity {
                 $answers[rand(0, (count($answers) - 1))]->click();
             }
             $save->press();
-            $this->c->reloadPage();
+            $this->c->reloadPage($this->title);
         }
     }
 

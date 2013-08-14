@@ -55,7 +55,7 @@ class ForumActivity extends Activity {
                 }
                 $this->view();
             } else {
-                $this->c->l->action($this->title . ': Skipping viewing a discussion');
+                $this->c->l->action($this->title . ': Skipping discussion ' . $discussion->getTitle());
             }
         }
     }
@@ -81,7 +81,7 @@ class ForumActivity extends Activity {
             $this->c->l->action($el->getValue());
             if ($el->getValue() != $label) {
                 $el->selectOption($label);
-                $this->c->reloadPage();
+                $this->c->reloadPage($this->title);
             }
         }
     }

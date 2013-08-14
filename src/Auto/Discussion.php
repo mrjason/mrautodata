@@ -127,7 +127,7 @@ class Discussion {
             if ($message->isVisible()) {
                 $message->setValue($this->c->ch->getRandParagraph());
             } else {
-                $this->c->l->failure($this->title . ': id_message textarea is not visible');
+                $this->c->l->error($this->title . ': id_message textarea is not visible');
             }
         }
         if ($select = $this->c->p->findField('subscribe')) {

@@ -91,15 +91,15 @@ class QuizActivity extends Activity {
      */
     public function finishAttempt() {
         if ($btn = $this->c->p->findButton('Submit all and finish')) {
-            $this->c->l->action($this->title . ':Submitting and finishing ' . $this->title);
+            $this->c->l->action($this->title . ': Submitting and finishing');
             $btn->click();
             if ($confirmdlg = $this->c->p->find('css', '#confirmdialog_c')) {
                 $confirmdlg->pressButton('Submit all and finish');
-                $this->c->l->action($this->title . ':Confirming Submitting and finishing ' . $this->title);
+                $this->c->l->action($this->title . ': Confirming Submitting and finishing');
                 $this->c->reloadPage($this->title);
             }
             if ($continue = $this->c->p->findButton('Continue')) {
-                $this->c->l->action($this->title . ':Found continue button for an error not sure why');
+                $this->c->l->action($this->title . ': Found continue button for an error not sure why');
                 $continue->click();
                 $this->c->reloadPage($this->title);
             } else {
@@ -108,13 +108,13 @@ class QuizActivity extends Activity {
                     $this->c->reloadPage($this->title);
                 }
                 if ($finish = $this->c->p->findLink('Finish review')) {
-                    $this->c->l->action($this->title . ':Finishing review');
+                    $this->c->l->action($this->title . ': Finishing review');
                     $finish->click();
                     $this->c->reloadPage($this->title);
                 }
             }
         } else {
-            $this->c->l->action($this->title . ':Submit and finish button not present');
+            $this->c->l->action($this->title . ': Submit and finish button not present');
         }
     }
 

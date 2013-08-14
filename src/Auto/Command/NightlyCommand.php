@@ -127,7 +127,7 @@ EOF
                                     $j2->interactWithActivity($activity, $grade);
                                     $course->view();
                                 } else {
-                                    $log->action($site->url . ': Skipped activity ' . $activity->getTitle());
+                                    $log->action($course->getFullname() . ': Skipped activity ' . $activity->getTitle());
                                 }
                             }
                         }

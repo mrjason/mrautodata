@@ -30,7 +30,7 @@ class TruefalseQuestion extends Question {
 
         foreach ($this->field as $field) {
             if ($field->getAttribute('value') == $this->answer) {
-                $this->c->l->action('Answering ' . $this->title . ' with answer with value ' . $this->answer);
+                $this->c->l->action($this->title . ': Answering with answer with value ' . $this->answer);
                 $field->click();
             }
         }

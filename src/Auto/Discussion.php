@@ -68,7 +68,7 @@ class Discussion {
      * View the discussion within a forum
      */
     public function view() {
-        $this->c->l->action(' Viewing the discussion ' . $this->title);
+        $this->c->l->action($this->title. ': Viewing discussion');
         $this->c->visit($this->url);
     }
 
@@ -96,7 +96,7 @@ class Discussion {
             $this->c->reloadPage($this->title);
             $this->post($type, $subject);
         } else {
-            $this->c->l->action('Could not find any discussion button to click on');
+            $this->c->l->action($this->title. ': Could not find any discussion button to click on');
         }
     }
 
@@ -154,7 +154,7 @@ class Discussion {
     public function randReply() {
         if ($posts = $this->c->p->findAll('css', 'div.forumpost')) {
             $rand = rand(0, (count($posts) - 1));
-            $this->c->l->action('Replying to the ' . $rand . ' reply link on the page');
+            $this->c->l->action($this->title. ': Replying to the ' . $rand . ' reply link');
             if ($reply = $posts[$rand]->findLink('Reply')) {
                 $reply->click();
                 $this->c->reloadPage($this->title);

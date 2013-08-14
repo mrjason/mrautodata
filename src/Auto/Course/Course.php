@@ -108,7 +108,7 @@ class Course {
      * @return array an array of section objects.
      */
     public function getSections() {
-        $this->c->l->action("Getting all course sections");
+        $this->c->l->action($this->fullname . ': Getting all course sections');
         $elSections = $this->c->p->findAll('css', 'div.course-content ul li');
 
         $sections = array();
@@ -131,15 +131,15 @@ class Course {
      */
     public function clickFullnameLink() {
         if ($el = $this->c->p->findLink($this->fullname)) {
-            $this->c->l->action("Clicked on " . $this->fullname);
+            $this->c->l->action($this->fullname . ': Clicked full name link');
             $el->click();
             $this->c->reloadPage($this->fullname);
         } else {
             if ($this->c->cf->debug) {
-                $this->c->l->action("Can't find current course link " . $this->fullname);
+                $this->c->l->action($this->fullname . ': Can\'t find current course link');
             }
             if (isset($this->url)) {
-                $this->c->l->action('Returning to course the course ' . $this->fullname . ' via the url ' . $this->url);
+                $this->c->l->action($this->fullname . ': Returning to course the course via the url ' . $this->url);
                 $this->c->visit($this->url);
             }
         }
@@ -152,12 +152,12 @@ class Course {
     public function clickNavLink() {
         if ($navbar = $this->c->p->find('css', '.navbar')) {
             if ($el = $navbar->findLink($this->fullname)) {
-                $this->c->l->action('Clicked on Course Nav link ' . $this->fullname);
+                $this->c->l->action($this->fullname . ': Clicked on Course Nav link');
                 $el->click();
                 $this->c->reloadPage($this->fullname);
             }
         } else if (isset($this->url)) {
-            $this->c->l->action('Returning to course' . $this->fullname . ' with url ' . $this->url);
+            $this->c->l->action($this->fullname . ': Returning to course with url ' . $this->url);
             $this->c->visit($this->url);
         }
     }

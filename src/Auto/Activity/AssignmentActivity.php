@@ -184,7 +184,7 @@ class AssignmentActivity extends Activity {
                     if ($el = $this->c->p->find($selectXpath)) {
                         $options = $this->selenium->getSelectOptions($selectXpath);
                         $option  = $options[rand(1, count($options) - 1)];
-                        $this->c->l->action("Selecting $option");
+                        $this->c->l->action($this->title . ': Selecting ' . $option);
                         $this->selenium->select($selectXpath, "label=$option");
                     }
                 }

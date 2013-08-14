@@ -144,7 +144,7 @@ class ContentHelper extends Helper {
         'Why won not a mixture mob the dive?',
         'Should the oldest tome defect?',
         'How does John Wayne do it?',
-        'When will Modlel 2.0 be released?',
+        'When will Moodle 2.0 be released?',
         'Who has control of my information?',
         'How do I dance the tango?',
         'Can birds fly backwards?',
@@ -159,16 +159,16 @@ class ContentHelper extends Helper {
         'What is the impact of streaming video on film?',
         'Is flash an appropriate video type for web?',
         'Does the iPad support flash?',
-        'Can toast be burtn?',
+        'Can toast be burnt?',
         'When a camel spits is it gross?',
         'Do dogs bark at squirrels?',
-        'Is there a bannana in my ear?',
+        'Is there a banana in my ear?',
         'What is your favorite video?',
         'Can you dance a jig?',
         'How do computers compute?',
         'When is too much too little?',
         'Where is my mustache?',
-        'Are drinks free ordo they cost?',
+        'Are drinks free or do they cost?',
         'Can you dance to mariachi?'
     );
 

@@ -66,8 +66,7 @@ class ForumActivity extends Activity {
     public function post() {
         $this->view();
         $this->changeDisplayFormat();
-        $discussion = new \Auto\Discussion(array('c' => $this->c));
-        $discussion->create();
+        $this->createDiscussion();
         $this->view();
     }
 
@@ -78,7 +77,7 @@ class ForumActivity extends Activity {
      */
     public function changeDisplayFormat($label = 'Default') {
         if ($el = $this->c->p->findField('displayformat')) {
-            $this->c->l->action($el->getValue());
+            $this->c->l->action($this->title. ': Changing display value ' . $el->getValue() . ' to default');
             if ($el->getValue() != $label) {
                 $el->selectOption($label);
                 $this->c->reloadPage($this->title);

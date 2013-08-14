@@ -122,7 +122,6 @@ class Container {
             if($btn = $plddlg->findButton('Close')){
                 $this->l->action($pageTitle.': Closing PLD Alert');
                 $btn->press();
-                $this->l->action('Closing PLD Alert after');
             }
             $this->p = $this->s->getPage();
         }

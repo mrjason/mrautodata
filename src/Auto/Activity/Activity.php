@@ -110,7 +110,6 @@ class Activity {
                 $this->c->l->action($this->title . ': Marking complete');
                 $el->click();
                 $this->c->reloadPage($this->title);
-                $this->c->l->action($el->getAttribute('title'));
             }
         }
     }

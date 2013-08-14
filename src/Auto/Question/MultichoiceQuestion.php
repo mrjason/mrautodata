@@ -30,13 +30,13 @@ class MultichoiceQuestion extends Question {
         if (isset($this->answer)) {
             foreach ($this->field as $field) {
                 if (substr($field->getText(), 3) == $this->answer) {
-                    $this->c->l->action('Answering ' . $this->title . ' with answer having value ' . $this->answer);
+                    $this->c->l->action($this->title . ': Answering with answer having value ' . $this->answer);
                     $field->click();
                 }
             }
         } else {
             $rand = rand(1, count($this->field) - 1);
-            $this->c->l->action('Answering ' . $this->title . ' with answer having value ' . $rand);
+            $this->c->l->action($this->title . ': Answering with answer having value ' . $rand);
             $this->field[$rand]->click();
         }
     }

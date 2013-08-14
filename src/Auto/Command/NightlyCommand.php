@@ -121,7 +121,7 @@ EOF
                             $course->view();
                             $activities = $course->getActivities();
                             foreach ($activities as $activity) {
-                                $interact = 1;//!rand(0, 4);
+                                $interact = !rand(0, 4);
                                 if ($interact) {
                                     $grade = rand(60, 100);
                                     $j2->interactWithActivity($activity, $grade);

@@ -85,7 +85,8 @@ EOF
         $j2         = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
         $useconduit = $cfg->get('conduit', 'enabled');
         if ($useconduit) {
-            $conduit = $this->getHelper('conduit')->setToken($cfg->get('conduit', 'token'));
+            $conduit = $this->getHelper('conduit');
+            $conduit->setToken($cfg->get('conduit', 'token'));
         }
         $username = $input->getOption('username');
         if (!$password = $input->getOption('password')) {
@@ -111,11 +112,13 @@ EOF
             }
             foreach ($users as $user) {
                 if ($useconduit) {
-                    $fields = array(
-                        'username'   => $user->username,
-                        'htmleditor' => '0'
-                    );
-                    $conduit->updateUser($fields);
+                    $fields = array('username' => $user->username, 'htmleditor' => '0');
+                    try {
+                        $conduit->user($fields, 'update');
+                    } catch (Exception $e) {
+                        print_r($e);
+                        /// hopefully this continues without doing anything.
+                    }
                 }
                 if ($j2->login($user)) {
                     $courses = $j2->getCourses(); // Might want to cache this for all users if we can assume they are enrolled in the same courses.
@@ -135,10 +138,13 @@ EOF
                     }
                     $j2->logout();
                 }
-
                 if ($useconduit) {
                     $fields['htmleditor'] = '1';
-                    $conduit->updateUser($fields);
+                    try {
+                        $conduit->user($fields, 'update');
+                    } catch (Exception $e) {
+                        /// hopefully this continues without doing anything.
+                    }
                 }
             }
 

@@ -105,8 +105,8 @@ EOF
                 $users = $user->getUsers();
 
                 foreach ($users as $user) {
-                    $fields = array('username' => $user->username, 'htmleditor' => '0');
                     if ($useconduit) {
+                        $fields = array('username' => $user->username, 'htmleditor' => '0');
                         try {
                             $conduit->user($fields, 'update');
                         } catch (Exception $e) {
@@ -133,15 +133,14 @@ EOF
                         }
                         $j2->logout();
                     }
-                    $fields['htmleditor'] = '1';
                     if ($useconduit) {
+                        $fields['htmleditor'] = '1';
                         try {
                             $conduit->user($fields, 'update');
                         } catch (Exception $e) {
                             /// hopefully this continues without doing anything.
                         }
                     }
-
                 }
                 $j2->teardown();
             } catch (Exception $e) {

@@ -104,7 +104,7 @@ class AssignActivity extends Activity {
                     } else if($gradeform = $this->container->page->find('css', '#markingguide-advancedgrading')) { /// marking guide
                         $scores = $gradingform->findAll('css','.score');
                         foreach($scores as $score){
-                            $maxGrade = $score->find('css','criteriondescriptionscore');
+                            $maxGrade = $score->find('css','.criteriondescriptionscore');
                             $grade = rand(0,$maxGrade);
                             $field = $score->findField('text');
                             $field->setValue((string)$grade);
@@ -113,7 +113,7 @@ class AssignActivity extends Activity {
                         $this->leaveRemarks($remarks);
                     }
 
-                    if (($editor = $this->container->page->findField('id_assignfeedbackcomments_editor')) && rand(0, 1)) {
+                    if (($editor = $this->container->page->findField('id_assignfeedbackcomments_editor')) && rand(0, 5) == 0) {
                         if ($editor->isVisible()) {
                             $editor->setValue($this->container->contentHelper->getRandTeacherComment('html'));
                             $this->container->logHelper->action($this->title . ': Leaving text feedback');
@@ -123,7 +123,7 @@ class AssignActivity extends Activity {
                         }
                     }
 
-                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 1)) {
+                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 20) == 0) {
                         $this->container->logHelper->action($this->title . ': Leaving file feedback');
                         $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
                     }

@@ -72,15 +72,16 @@ class AssignActivity extends Activity {
                 $this->container->reloadPage($this->title);
 
                 $next = true;
-                //do grading
                 while($next){
                     if($field = $this->container->page->findField('grade')){ // standard grading
+                        $this->container->logHelper->action($this->title . ': Grading standard way');
                         $label = $this->container->page->find('css','#fitem_id_grade .fitemtitle > label');
                         $maxGrade = str_replace('Grade out of ', '', $label->getText());
                         $grade = rand(0,$maxGrade);
                         $field->setValue((string)$grade);
-                        $this->container->logHelper->action($this->title . ': Grading standard way with '.$grade);
+                        $this->container->logHelper->action($this->title . ': Setting grade to '.$grade);
                     } else if ($gradeform = $this->container->page->find('css', '#rubric-advancedgrading')) { /// Rubric grading
+                        $this->container->logHelper->action($this->title . ': Grading with rubric grading form');
                         $criterion = $gradeform->findAll('css','.criterion');
                         foreach($criterion as $criteria){
                             $levels = $criteria->findAll('css','.level');
@@ -89,10 +90,10 @@ class AssignActivity extends Activity {
                             $levels[$selectedLevel]->click();
                             $this->container->logHelper->action($this->title . ': Clicking level '.$selectedLevel);
                         }
-
                         $remarks = $gradeform->findAll('css','.remark textarea');
                         $this->leaveRemarks($remarks);
                     } else if ($gradeform = $this->container->page->find('css', '#checklist-advancedgrading')) { /// Checklist grading
+                        $this->container->logHelper->action($this->title . ': Grading with checklist grading form');
                         $items = $gradeform->findAll('css','.item');
                         foreach ($items as $item) {
                             if(rand(0,1)){
@@ -101,19 +102,21 @@ class AssignActivity extends Activity {
                         }
                         $remarks = $gradeform->findAll('css','.remark textarea');
                         $this->leaveRemarks($remarks);
-                    } else if($gradeform = $this->container->page->find('css', '#markingguide-advancedgrading')) { /// marking guide
+                    } else if($gradeform = $this->container->page->find('css', '#guide-advancedgrading')) { /// marking guide'
+                        $this->container->logHelper->action($this->title . ': Grading with marking guide grading form');
                         $scores = $gradingform->findAll('css','.score');
                         foreach($scores as $score){
                             $maxGrade = $score->find('css','.criteriondescriptionscore');
-                            $grade = rand(0,$maxGrade);
+                            $grade = rand(0,$maxGrade->getText());
                             $field = $score->findField('text');
                             $field->setValue((string)$grade);
+                            $this->container->logHelper->action($this->title . ': Entering grade '.$grade);
                         }
                         $remarks = $gradeform->findAll('css','.remark textarea');
                         $this->leaveRemarks($remarks);
                     }
 
-                    if (($editor = $this->container->page->findField('id_assignfeedbackcomments_editor')) && rand(0, 5) == 0) {
+                    if (($editor = $this->container->page->findField('id_assignfeedbackcomments_editor')) && rand(0, 10) == 0) {
                         if ($editor->isVisible()) {
                             $editor->setValue($this->container->contentHelper->getRandTeacherComment('html'));
                             $this->container->logHelper->action($this->title . ': Leaving text feedback');
@@ -123,7 +126,7 @@ class AssignActivity extends Activity {
                         }
                     }
 
-                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 20) == 0) {
+                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 50) == 0) {
                         $this->container->logHelper->action($this->title . ': Leaving file feedback');
                         $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
                     }
@@ -143,7 +146,7 @@ class AssignActivity extends Activity {
 
     public function leaveRemarks($remarks){
         foreach($remarks as $remark){
-            if(rand(0,5) == 0){
+            if(rand(0,10) == 0){
                 $this->container->logHelper->action($this->title . ': Leaving a remark');
                 $remark->setValue($this->container->contentHelper->getRandTeacherComment());
             }

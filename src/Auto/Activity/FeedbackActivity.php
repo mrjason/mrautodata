@@ -29,35 +29,35 @@ class FeedbackActivity extends Activity {
      * </ul>
      */
     public function post() {
-        if ($el = $this->c->p->findLink('Answer the questions...')) {
-            $el->click();
-            $this->c->reloadPage($this->title);
-            $textfields = $this->c->p->findAll('css', '.feedback_item_textfield input');
+        if ($element = $this->container->page->findLink('Answer the questions...')) {
+            $element->click();
+            $this->container->reloadPage($this->title);
+            $textfields = $this->container->page->findAll('css', '.feedback_item_textfield input');
             foreach ($textfields as $textfield) {
-                $textfield->setValue($this->c->ch->getRandSentence());
+                $textfield->setValue($this->container->contentHelper->getRandSentence());
             }
-            $textareas = $this->c->p->findAll('css', '.feedback_item_textarea textarea');
+            $textareas = $this->container->page->findAll('css', '.feedback_item_textarea textarea');
             foreach ($textareas as $textarea) {
                 if ($textarea->isVisible()) {
-                    $textarea->setValue($this->c->ch->getRandParagraph());
+                    $textarea->setValue($this->container->contentHelper->getRandParagraph());
                 } else {
-                    $this->c->l->failure($this->title . ': feedback_item_textfield textarea is not visible');
+                    $this->container->logHelper->failure($this->title . ': feedback_item_textfield textarea is not visible');
                 }
             }
-            $choices = $this->c->p->findAll('css', '.feedback_item_presentation_left ul');
+            $choices = $this->container->page->findAll('css', '.feedback_item_presentation_left ul');
             foreach ($choices as $choice) {
                 if ($radiobtns = $choice->findAll('css', 'li input')) {
                     $radiobtns[rand(0, (count($radiobtns) - 1))]->click();
                 }
 
             }
-            if ($button = $this->c->p->findButton('Submit your answers')) {
+            if ($button = $this->container->page->findButton('Submit your answers')) {
                 $button->click();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
             }
-            if ($button = $this->c->p->findButton('Continue')) {
+            if ($button = $this->container->page->findButton('Continue')) {
                 $button->click();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
             }
         }
     }

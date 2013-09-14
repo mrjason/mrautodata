@@ -29,7 +29,7 @@ class SetupSiteCommand extends Command {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used (should be a alias)', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'sales')
-            ->addOption('course', 'c', InputOption::VALUE_OPTIONAL, 'Course id start to perform actions on', 'Alg202,Alg 202 Flex')
+            ->addOption('course', 'container', InputOption::VALUE_OPTIONAL, 'Course id start to perform actions on', 'Alg202,Alg 202 Flex')
             ->addOption('userbegin', 'b', InputOption::VALUE_OPTIONAL, 'User id start to perform actions with', 0)
             ->addOption('userend', 'e', InputOption::VALUE_OPTIONAL, 'User id end to perform actions with', 10)
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'user')

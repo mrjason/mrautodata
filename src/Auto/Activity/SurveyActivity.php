@@ -25,7 +25,7 @@ class SurveyActivity extends Activity {
      * Add the survey type required field to the survey creation screen.
      */
     public function fillOutRequiredFields() {
-        $select = $this->c->p->findField('template');
+        $select = $this->container->page->findField('template');
         $select->selectOption(rand(1, 5));
     }
 }

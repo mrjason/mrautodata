@@ -25,15 +25,15 @@ class EssayQuestion extends Question {
      */
     public function answer() {
         if (!isset($this->field)) {
-            $this->getField();
+            $this->getAnswerField();
         }
 
         if (isset($this->field)) {
-            $text = $this->c->ch->getRandParagraph();
-            $this->c->l->action($this->title . ': Answering with answer ' . $text);
+            $text = $this->container->contentHelper->getRandParagraph();
+            $this->container->logHelper->action($this->title . ': Answering with answer ' . $text);
             $this->field->setValue($text);
             if (rand(0, 10) == 0) {
-                $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
+                $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
             }
         }
     }
@@ -41,16 +41,16 @@ class EssayQuestion extends Question {
     /**
      * {@inheritdoc}
      */
-    public function getField() {
+    public function getAnswerField() {
         if ($field = $this->qdiv->find('css', '.answer textarea')) {
             if ($field->isVisible()) {
                 $this->field = $field;
                 return $this->field;
             } else {
-                $this->c->l->failure($this->title . ': Answer textarea is not visible');
+                $this->container->logHelper->failure($this->title . ': Answer textarea is not visible');
             }
         } else {
-            $this->c->l->action($this->title . ': Could not find answer field');
+            $this->container->logHelper->action($this->title . ': Could not find answer field');
         }
         return false;
     }

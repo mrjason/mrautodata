@@ -15,13 +15,13 @@ namespace Auto\Activity;
 class Activity {
 
     /**
-     * @var string the activity's id used int eh moodle database in in most links to the activity.
+     * @var string the activity's id used in the Moodle database in in most links to the activity.
      */
     protected $id;
     /**
      * @var string the value for the id attribute for the link in the course
      */
-    protected $cssid;
+    protected $courseLinkId;
     /**
      * @var string the title of the activity
      */
@@ -38,10 +38,10 @@ class Activity {
     /**
      * @var Container containing all variables for the session, page, log helper and content helper.
      */
-    protected $c;
+    protected $container;
 
     /**
-     * Consturctor for the class
+     * Constructor for the class
      *
      * @param $options mixed And array of variables that will be set for the activity.  Must include the Container c variable to work.  Array should be array('variable name'=> $value).
      */
@@ -49,7 +49,7 @@ class Activity {
         foreach ($options as $name => $value) {
             $this->{$name} = $value;
         }
-        $this->c->reloadPage($this->title);
+        $this->container->reloadPage($this->title);
     }
 
     /**
@@ -58,12 +58,12 @@ class Activity {
     public function create() {
         $this->fillOutCreateForm();
         $this->fillOutRequiredFields();
-        if ($save = $this->c->p->findButton('Save and return to course')) {
-            $this->c->l->action($this->title . ': Saving ' . $this->type . ' and returning to the course.');
+        if ($save = $this->container->page->findButton('Save and return to course')) {
+            $this->container->logHelper->action($this->title . ': Saving ' . $this->type . ' and returning to the course.');
             $save->press();
-            $this->c->reloadPage($this->title);
-            if ($error = $this->c->p->find('css', '.error')) {
-                $this->c->l->error($this->title . ': Error in create activity form for ' . $this->type . '. Error is ' . $error->getText());
+            $this->container->reloadPage($this->title);
+            if ($error = $this->container->page->find('css', '.error')) {
+                $this->container->logHelper->error($this->title . ': Error in create activity form for ' . $this->type . '. Error is ' . $error->getText());
             }
         }
     }
@@ -80,8 +80,12 @@ class Activity {
      *  Interact with the activity, usually view and post. THis should be overridden by the activity unless all that the activity needs is to be viewed.
      */
     public function interact() {
-        $this->c->l->action($this->title . ': Starting interaction');
+        $this->container->logHelper->action($this->title . ': Starting interaction');
         $this->post();
+    }
+
+    public function teacherInteract($grade){
+        /// Usually the teacher does nothing unless overridden
     }
 
     /**
@@ -95,10 +99,10 @@ class Activity {
      * View the activity.
      */
     public function view() {
-        $this->c->reloadPage($this->title);
+        $this->container->reloadPage($this->title);
         $this->access('course');
-        $this->c->l->action($this->title . ': Viewing');
-        $this->c->reloadPage($this->title);
+        $this->container->logHelper->action($this->title . ': Viewing');
+        $this->container->reloadPage($this->title);
     }
 
     /**
@@ -106,10 +110,10 @@ class Activity {
      */
     public function complete() {
         if ($li = $this->getCourseLink()) {
-            if ($el = $li->find('css', 'input[type="image"]')) {
-                $this->c->l->action($this->title . ': Marking complete');
-                $el->click();
-                $this->c->reloadPage($this->title);
+            if ($element = $li->find('css', 'input[type="image"]')) {
+                $this->container->logHelper->action($this->title . ': Marking complete');
+                $element->click();
+                $this->container->reloadPage($this->title);
             }
         }
     }
@@ -131,14 +135,14 @@ class Activity {
                 break;
         }
         if (!empty($link)) {
-            $this->c->l->action($this->title . ': Clicked on activity ' . $logarea . ' link');
+            $this->container->logHelper->action($this->title . ': Clicked on activity ' . $logarea . ' link');
             $link->click();
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         } else if (isset($this->url)) {
-            $this->c->l->action($this->title . ': Returning to activity using url ' . $this->url);
-            $this->c->visit($this->url);
+            $this->container->logHelper->action($this->title . ': Returning to activity using url ' . $this->url);
+            $this->container->visit($this->url);
         } else {
-            $this->c->l->action($this->title . ': Could not find link to ' . $logarea . ' and the url was not set');
+            $this->container->logHelper->action($this->title . ': Could not find link to ' . $logarea . ' and the url was not set');
         }
     }
 
@@ -146,20 +150,20 @@ class Activity {
      * Add values to the general fields in the create activity form.
      */
     public function fillOutCreateForm() {
-        if ($field = $this->c->p->findField('name')) {
+        if ($field = $this->container->page->findField('name')) {
             $field->setValue($this->title);
 
-        } else if ($field = $this->c->p->findField('title')) {
+        } else if ($field = $this->container->page->findField('title')) {
             $field->setValue(ucfirst($this->type) . ' Activity Auto Created');
         }
-        if ($div = $this->c->p->find('css', '#fitem_id_introeditor')) {
+        if ($div = $this->container->page->find('css', '#fitem_id_introeditor')) {
             $class = $div->getAttribute('class');
             if (strpos($class, 'hide') === false) { // Some activities hide the introeditor to not require that field be entered, External tools specifically.
-                $field = $this->c->p->findField('id_introeditor');
-                $field->setValue($this->c->ch->getRandParagraph());
+                $field = $this->container->page->findField('id_introeditor');
+                $field->setValue($this->container->contentHelper->getRandParagraph());
             }
-        } else if ($field = $this->c->p->findField('description')) {
-            $field->setValue($this->c->ch->getRandParagraph());
+        } else if ($field = $this->container->page->findField('description')) {
+            $field->setValue($this->container->contentHelper->getRandParagraph());
         }
         $this->fillOutRequiredFields();
     }
@@ -175,8 +179,8 @@ class Activity {
      * @return bool Return the link object or false if the link can't be found.
      */
     public function getNavLink() {
-        if ($navbar = $this->c->p->find('css', '.navbar')) {
-            if ($link = $this->c->p->findLink($this->title)) {
+        if ($navbar = $this->container->page->find('css', '.navbar')) {
+            if ($link = $this->container->page->findLink($this->title)) {
                 return $link;
             }
         }
@@ -189,7 +193,7 @@ class Activity {
      * @return bool Return the link object or false if the link doesn't exist on the page.
      */
     public function getCourseLink() {
-        if ($li = $this->c->p->find('css', '#' . $this->cssid)) {
+        if ($li = $this->container->page->find('css', '#' . $this->courseLinkId)) {
             if ($link = $li->findLink($this->title)) {
                 return $link;
             }
@@ -217,10 +221,10 @@ class Activity {
     /**
      * Set the CSS id for the link to the activity in the course.
      *
-     * @param string $cssid
+     * @param string $cssId
      */
-    public function setCssId($cssid) {
-        $this->cssid = $cssid;
+    public function setCssId($cssId) {
+        $this->courseLinkId = $cssId;
     }
 
     /**
@@ -228,7 +232,7 @@ class Activity {
      * @return string The id attribute for the course link to the activity
      */
     public function getCssId() {
-        return $this->cssid;
+        return $this->courseLinkId;
     }
 
     /**
@@ -246,5 +250,9 @@ class Activity {
      */
     public function getTitle() {
         return $this->title;
+    }
+
+    public function getType(){
+        return $this->type;
     }
 }

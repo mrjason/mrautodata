@@ -17,7 +17,7 @@ class Question {
     /**
      * @var Container containing all variables for the session, page, log helper and content helper.
      */
-    protected $c;
+    protected $container;
 
     /**
      * @var \Behat\Mink\NodeElement Mink object for the question area.
@@ -46,12 +46,7 @@ class Question {
     /**
      * @var \Behat\Mink\NodeElement Mink object for the check button
      */
-    protected $cbtn;
-
-    /**
-     * @var int The grade we want the student to get.
-     */
-    protected $tograde = 70;
+    protected $containerbtn;
 
     /**
      * @var string The title of the question.
@@ -76,16 +71,22 @@ class Question {
             $this->getFlag();
         }
 
-        if (!isset($this->cbtn)) {
+        if (!isset($this->containerbtn)) {
             $this->getCheckButton();
         }
 
+        $this->answerSetup();
+    }
+
+    public function answerSetup(){
         if (!isset($this->answer)) {
-            $this->getAnswer();
+            if(!$this->getAnswer()) {
+                $this->getRandomAnswer();
+            }
         }
 
         if (!isset($this->field)) {
-            $this->getField();
+            $this->getAnswerField();
         }
     }
 
@@ -105,11 +106,11 @@ class Question {
      * Press the check button if it exists for the question.
      */
     public function check() {
-        if (!isset($this->cbtn)) {
+        if (!isset($this->containerbtn)) {
             $this->getCheckButon();
         }
-        if (isset($this->cbtn)) {
-            $this->cbtn->press();
+        if (isset($this->containerbtn)) {
+            $this->containerbtn->press();
             $this->reloadPage();
         }
     }
@@ -128,25 +129,28 @@ class Question {
 
     /**
      * Get the answer value that has been added to the question text or return false if it can't be found.
-     * @return bool|string Locate the answer value in the question and set that in the object and return it. Return false if it doesn't exist.
+     * <div class="queanswer hide">answer</div>
+     * @return bool  Return false if the answer doesn't exist doesn't exist.
      */
     public function getAnswer() {
-        if ($answer = $this->qdiv->find('css', '.mrqueanswer')) {
-            $this->answer = $answer->getText();
-            $this->c->l->action($this->title . ': Found mrqueanswer set to ' . $this->answer);
-            return $this->answer;
+        if ($answer = $this->qdiv->find('css', '.queanswer')) {
+            $this->answer = $answer->getHTML();
+            $this->container->logHelper->action($this->title . ': Found queanswer set to ' . $this->answer);
+            return true;
         }
         return false;
     }
+
+    public function getRandomAnswer(){}
 
     /**
      * Get the Mink object for the check button to check the answer if it exists on the page. Return false if it doesn't exist.
      * @return bool|\Behat\Mink\Element Locate the check button in the question and set that in the object and return it. Return false if it doesn't exist.
      */
     public function getCheckButton() {
-        if ($btn = $this->qdiv->findButton('Check')) {
-            $this->cbtn = $btn;
-            return $this->cbtn;
+        if ($button = $this->qdiv->findButton('Check')) {
+            $this->containerbtn = $button;
+            return $this->containerbtn;
         }
         return false;
     }
@@ -156,8 +160,8 @@ class Question {
      * @return bool|\Behat\Mink\NodeElement Locate the question title in the question and set that in the object and return it. Return false if it doesn't exist.
      */
     public function getTitle() {
-        if ($el = $this->qdiv->find('css', '.info .no')) {
-            $this->title = $el->getText();
+        if ($element = $this->qdiv->find('css', '.info .no')) {
+            $this->title = $element->getText();
             return $this->title;
         }
         return false;
@@ -166,13 +170,19 @@ class Question {
     /**
      *  Answer the question in the form using the field value.
      */
-    public function answer() {
+    public function answerCorrect() {
+        $this->answer();
+    }
+
+
+    public function answerRandomly(){
+        $this->getRandomAnswer();
+        $this->answer();
     }
 
     /**
      * Return the field that will be used to answer the question
      * @return bool|\Behat\Mink\Element The field to put the answer in.
      */
-    public function getField() {
-    }
+    public function getAnswerField() {}
 }

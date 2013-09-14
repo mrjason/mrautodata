@@ -25,10 +25,10 @@ class BookActivity extends Activity {
      */
     public function post() {
         $this->view();
-        while ($el = $this->c->p->findLink('Next')) {
-            $this->c->l->action($this->title . ': Going to the next chapter of the book');
-            $el->click();
-            $this->c->reloadPage($this->title);
+        while ($element = $this->container->page->findLink('Next')) {
+            $this->container->logHelper->action($this->title . ': Going to the next chapter of the book');
+            $element->click();
+            $this->container->reloadPage($this->title);
         }
     }
 }

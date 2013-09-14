@@ -37,24 +37,32 @@ class QuizActivity extends Activity {
             'Continue the last attempt',
             'Re-attempt quiz'
         );
+
+        $grade = rand(50,100);
         /// continue quiz attempt
         foreach ($buttons as $button) {
-            if ($btn = $this->c->p->findButton($button)) {
-                $btn->click();
+            if ($button = $this->container->page->findButton($button)) {
+                $button->click();
 
-                $this->c->reloadPage($this->title);
-                while ($next = $this->c->p->findButton('Next')) {
+                $this->container->reloadPage($this->title);
+                while ($next = $this->container->page->findButton('Next')) {
                     $questions = $this->getQuestions();
-                    $this->c->l->action($this->title . ': Answering all questions');
+                    $this->container->logHelper->action($this->title . ': Answering all questions');
+
                     foreach ($questions as $question) {
-                        $question->answer();
+                        $rand = rand(0, 100);
+                        if($rand <= $grade){
+                            $question->answerCorrect();
+                        } else {
+                            $question->answerRandomly();
+                        }
 
                         if (rand(0, 99) == 0) {
                             $question->flag();
                         }
                     }
                     $next->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                 }
                 $this->finishAttempt();
             }
@@ -66,15 +74,15 @@ class QuizActivity extends Activity {
      * @return array An array of \Behat\Mink\Element objects for the questions on that page.
      */
     public function getQuestions() {
-        $this->c->l->action($this->title . ': Getting all questions on the quiz page');
-        $qs        = $this->c->p->findAll('css', '#responseform .que');
+        $this->container->logHelper->action($this->title . ': Getting all questions on the quiz page');
+        $qs        = $this->container->page->findAll('css', '#responseform .que');
         $questions = array();
         foreach ($qs as $q) {
             $classes   = explode(' ', $q->getAttribute('class'));
             $classname = '\Auto\Question\\' . ucfirst($classes[1] . 'Question');
             if (class_exists($classname)) {
                 $options     = array(
-                    'c'        => $this->c,
+                    'container'        => $this->container,
                     'qdiv'     => $q,
                     'qclasses' => $classes
                 );
@@ -90,32 +98,36 @@ class QuizActivity extends Activity {
      * @access public
      */
     public function finishAttempt() {
-        if ($btn = $this->c->p->findButton('Submit all and finish')) {
-            $this->c->l->action($this->title . ': Submitting and finishing');
-            $btn->click();
-            if ($confirmdlg = $this->c->p->find('css', '#confirmdialog_c')) {
+        if ($button = $this->container->page->findButton('Submit all and finish')) {
+            $this->container->logHelper->action($this->title . ': Submitting and finishing');
+            $button->click();
+            if ($confirmdlg = $this->container->page->find('css', '#confirmdialog_c')) {
                 $confirmdlg->pressButton('Submit all and finish');
-                $this->c->l->action($this->title . ': Confirming Submitting and finishing');
-                $this->c->reloadPage($this->title);
+                $this->container->logHelper->action($this->title . ': Confirming Submitting and finishing');
+                $this->container->reloadPage($this->title);
             }
-            if ($continue = $this->c->p->findButton('Continue')) {
-                $this->c->l->action($this->title . ': Found continue button for an error not sure why');
+            if ($continue = $this->container->page->findButton('Continue')) {
+                $this->container->logHelper->action($this->title . ': Found continue button for an error not sure why');
                 $continue->click();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
             } else {
-                while ($next = $this->c->p->findLink('Next')) {
+                while ($next = $this->container->page->findLink('Next')) {
                     $next->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                 }
-                if ($finish = $this->c->p->findLink('Finish review')) {
-                    $this->c->l->action($this->title . ': Finishing review');
+                if ($finish = $this->container->page->findLink('Finish review')) {
+                    $this->container->logHelper->action($this->title . ': Finishing review');
                     $finish->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                 }
             }
         } else {
-            $this->c->l->action($this->title . ': Submit and finish button not present');
+            $this->container->logHelper->action($this->title . ': Submit and finish button not present');
         }
+    }
+
+    public function teacherInteract($grade){
+        /// This should point to grade
     }
 
     /**
@@ -123,25 +135,26 @@ class QuizActivity extends Activity {
      * @todo   Update to work with mink
      * @access public
      */
-    public function grade() {
-        $el = $this->c->p->find('css', 'div#quizattemptcounts a');
-        $el->click();
-        $this->c->reloadPage($this->title);
-        $this->c->reloadPage($this->title);
-        $el->click("link=Manual grading");
-        $this->c->reloadPage($this->title);
-        $el->click("//table[@id='attempts']/tbody/tr[2]/td[4]/strong[2]/a");
-        $this->c->reloadPage($this->title);
-        $questions = $this->selenium->getXpathCount("//form/div");
-        for ($i = 1; $i < $questions; $i++) {
-            $basexpath = "//form/div[$i]/fieldset/div";
-            $this->selenium->type($basexpath . "/div[2]/textarea", $this->c->ch->getRandParagraph()); /// comment
-            $maxvalues = explode('/', $el->getRandText()); //($basexpath."[2]/div[2]"));
-            $this->selenium->type($basexpath . "[2]/div[2]/input", rand(0, (int)$maxvalues[1])); /// grade
+    /*public function grade() {
+               $element = $this->container->page->find('css', 'div#quizattemptcounts a');
+               $element->click();
+               $this->container->reloadPage($this->title);
+               $link = $this->container->page->findLink('Manual grading');
+               $link->click();
+               $this->container->reloadPage($this->title);
+               $this->container->page->find('css','table#attempts');
+               $element->click("//table[@id='attempts']/tbody/tr[2]/td[4]/strong[2]/a");
+               $this->container->reloadPage($this->title);
+               $questions = $this->selenium->getXpathCount("//form/div");
+               for ($i = 1; $i < $questions; $i++) {
+                   $basexpath = "//form/div[$i]/fieldset/div";
+                   $this->selenium->type($basexpath . "/div[2]/textarea", $this->container->contentHelper->getRandParagraph()); /// comment
+                   $maxvalues = explode('/', $element->getRandText()); //($basexpath."[2]/div[2]"));
+                   $this->selenium->type($basexpath . "[2]/div[2]/input", rand(0, (int)$maxvalues[1])); /// grade
 
-            $button = $this->c->p->findButton('Save Changes');
-            $button->click();
-            $this->c->reloadPage($this->title);
-        }
-    }
+                   $button = $this->container->page->findButton('Save Changes');
+                   $button->click();
+                   $this->container->reloadPage($this->title);
+               }
+    }*/
 }

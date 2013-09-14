@@ -29,7 +29,7 @@ class CourseCommand extends Command {
     protected function configure() {
         $this
             ->addArgument('action', InputArgument::REQUIRED, 'create, update or delete the course')
-            ->addOption('courseinfo', 'c', InputOption::VALUE_OPTIONAL, 'Course shortname/Course fullname', 'ACFV/Automated Course Folderview')
+            ->addOption('courseinfo', 'container', InputOption::VALUE_OPTIONAL, 'Course shortname/Course fullname', 'ACFV/Automated Course Folderview')
             ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Course format', 'folderview')
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used, this is the alias in the sites file use the ls command to find all sites available', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'nightly')

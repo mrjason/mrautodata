@@ -39,17 +39,17 @@ class LogHelper extends Helper {
     /**
      * @var ConfigHelper ConfigHelper class
      */
-    protected $cfg;
+    protected $containerfg;
 
     /**
      * Load up the Log helper with the directory
      */
     public function init() {
-        $this->cfg    = $this->getHelperSet()->get('config');
-        $this->dir    = $this->cfg->get('dirs', 'log');
-        $transport    = \Swift_SmtpTransport::newInstance($this->cfg->get('mail', 'host'), $this->cfg->get('mail', 'port'), $this->cfg->get('mail', 'secure'))
-            ->setUsername($this->cfg->get('mail', 'username'))
-            ->setPassword($this->cfg->get('mail', 'password'));
+        $this->containerfg    = $this->getHelperSet()->get('config');
+        $this->dir    = $this->containerfg->get('dirs', 'log');
+        $transport    = \Swift_SmtpTransport::newInstance($this->containerfg->get('mail', 'host'), $this->containerfg->get('mail', 'port'), $this->containerfg->get('mail', 'secure'))
+            ->setUsername($this->containerfg->get('mail', 'username'))
+            ->setPassword($this->containerfg->get('mail', 'password'));
         $this->mailer = \Swift_Mailer::newInstance($transport);
     }
 
@@ -60,7 +60,7 @@ class LogHelper extends Helper {
      */
     public function setDir($dir = '') {
         if (!is_dir($dir)) {
-            $this->dir = $this->cfg->get('dirs', 'log');
+            $this->dir = $this->containerfg->get('dirs', 'log');
         } else {
             $this->dir = $dir;
         }
@@ -248,7 +248,7 @@ class LogHelper extends Helper {
                 $address->name  = $this->site->owner['name'];
                 $to[]           = $address;
             }
-            $admins = $this->cfg->getSection('emailadmins');
+            $admins = $this->containerfg->getSection('emailadmins');
 
             foreach ($admins as $admin) {
                 $address        = new \stdClass();

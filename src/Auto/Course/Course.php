@@ -33,7 +33,7 @@ class Course {
     /**
      * @var Container containing all variables for the session, page, log helper and content helper.
      */
-    protected $c;
+    protected $container;
 
     /**
      * @var string The CSS attributes to locate an activity field in the add activity area of the course format
@@ -53,7 +53,7 @@ class Course {
         foreach ($options as $name => $value) {
             $this->{$name} = $value;
         }
-        $this->c->reloadPage($this->fullname);
+        $this->container->reloadPage($this->fullname);
     }
 
     /**
@@ -61,21 +61,21 @@ class Course {
      * @return array an array of activity objects
      */
     public function getActivities() {
-        /// If this is a folder view formated course we might be in single folder view and want to get out of that
-        if ($this->c->s->getCurrentUrl() != $this->url) {
-            $this->c->visit($this->url);
+        /// If this is a folder view formatted course we might be in single folder view and want to get out of that
+        if ($this->container->session->getCurrentUrl() != $this->url) {
+            $this->container->visit($this->url);
         }
-        if ($el = $this->c->p->find('css', 'div.topiclistlink > a')) {
-            $el->click();
-            $this->c->reloadPage($this->fullname);
+        if ($element = $this->container->page->find('css', 'div.topiclistlink > a')) {
+            $element->click();
+            $this->container->reloadPage($this->fullname);
         }
 
-        if ($expand = $this->c->p->findLink('Expand All')) {
+        if ($expand = $this->container->page->findLink('Expand All')) {
             $expand->click();
-            $this->c->reloadPage($this->fullname);
+            $this->container->reloadPage($this->fullname);
         }
 
-        $activitiesLi = $this->c->p->findAll('css', 'li.activity');
+        $activitiesLi = $this->container->page->findAll('css', 'li.activity');
         $activities   = array();
         foreach ($activitiesLi as $li) {
             $classes   = explode(' ', $li->getAttribute('class'));
@@ -87,7 +87,7 @@ class Course {
                     list($module, $id) = explode('-', $cssid);
 
                     $options      = array(
-                        'c'     => $this->c,
+                        'container'     => $this->container,
                         'cssid' => $cssid,
                         'id'    => $id,
                         'title' => $link->getText(),
@@ -108,15 +108,15 @@ class Course {
      * @return array an array of section objects.
      */
     public function getSections() {
-        $this->c->l->action($this->fullname . ': Getting all course sections');
-        $elSections = $this->c->p->findAll('css', 'div.course-content ul li');
+        $this->container->logHelper->action($this->fullname . ': Getting all course sections');
+        $elementSections = $this->container->page->findAll('css', 'div.course-content ul li');
 
         $sections = array();
-        foreach ($elSections as $el) {
+        foreach ($elementSections as $element) {
             $section     = new \stdClass;
-            $section->id = $el->getAttribute('id');
-            if ($elName = $this->c->p->find('css', 'h3.sectionname')) {
-                $section->name = $elName->getText();
+            $section->id = $element->getAttribute('id');
+            if ($elementName = $this->container->page->find('css', 'h3.sectionname')) {
+                $section->name = $elementName->getText();
             } else {
                 $section->name = '';
             }
@@ -130,17 +130,17 @@ class Course {
      * @access public
      */
     public function clickFullnameLink() {
-        if ($el = $this->c->p->findLink($this->fullname)) {
-            $this->c->l->action($this->fullname . ': Clicked full name link');
-            $el->click();
-            $this->c->reloadPage($this->fullname);
+        if ($element = $this->container->page->findLink($this->fullname)) {
+            $this->container->logHelper->action($this->fullname . ': Clicked full name link');
+            $element->click();
+            $this->container->reloadPage($this->fullname);
         } else {
-            if ($this->c->cf->debug) {
-                $this->c->l->action($this->fullname . ': Can\'t find current course link');
+            if ($this->container->cfg->debug) {
+                $this->container->logHelper->action($this->fullname . ': Can\'t find current course link');
             }
             if (isset($this->url)) {
-                $this->c->l->action($this->fullname . ': Returning to course the course via the url ' . $this->url);
-                $this->c->visit($this->url);
+                $this->container->logHelper->action($this->fullname . ': Returning to course the course via the url ' . $this->url);
+                $this->container->visit($this->url);
             }
         }
     }
@@ -150,15 +150,15 @@ class Course {
      * @access public
      */
     public function clickNavLink() {
-        if ($navbar = $this->c->p->find('css', '.navbar')) {
-            if ($el = $navbar->findLink($this->fullname)) {
-                $this->c->l->action($this->fullname . ': Clicked on Course Nav link');
-                $el->click();
-                $this->c->reloadPage($this->fullname);
+        if ($navbar = $this->container->page->find('css', '.navbar')) {
+            if ($element = $navbar->findLink($this->fullname)) {
+                $this->container->logHelper->action($this->fullname . ': Clicked on Course Nav link');
+                $element->click();
+                $this->container->reloadPage($this->fullname);
             }
         } else if (isset($this->url)) {
-            $this->c->l->action($this->fullname . ': Returning to course with url ' . $this->url);
-            $this->c->visit($this->url);
+            $this->container->logHelper->action($this->fullname . ': Returning to course with url ' . $this->url);
+            $this->container->visit($this->url);
         }
     }
 
@@ -168,34 +168,34 @@ class Course {
     public function create() {
         $i = 0;
 
-        $this->c->visit('/course/index.php?categoryedit=on');
-        $this->c->l->action('Adding course');
-        if ($btn = $this->c->p->findButton('Add a new course')) {
-            $btn->click();
-            $this->c->reloadPage($this->fullname);
+        $this->container->visit('/course/index.php?categoryedit=on');
+        $this->container->logHelper->action('Adding course');
+        if ($button = $this->container->page->findButton('Add a new course')) {
+            $button->click();
+            $this->container->reloadPage($this->fullname);
             do {
                 $fullname  = $this->fullname . $i;
                 $shortname = $this->shortname . $i;
-                $elfn      = $this->c->p->findField('fullname');
-                $elfn->setValue($fullname);
-                $elsn = $this->c->p->findField('shortname');
-                $elsn->setValue($shortname);
-                $elf = $this->c->p->findField('format');
+                $elementfn      = $this->container->page->findField('fullname');
+                $elementfn->setValue($fullname);
+                $elementsn = $this->container->page->findField('shortname');
+                $elementsn->setValue($shortname);
+                $elementf = $this->container->page->findField('format');
                 if (isset($this->format)) {
-                    $elf->selectOption($this->format);
+                    $elementf->selectOption($this->format);
                 } else {
-                    $this->format = $elf->getValue();
+                    $this->format = $elementf->getValue();
                 }
-                $btn = $this->c->p->findButton('Save changes');
-                $btn->click();
-                $this->c->reloadPage($this->fullname);
+                $button = $this->container->page->findButton('Save changes');
+                $button->click();
+                $this->container->reloadPage($this->fullname);
                 $i++;
-            } while ($error = $this->c->p->find('css', '.error'));
+            } while ($error = $this->container->page->find('css', '.error'));
             $this->fullname  = $fullname;
             $this->shortname = $shortname;
-            $this->url       = $this->c->s->getCurrentUrl();
-            $this->clickNavLink();
-            $this->clickNavLink();
+            $this->url       = $this->container->session->getCurrentUrl();
+            $this->containerlickNavLink();
+            $this->containerlickNavLink();
             return $this;
         }
     }
@@ -206,9 +206,9 @@ class Course {
      */
     public function getAvailableActivities() {
         $activities = array();
-        $this->clickAddActivity();
+        $this->containerlickAddActivity();
 
-        $divs = $this->c->p->findAll('css', $this->addActivityCss);
+        $divs = $this->container->page->findAll('css', $this->addActivityCss);
         foreach ($divs as $div) {
             $id        = $div->getAttribute($this->addactivityAttr);
             $classes   = explode('_', $id);
@@ -216,7 +216,7 @@ class Course {
 
             if (class_exists($classname)) {
                 $options      = array(
-                    'c'     => $this->c,
+                    'container'     => $this->container,
                     'cssid' => $id,
                     'title' => ucfirst($classes[1]) . ' Activity Auto Created'
                 );
@@ -236,10 +236,10 @@ class Course {
         $activities = $this->getAvailableActivities();
         foreach ($activities as $activity) {
             if (method_exists($activity, 'create')) {
-                if ($el = $this->getCreateAcitivty($activity)) {
-                    $this->c->l->action($this->fullname . ': Creating ' . $activity->getTitle());
-                    $el->doubleClick();
-                    $this->c->reloadPage($this->fullname);
+                if ($element = $this->getCreateAcitivty($activity)) {
+                    $this->container->logHelper->action($this->fullname . ': Creating ' . $activity->getTitle());
+                    $element->doubleClick();
+                    $this->container->reloadPage($this->fullname);
                     $activity->create();
                 }
             }
@@ -254,8 +254,8 @@ class Course {
      * @return bool|\Behat\Mink\NodeElement
      */
     public function getCreateAcitivity($activity) {
-        if ($el = $this->c->p->findField($activity->getCssId())) {
-            return $el;
+        if ($element = $this->container->page->findField($activity->getCssId())) {
+            return $element;
         }
         return false;
     }
@@ -267,17 +267,17 @@ class Course {
         $this->turnEditingOn();
 
         // Check if the activity chooser is even on.
-        if ($chooser = $this->c->p->findLink('Activity chooser on')) {
-            $this->c->l->action($this->fullname . ': Changing to activity chooser');
+        if ($chooser = $this->container->page->findLink('Activity chooser on')) {
+            $this->container->logHelper->action($this->fullname . ': Changing to activity chooser');
             $chooser->click();
-            $this->c->reloadPage($this->fullname);
+            $this->container->reloadPage($this->fullname);
         }
-        if ($addActivity = $this->c->p->find('css', '.section-modchooser-link a')) {
-            $this->c->l->error($this->fullname . ': Clicking on add activity link');
+        if ($addActivity = $this->container->page->find('css', '.section-modchooser-link a')) {
+            $this->container->logHelper->error($this->fullname . ': Clicking on add activity link');
             $addActivity->click();
         } else {
-            $this->c->l->error($this->fullname . ': Could not find the add activity link');
-            $this->clickNavLink();
+            $this->container->logHelper->error($this->fullname . ': Could not find the add activity link');
+            $this->containerlickNavLink();
         }
     }
 
@@ -285,19 +285,19 @@ class Course {
      * Click the turn editing on button in a course and then reload the page.
      */
     public function turnEditingOn() {
-        if ($btn = $this->c->p->findButton('Turn editing on')) {
-            $this->c->l->error($this->fullname . ': Turning editing on');
-            $btn->click();
+        if ($button = $this->container->page->findButton('Turn editing on')) {
+            $this->container->logHelper->error($this->fullname . ': Turning editing on');
+            $button->click();
         }
-        $this->c->reloadPage($this->fullname);
+        $this->container->reloadPage($this->fullname);
     }
 
     /**
      * View the course page via the url
      */
     public function view() {
-        $this->c->l->action($this->fullname . ': Viewing');
-        $this->c->s->visit($this->url);
+        $this->container->logHelper->action($this->fullname . ': Viewing');
+        $this->container->session->visit($this->url);
     }
 
     /**

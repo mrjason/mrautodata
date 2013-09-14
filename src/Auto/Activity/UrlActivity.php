@@ -24,7 +24,7 @@ class UrlActivity extends Activity {
      * Add values to the required fields for the url resource type in the resource creation screen
      */
     public function fillOutRequiredFields() {
-        $field = $this->c->p->findField('externalurl');
+        $field = $this->container->page->findField('externalurl');
         $field->setValue('http://www.moodlerooms.com');
     }
 }

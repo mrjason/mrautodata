@@ -24,6 +24,6 @@ class ResourceActivity extends Activity {
      * Add a file to the file resource in the creation screen
      */
     public function fillOutRequiredFields() {
-        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
+        $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
     }
 }

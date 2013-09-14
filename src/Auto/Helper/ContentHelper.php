@@ -487,6 +487,15 @@ class ContentHelper extends Helper {
         'o\'Neil',
         'o\'Connell'
     );
+
+    protected $teacherComment = array(
+        'Your work showed a lot of promise keep it up',
+        'Your work needs improvement, please see me during my office hours',
+        'Please provide more detail in your work. I am looking for a better explination',
+        'This was great effort keep up the good work',
+        'Please review the materials for this week and resubmit the assignment',
+        'I need more from you at this time.'
+    );
     /**
      * @var array HTML attributes that are associated with each type of information array for when the information is returned as HTML
      */
@@ -494,12 +503,14 @@ class ContentHelper extends Helper {
         'paragraph' => 'p',
         'sentence'  => 'p',
         'question'  => 'p',
-        'header'    => 'h2'
+        'header'    => 'h2',
+        'teacherComment'    => 'p',
+        'word'    => 'p'
     );
     /**
      * @var array Creole Moodle wiki wrappers for each type of content arrays that are returned.
      */
-    protected $creole = array(
+    protected $containerreole = array(
         'paragraph' => '\\\\',
         'sentence'  => '\\\\',
         'question'  => '\\\\',
@@ -512,7 +523,7 @@ class ContentHelper extends Helper {
      * @param \Auto\Container $c configured container to access logs and mink script
      */
     public function setUp($c) {
-        $this->c = $c;
+        $this->container = $c;
     }
 
     /**
@@ -610,6 +621,10 @@ class ContentHelper extends Helper {
         return $this->getRandText('word', $output);
     }
 
+    public function getRandTeacherComment($output = 'plaintext'){
+        return $this->getRandText('teacherComment', $output);
+    }
+
     /**
      * Create random text from the arrays
      *
@@ -651,7 +666,7 @@ class ContentHelper extends Helper {
     /**
      * Return a random file of the extention in the directory and type provided. Intended for the included files directory
      *
-     * @param $dir  The base directory where the files are stored, usually $this->c->l->fdir
+     * @param $dir  The base directory where the files are stored, usually $this->container->logHelper->fdir
      * @param $type The type of file to be getting, math, english, scorm, imscp
      * @param $ext  The file's extension also a directory, pdf, zip, docx
      *
@@ -679,7 +694,7 @@ class ContentHelper extends Helper {
     /**
      * Grab a file from the sent directory and then upload it to Moodle via the upload file repository
      *
-     * @param        $dir    The base directory where the files are stored, usually $this->c->l->fdir
+     * @param        $dir    The base directory where the files are stored, usually $this->container->logHelper->fdir
      * @param        $type   The type of file to be getting, math, english, scorm, imscp
      * @param        $ext    The file's extension also a directory, pdf, zip, docx
      * @param string $saveas The name to save the file as
@@ -699,57 +714,57 @@ class ContentHelper extends Helper {
      */
     public function addFile($file, $saveas = '') {
         if (file_exists($file)) {
-            $el = 0;
-            $this->c->reloadPage();
-            if ($div = $this->c->p->find('css', '.fp-btn-add')) {
-                sleep($this->c->cf->delay); // it seems some javascript is running to update the file manager.  The add button can be found and then hidden when the .fm-maxfiles class is applied.
+            $element = 0;
+            $this->container->reloadPage();
+            if ($div = $this->container->page->find('css', '.fp-btn-add')) {
+                sleep($this->container->cfg->delay); // it seems some javascript is running to update the file manager.  The add button can be found and then hidden when the .fm-maxfiles class is applied.
                 /// There is a class added to hide the add button when the maximum allowed files is reached.
-                if ($max = $this->c->p->find('css', '.filemanager.fm-maxfiles')) {
-                    $this->c->l->action('Maximum files have been uploaded');
-                    $el = 0;
+                if ($max = $this->container->page->find('css', '.filemanager.fm-maxfiles')) {
+                    $this->container->logHelper->action('Maximum files have been uploaded');
+                    $element = 0;
                 } else {
-                    $this->c->l->action('Found the fp-btn-add button');
-                    $el = $div->find('css', 'a');
+                    $this->container->logHelper->action('Found the fp-btn-add button');
+                    $element = $div->find('css', 'a');
                 }
-            } else if ($el = $this->c->p->findButton('Choose a file...')) {
-                sleep($this->c->cf->delay);
-                $this->c->l->action('Found the Choose a file... button');
+            } else if ($element = $this->container->page->findButton('Choose a file...')) {
+                sleep($this->container->cfg->delay);
+                $this->container->logHelper->action('Found the Choose a file... button');
             }
-            if (!empty($el)) {
-                $el->click();
-                if ($repoarea = $this->c->p->find('css', '.fp-list')) {
+            if (!empty($element)) {
+                $element->click();
+                if ($repoarea = $this->container->page->find('css', '.fp-list')) {
                     if ($uploadrepo = $repoarea->findLink('Upload a file')) {
                         $uploadrepo->click();
                     /// Need to delay looking for AJAX to process and part of the page to be unhidden or added.
-                        sleep($this->c->cf->delay);
-                        if ($upload = $this->c->p->findField('repo_upload_file')) {
-                            $this->c->l->action('Attaching file ' . $file . ' in upload repository');
+                        sleep($this->container->cfg->delay);
+                        if ($upload = $this->container->page->findField('repo_upload_file')) {
+                            $this->container->logHelper->action('Attaching file ' . $file . ' in upload repository');
                             $upload->attachFile($file);
 
                             if (!empty($saveas)) {
-                                $el = $this->c->p->findField('title');
-                                $el->setValue($saveas);
+                                $element = $this->container->page->findField('title');
+                                $element->setValue($saveas);
                             }
-                            $button = $this->c->p->findButton('Upload this file');
+                            $button = $this->container->page->findButton('Upload this file');
                             try {
                                 $button->press();
                             } catch (Exception $e) {
                                 //do nothing because the likely issue is an alert that we can't handle.
                             }
                         } else {
-                            $this->c->l->action('Could not find .fp-upload-form in repository browser');
+                            $this->container->logHelper->action('Could not find .fp-upload-form in repository browser');
                         }
                     } else {
-                        $this->c->l->action('Could not find the upload a file link in repository browser');
+                        $this->container->logHelper->action('Could not find the upload a file link in repository browser');
                     }
                 } else {
-                    $this->c->l->action('Could not find .fp-list in repository browser');
+                    $this->container->logHelper->action('Could not find .fp-list in repository browser');
                 }
             } else {
-                $this->c->l->action('Could not find the filepicker add button or choose a file button');
+                $this->container->logHelper->action('Could not find the filepicker add button or choose a file button');
             }
         } else {
-            $this->c->l->action($file . ' Does not exist on the computer');
+            $this->container->logHelper->action($file . ' Does not exist on the computer');
         }
     }
 

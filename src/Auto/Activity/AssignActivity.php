@@ -26,32 +26,127 @@ class AssignActivity extends Activity {
      */
     public function post() {
         $this->view();
-        $btnname = 'Add submission';
-        $btn = $this->c->p->findButton($btnname);
+        $buttonName = 'Add submission';
+        $button = $this->container->page->findButton($buttonName);
 
-        if (!$btn) {
-            $btnname = 'Edit my submission';
-            $btn = $this->c->p->findButton($btnname);
+        if (!$button) {
+            $buttonName = 'Edit my submission';
+            $button = $this->container->page->findButton($buttonName);
         }
 
-        if ($btn) {
-            $btn->press();
-            $this->c->l->action($this->title . ': Clicked button '.$btnname);
-            $this->c->reloadPage($this->title);
-            if ($editor = $this->c->p->findField('id_onlinetext_editor')) {
+        if ($button) {
+            $button->press();
+            $this->container->logHelper->action($this->title . ': Clicked button '.$buttonName);
+            $this->container->reloadPage($this->title);
+            if ($editor = $this->container->page->findField('id_onlinetext_editor')) {
                 if ($editor->isVisible()) {
-                    $editor->setValue($this->c->ch->getRandEssay('html'));
+                    $editor->setValue($this->container->contentHelper->getRandEssay('html'));
                 } else {
-                    $this->c->l->failure($this->title . ': id_onlinetext_editor textarea is not visible');
+                    $this->container->logHelper->failure($this->title . ': id_onlinetext_editor textarea is not visible');
                 }
             }
-            $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
-            if ($save = $this->c->p->findButton('Save changes')) {
+            $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
+            if ($save = $this->container->page->findButton('Save changes')) {
                 $save->press();
             }
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         } else {
-            $this->c->l->action($this->title . ': Could not find Add or Edit submission button');
+            $this->container->logHelper->action($this->title . ': Could not find Add or Edit submission button');
+        }
+    }
+
+    public function teacherInteract($grade){
+        $this->view();
+        $this->grade($grade);
+    }
+
+    public function grade($grade){
+        if($link = $this->container->page->find('css','.submissionlinks > a')){
+            $link->click();
+            $this->container->logHelper->action($this->title . ': Viewing grading and submissions screen');
+            $this->container->reloadPage($this->title);
+            $gradeButtons = $this->container->page->findAll('css', 'td.cell.c5 > a');
+            if(!empty($gradeButtons[0])){
+                $gradeButtons[0]->click();
+                $this->container->logHelper->action($this->title . ': Navigating to grade first student');
+                $this->container->reloadPage($this->title);
+
+                $next = true;
+                //do grading
+                while($next){
+                    if($field = $this->container->page->findField('grade')){ // standard grading
+                        $label = $this->container->page->find('css','#fitem_id_grade .fitemtitle > label');
+                        $maxGrade = str_replace('Grade out of ', '', $label->getText());
+                        $grade = rand(0,$maxGrade);
+                        $field->setValue((string)$grade);
+                        $this->container->logHelper->action($this->title . ': Grading standard way with '.$grade);
+                    } else if ($gradeform = $this->container->page->find('css', '#rubric-advancedgrading')) { /// Rubric grading
+                        $criterion = $gradeform->findAll('css','.criterion');
+                        foreach($criterion as $criteria){
+                            $levels = $criteria->findAll('css','.level');
+                            $count = count($levels)-1;
+                            $selectedLevel = rand(0,$count);
+                            $levels[$selectedLevel]->click();
+                            $this->container->logHelper->action($this->title . ': Clicking level '.$selectedLevel);
+                        }
+
+                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $this->leaveRemarks($remarks);
+                    } else if ($gradeform = $this->container->page->find('css', '#checklist-advancedgrading')) { /// Checklist grading
+                        $items = $gradeform->findAll('css','.item');
+                        foreach ($items as $item) {
+                            if(rand(0,1)){
+                                $item->click();
+                            }
+                        }
+                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $this->leaveRemarks($remarks);
+                    } else if($gradeform = $this->container->page->find('css', '#markingguide-advancedgrading')) { /// marking guide
+                        $scores = $gradingform->findAll('css','.score');
+                        foreach($scores as $score){
+                            $maxGrade = $score->find('css','criteriondescriptionscore');
+                            $grade = rand(0,$maxGrade);
+                            $field = $score->findField('text');
+                            $field->setValue((string)$grade);
+                        }
+                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $this->leaveRemarks($remarks);
+                    }
+
+                    if (($editor = $this->container->page->findField('id_assignfeedbackcomments_editor')) && rand(0, 1)) {
+                        if ($editor->isVisible()) {
+                            $editor->setValue($this->container->contentHelper->getRandTeacherComment('html'));
+                            $this->container->logHelper->action($this->title . ': Leaving text feedback');
+                        } else {
+                            $this->container->logHelper->failure($this->title . ': id_assignfeedbackcomments_editor textarea is
+                            not visible');
+                        }
+                    }
+
+                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 1)) {
+                        $this->container->logHelper->action($this->title . ': Leaving file feedback');
+                        $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
+                    }
+
+                    if($button = $this->container->page->findButton('Save and show next')){
+                        $this->container->reloadPage($this->title);
+                    } else {
+                        $next   = false;
+                        $button = $this->container->page->findButton('Save changes');
+                    }
+                    $button->click();
+                    $this->container->reloadPage($this->title);
+                }
+            }
+        }
+    }
+
+    public function leaveRemarks($remarks){
+        foreach($remarks as $remark){
+            if(rand(0,5) == 0){
+                $this->container->logHelper->action($this->title . ': Leaving a remark');
+                $remark->setValue($this->container->contentHelper->getRandTeacherComment());
+            }
         }
     }
 

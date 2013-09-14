@@ -136,8 +136,10 @@ EOF
 
                         foreach ($activities as $activity) {
                             $grade = rand(60, 100);
+                            if($activity->getType() == 'assign'){
                             $j2->interactWithActivity($activity, $grade);
                             $course->view();
+                            }
                         }
                     }
                     $j2->logout();

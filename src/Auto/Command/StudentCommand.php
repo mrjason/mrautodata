@@ -128,12 +128,13 @@ EOF
                     foreach ($courses as $course) {
                         $course->view();
                         $activities = $course->getActivities();
-                        //$activities = $j2->getCourseActivities();
 
                         foreach ($activities as $activity) {
                             $grade = rand(60, 100);
+                            //if($activity->getType() == 'quiz'){
                             $j2->interactWithActivity($activity, $grade);
                             $course->view();
+                            //}
                         }
                     }
                     $j2->logout();

@@ -25,62 +25,70 @@ class MatchQuestion extends Question {
      * If the answer isn't set or we are not in the grade range add a random sentence to the field.
      */
     public function answer() {
-        if (!isset($this->field)) {
-            $this->getField();
-        }
+        $this->answerSetup();
 
-        /// If someone messed up setting up the Matching and we have more or fewer answers than they are questions then we generate random answers
-        if (count($this->field) != count($this->answer)) {
-            foreach ($this->field as $field) {
-                $options  = $field->findAll('css', 'option');
-                $rand     = rand(0, count($options) - 1);
-                $selected = $options[$rand]->getValue();
-                $text     = $options[$rand]->getText();
-                $this->c->l->action($this->title . ': Answering with answer ' . $text . ' value is ' . $selected);
-                $field->selectOption($selected);
-            }
-        } else {
-            /// Loop through each field, find the options in the select and then text if the text for the option matches the answer
-            /// and if so select that value
+        /// If someone didn't create answers or messed up the number of answers then we generate random answers
+        if (count($this->field) == count($this->answer)) {
             for ($i = 0; $i < count($this->field); $i++) {
                 $options = $this->field[$i]->findAll('css', 'option');
                 for ($j = 0; $j < count($options); $j++) {
                     $text = $options[$j]->getText();
                     if ($text == $this->answer[$i]) {
-                        $this->c->l->action($this->title . ': Answering with answer ' . $this->answer[$i] . ' value is ' . $j);
+                        $this->container->logHelper->action($this->title . ': Correctly answering with answer ' . $this->answer[$i] . ' value is '
+                        . $j);
                         $this->field[$i]->selectOption($j);
                     }
-                }
+            }
+            }
+        } else {
+            $this->answerRandomly();
+        }
+    }
 
+    /**
+     * Loop through each field, find the options in the select and then text if the text for the option matches the answer
+     * and if so select that value
+     *
+     * @author Jason Hardin <jason@moodlerooms.com>
+     */
+    public function answerRandomly(){
+        for ($i = 0; $i < count($this->field); $i++) {
+            foreach ($this->field as $field) {
+                $options  = $field->findAll('css', 'option');
+                $rand     = rand(0, count($options) - 1);
+                $selected = $options[$rand]->getValue();
+                $text     = $options[$rand]->getText();
+                $this->container->logHelper->action($this->title . ': Randomly answering with answer ' . $text . ' value is ' . $selected);
+                $field->selectOption($selected);
             }
         }
     }
 
     /**
      * Locate all of the select fields in the question and return an array of \Behat\Mink\NodeElement objects.  Return false if nothing is found.
-     * @return array|bool Any array of \Behat\Mink\NodeElement objects or false
+     * @return bool Any array of \Behat\Mink\NodeElement objects or false
      */
-    public function getField() {
+    public function getAnswerField() {
         if ($fields = $this->qdiv->findAll('css', '.answer .control select')) {
             $this->field = $fields;
-            return $this->field;
+            return true;
         }
         return false;
     }
 
     /**
      * Get all answers for all of the matching select fields.  Each select question should have an answer in it.
-     * @return array|bool Any array of \Behat\Mink\NodeElement objects or false
+     * @return bool Any array of \Behat\Mink\NodeElement objects or false
      */
     public function getAnswer() {
-        if ($answers = $this->qdiv->findAll('css', '.mrqueanswer')) {
-            $this->answer = array();
+        $this->answer = array();
+        if ($answers = $this->qdiv->findAll('css', '.queanswer')) {
             foreach ($answers as $answer) {
                 $this->answer[] = $answer->getText();
-                $this->c->l->action($this->title . ': Found mrqueanswer set to ' . $answer->getText());
+                $this->container->logHelper->action($this->title . ': Found queanswer set to ' . $answer->getText());
             }
 
-            return $this->answer;
+            return true;
         }
         return false;
     }

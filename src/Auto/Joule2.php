@@ -31,7 +31,7 @@ class Joule2 {
     /**
      * @var Container Class containing all variables for the session, page, log helper and content helper.
      */
-    protected $c;
+    protected $container;
 
     /**
      * Construct the Joule2 classes for the run
@@ -39,7 +39,7 @@ class Joule2 {
      * @param \Auto\Container $container new container variable to be used in the process
      */
     public function __construct($container) {
-        $this->c = $container;
+        $this->container = $container;
     }
 
     /**
@@ -50,22 +50,22 @@ class Joule2 {
      */
     public function setSite($site) {
         $this->site = $site;
-        $this->c->setBaseUrl($site->url);
-        $this->c->l->setSite($site);
+        $this->container->setBaseUrl($site->url);
+        $this->container->logHelper->setSite($site);
     }
 
     /**
      * This method wraps around the Container's teardown method
      */
     public function teardown() {
-        $this->c->teardown();
+        $this->container->teardown();
     }
 
     /**
      * This method wraps around the Container cleanup function
      */
     public function cleanup() {
-        $this->c->cleanup();
+        $this->container->cleanup();
     }
 
     /**
@@ -90,28 +90,28 @@ class Joule2 {
         if (!empty($user)) {
             $this->user = $user;
         }
-        $this->c->visit('/login/index.php');
-        $this->c->reloadPage($this->site->url);
-        if ($username = $this->c->p->findField('username')) {
+        $this->container->visit('/login/index.php');
+        $this->container->reloadPage($this->site->url);
+        if ($username = $this->container->page->findField('username')) {
             $username->setValue($this->user->username);
-            if ($password = $this->c->p->findField('password')) {
+            if ($password = $this->container->page->findField('password')) {
                 $password->setValue($this->user->password);
             }
-            if ($btn = $this->c->p->findButton('Login')) {
-                $btn->press();
-                $this->c->l->action($this->site->url . ': Logged in with username ' . $this->user->username);
+            if ($button = $this->container->page->findButton('Login')) {
+                $button->press();
+                $this->container->logHelper->action($this->site->url . ': Logged in with username ' . $this->user->username);
                 return true;
             } else {
-                $this->c->l->failure($this->site->url . ': Could not find login button');
+                $this->container->logHelper->failure($this->site->url . ': Could not find login button');
                 return false;
             }
         } else {
-            $this->c->l->failure($this->site->url . ': Could not find username field in the login area');
+            $this->container->logHelper->failure($this->site->url . ': Could not find username field in the login area');
             return false;
         }
-        $this->c->reloadPage($this->site->url);
-        if ($this->c->p->find('css', 'div.loginerrors')) {
-            $this->c->l->failure($this->site->url . ': Error in Login for ' . $this->user->username . ' ' . $this->c->p->find('css', 'div.loginerrors > span')->getText());
+        $this->container->reloadPage($this->site->url);
+        if ($this->container->page->find('css', 'div.loginerrors')) {
+            $this->container->logHelper->failure($this->site->url . ': Error in Login for ' . $this->user->username . ' ' . $this->container->page->find('css', 'div.loginerrors > span')->getText());
             return false;
         }
     }
@@ -122,13 +122,13 @@ class Joule2 {
      */
     public function logout() {
         try {
-            $this->c->visit('/login/logout.php');
-            $this->c->reloadPage($this->site->url);
-            if ($continue = $this->c->p->findButton('Continue')) {
+            $this->container->visit('/login/logout.php');
+            $this->container->reloadPage($this->site->url);
+            if ($continue = $this->container->page->findButton('Continue')) {
                 $continue->click();
             }
         } catch (\Exception $e) {
-            $this->c->l->error($e);
+            $this->container->logHelper->error($e);
         }
     }
 
@@ -137,29 +137,29 @@ class Joule2 {
      * @return array and array of course objects.
      */
     public function getCourses() {
-        $this->c->l->action($this->site->url . ': Getting all courses');
+        $this->container->logHelper->action($this->site->url . ': Getting all courses');
         /// Lets try my Moodle first as this seems the most common list of courses that Sale directors don't change.
-        $this->c->visit('/my');
+        $this->container->visit('/my');
         $courses   = array();
-        $elCourses = $this->c->p->findAll('css', 'div.course_title > h2.title > a');
+        $elementCourses = $this->container->page->findAll('css', 'div.course_title > h2.title > a');
 
-        $coursecount = count($elCourses) + 1;
+        $coursecount = count($elementCourses) + 1;
 
         /// If My moodle had nothing lets try the front page for the list of courses.
         if ($coursecount == 1) {
-            $this->c->visit();
-            $elCourses   = $this->c->p->findAll('css', 'div.coursebox > div.info > h3 > a');
-            $coursecount = count($elCourses) + 1;
+            $this->container->visit();
+            $elementCourses   = $this->container->page->findAll('css', 'div.coursebox > div.info > h3 > a');
+            $coursecount = count($elementCourses) + 1;
         }
 
         if ($coursecount > 1) {
-            foreach ($elCourses as $el) {
-                $url       = $el->getAttribute('href');
+            foreach ($elementCourses as $element) {
+                $url       = $element->getAttribute('href');
                 $ids       = preg_split('/id=/', $url);
                 $options   = array(
-                    'c'        => $this->c,
+                    'container'        => $this->container,
                     'url'      => $url,
-                    'fullname' => $el->getText(),
+                    'fullname' => $element->getText(),
                     'id'       => $ids[1]
                 );
                 $course    = new \Auto\Course\Course($options);
@@ -174,34 +174,34 @@ class Joule2 {
      * This method clicks on the Home link in the navigation breadcrumb.
      */
     public function goToSitePage() {
-        if ($el = $this->c->p->findLink('Home')) {
-            $this->c->l->action($this->site->url . ': Clicked Home link');
-            $el->click();
-            $this->c->reloadPage($this->site->url);
+        if ($element = $this->container->page->findLink('Home')) {
+            $this->container->logHelper->action($this->site->url . ': Clicked Home link');
+            $element->click();
+            $this->container->reloadPage($this->site->url);
         } else {
-            $this->c->l->action($this->site->url . ': Going to the base page');
-            $this->c->visit();
+            $this->container->logHelper->action($this->site->url . ': Going to the base page');
+            $this->container->visit();
         }
     }
 
     /**
      * Executes the interact method of the activity object passed.
      *
-     * @param $activity The activity object to interact with.
-     * @param $grade The grade to give the activity.
+     * @param object $activity The activity object to interact with.
+     * @param int $grade The grade to give the activity.
      *
      * @return bool
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function interactWithActivity($activity, $grade) {
-        if ($this->user->role == 'student') {
-            $activity->interact();
-        } else if ($this->user->role == 'teacher') {
-            if (method_exists($activity, 'grade')) {
-                $activity->grade($grade);
-            }
+        switch($this->user->role){
+            case 'teacher':
+                $activity->teacherInteract($grade);
+                break;
+            default:
+                $activity->interact();
         }
-        //$this->c->reloadPage($this->site->url);
+
         return true;
     }
 
@@ -240,16 +240,16 @@ class Joule2 {
      */
     public function addProfilePicture($filename) {
         try {
-            $this->c->l->action($this->site->url . ': Editing Profile');
-            $this->c->visit('/user/edit.php');
-            $this->c->ch->addFile($this->c->cf->filedir . '/' . $filename);
-            $button = $this->c->p->findButton('Update profile');
+            $this->container->logHelper->action($this->site->url . ': Editing Profile');
+            $this->container->visit('/user/edit.php');
+            $this->container->contentHelper->addFile($this->container->cfg->filedir . '/' . $filename);
+            $button = $this->container->page->findButton('Update profile');
 
             $button->press();
         } catch (Exception $e) {
             //do nothing because the likely issue is an alert that we can't handle.
         }
-        $this->c->reloadPage($this->site->url);
+        $this->container->reloadPage($this->site->url);
     }
 
     /**
@@ -261,7 +261,7 @@ class Joule2 {
      */
     public function createCourse($settings) {
         $classname = '\Auto\Course\\' . ucfirst($settings['format'] . 'Course');
-        $course    = new $classname(array_merge(array('c' => $this->c), $settings));
+        $course    = new $classname(array_merge(array('container' => $this->container), $settings));
         $course->create();
         return $course;
     }

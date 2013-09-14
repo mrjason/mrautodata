@@ -17,46 +17,46 @@ use Behat\Mink\Session,
  */
 class Container {
     /**
-     * @var ConfigHelper The server configuration object
+     * @var cfg The server configuration object
      */
-    public $cf;
+    public $cfg;
     /**
      * @var \Behat\Mink\Session The Mink Session object.
      */
-    public $s;
+    public $session;
     /**
      * @var object The Mink object returned from session->getPage()
      */
-    public $p;
+    public $page;
     /**
      * @var LogHelper LogHelper object to access that class's functions.
      */
-    public $l;
+    public $logHelper;
     /**
      * @var string The base url for the site and session.
      */
-    public $burl;
+    public $baseUrl;
 
     /**
      * Constructor for the Container object
      *
      * @param ConfigHelper  $cfg ConfigHelper object to grab all of the server settings.
-     * @param LogHelper     $l   Create a new LogHelper object and pass it here
-     * @param ContentHelper $ch  ContentHelper object
+     * @param LogHelper     $logHelper   Create a new LogHelper object and pass it here
+     * @param ContentHelper $contentHelper  ContentHelper object
      */
-    public function __construct($cfg, $ch, $l) {
-        $this->cf->delay     = $cfg->get('server', 'delay');
-        $this->cf->driver    = $cfg->get('server', 'driver');
-        $this->cf->verbose   = $cfg->get('notifications', 'verbose');
-        $this->cf->emaillogs = $cfg->get('notifications', 'emaillogs');
-        $this->cf->filedir   = $cfg->get('dirs', 'file');
-        $this->cf->ddir      = $cfg->get('dirs', 'download');
-        $this->ch            = $ch;
-        $this->l             = $l;
-        $this->l->init();
+    public function __construct($cfg, $contentHelper, $logHelper) {
+        $this->cfg->delay     = $cfg->get('server', 'delay');
+        $this->cfg->driver    = $cfg->get('server', 'driver');
+        $this->cfg->verbose   = $cfg->get('notifications', 'verbose');
+        $this->cfg->emaillogs = $cfg->get('notifications', 'emaillogs');
+        $this->cfg->filedir   = $cfg->get('dirs', 'file');
+        $this->cfg->ddir      = $cfg->get('dirs', 'download');
+        $this->contentHelper = $contentHelper;
+        $this->logHelper = $logHelper;
+        $this->logHelper->init();
 
         try {
-            switch ($this->cf->driver) {
+            switch ($this->cfg->driver) {
                 case 'zombie':
                     $driver = new ZombieDriver('127.0.0.1', 8124);
                     break;
@@ -68,11 +68,11 @@ class Container {
                     break;
 
             }
-            $this->s = new Session($driver);
-            $this->s->start();
-            $this->ch->setup($this);
+            $this->session = new Session($driver);
+            $this->session->start();
+            $this->contentHelper->setup($this);
         } catch (Exception $e) {
-            $this->l->action($e->msg);
+            $this->logHelper->action($e->msg);
             $this->cleanup();
         }
     }
@@ -81,49 +81,49 @@ class Container {
         if (strripos($url, 'http://') === false) {
             $url = 'http://' . $url;
         }
-        $this->burl = $url;
+        $this->baseUrl = $url;
     }
 
     /**
      * This method closes the log file and stops the selenium session.
      */
     public function teardown() {
-        $this->s->reset();
-        $this->l->export();
+        $this->session->reset();
+        $this->logHelper->export();
     }
 
     /**
      * This method removes all downloaded files from the server and emails the log file
      */
     public function cleanup() {
-        if (is_dir($this->cf->ddir)) {
-            $dirhandle = opendir($this->cf->ddir);
-            $this->l->action('Deleting files in  ' . $this->cf->ddir);
+        if (is_dir($this->cfg->ddir)) {
+            $dirhandle = opendir($this->cfg->ddir);
+            $this->logHelper->action('Deleting files in  ' . $this->cfg->ddir);
             while (false !== ($file = readdir($dirhandle))) {
                 if ($file != '.' && $file != '..') {
-                    unlink($this->cf->ddir . $file);
+                    unlink($this->cfg->ddir . $file);
                 }
             }
         }
-        $this->l->export();
-        if ($this->cf->emaillogs) {
-            $this->l->emailActions();
+        $this->logHelper->export();
+        if ($this->cfg->emaillogs) {
+            $this->logHelper->emailActions();
         }
-        $this->s->stop();
+        $this->session->stop();
     }
 
     /**
      * Simple function to get the page content into the internal page variable. This also checks for a PLD alert dialog and closes it.
      */
     public function reloadPage($pageTitle ='') {
-        $this->p = $this->s->getPage();
+        $this->page = $this->session->getPage();
 
-        if ($plddlg = $this->p->find('css', '#local_pld_alert')) {
-            if($btn = $plddlg->findButton('Close')){
-                $this->l->action($pageTitle.': Closing PLD Alert');
-                $btn->press();
+        if ($pldDialog = $this->page->find('css', '#local_pld_alert')) {
+            if($button = $pldDialog->findButton('Close')){
+                $this->logHelper->action($pageTitle.': Closing PLD Alert');
+                $button->press();
             }
-            $this->p = $this->s->getPage();
+            $this->page = $this->session->getPage();
         }
     }
 
@@ -131,14 +131,14 @@ class Container {
      * Wrapper class for session visit to the url based on the base url.  The base url can be included if already there.
      * The function then grab the page content.
      *
-     * @param string $url the url to go to with a / prefix or the full http://base sit eurl
+     * @param string $url the url to go to with a / prefix or the full http://basesiteurl
      */
     public function visit($url = '') {
-        if (strripos($url, $this->burl) === false) {
-            $url = $this->burl . $url;
+        if (strripos($url, $this->baseUrl) === false) {
+            $url = $this->baseUrl . $url;
         }
-        $this->l->action('Visiting ' . $url);
-        $this->s->visit($url);
+        $this->logHelper->action('Visiting ' . $url);
+        $this->session->visit($url);
         $this->reloadPage();
     }
 }

@@ -32,7 +32,7 @@ class ForumActivity extends Activity {
      * </ul>
      */
     public function interact() {
-        $this->c->l->action($this->title . ': Starting interaction');
+        $this->container->logHelper->action($this->title . ': Starting interaction');
         $this->view();
         $this->changeDisplayFormat();
         /// 20% of the time create a discussion
@@ -40,7 +40,7 @@ class ForumActivity extends Activity {
         if ($createDiscussion) {
             $this->createDiscussion();
         } else {
-            $this->c->l->action($this->title . ': Skipping discussion creation');
+            $this->container->logHelper->action($this->title . ': Skipping discussion creation');
         }
         $discussions = $this->getDiscussions();
         foreach ($discussions as $discussion) {
@@ -55,7 +55,7 @@ class ForumActivity extends Activity {
                 }
                 $this->view();
             } else {
-                $this->c->l->action($this->title . ': Skipping discussion ' . $discussion->getTitle());
+                $this->container->logHelper->action($this->title . ': Skipping discussion ' . $discussion->getTitle());
             }
         }
     }
@@ -76,11 +76,11 @@ class ForumActivity extends Activity {
      * @param string $label The select label to change the forums view tos
      */
     public function changeDisplayFormat($label = 'Default') {
-        if ($el = $this->c->p->findField('displayformat')) {
-            $this->c->l->action($this->title. ': Changing display value ' . $el->getValue() . ' to default');
-            if ($el->getValue() != $label) {
-                $el->selectOption($label);
-                $this->c->reloadPage($this->title);
+        if ($element = $this->container->page->findField('displayformat')) {
+            $this->container->logHelper->action($this->title. ': Changing display value ' . $element->getValue() . ' to default');
+            if ($element->getValue() != $label) {
+                $element->selectOption($label);
+                $this->container->reloadPage($this->title);
             }
         }
     }
@@ -90,7 +90,7 @@ class ForumActivity extends Activity {
      * @return Discussion The newly created discussion.
      */
     public function createDiscussion() {
-        $discussion = new Discussion(array('c' => $this->c));
+        $discussion = new Discussion(array('container' => $this->container));
         $discussion->create();
         return $discussion;
     }
@@ -106,55 +106,78 @@ class ForumActivity extends Activity {
     public function getDiscussions($paging = false) {
         $discussions = array();
         /// There is more than one page of forum data
-        /*if($el = $this->c->p->find('css','.paging') && $paging){
+        /*if($element = $this->container->page->find('css','.paging') && $paging){
         }*/
-        $ds = $this->c->p->findAll('css', '.forumheaderlist .discussion');
+        $ds = $this->container->page->findAll('css', '.forumheaderlist .discussion');
         foreach ($ds as $d) {
             $starter = $d->find('css', '.topic.starter a');
             /// Get the link to access the replies
             /// Urls are used because we mayb leave the page and the object would not stay
             if ($reply = $d->find('css', '.replies a')) {
-                $rurl = $reply->getAttribute('href');
+                $replyUrl = $reply->getAttribute('href');
             }
             /// Get the link to the author's profile and the author's name.
             if ($author = $d->find('css', '.author a')) {
-                $aurl  = $author->getAttribute('href');
-                $aname = $author->getText();
+                $autherUrl  = $author->getAttribute('href');
+                $authorName = $author->getText();
             }
-            /// Find all of the flags, bookmark and substantitive incase they need to be accessed.
-            /// Urls are used because we mayb leave the page and the object would not stay
+            /// Find all of the flags, bookmark and substantive in case they need to be accessed.
+            /// Urls are used because we maybe leave the page and the object would not stay
             $flags = $d->findAll('css', '.author .hsuforum_flags a');
             foreach ($flags as $flag) {
-                $furl = $flag->getAttribute('href');
-                if (strpos($furl, 'flag=bookmark')) {
-                    $fburl = $furl;
+                $flagUrl = $flag->getAttribute('href');
+                if (strpos($flagUrl, 'flag=bookmark')) {
+                    $flagBookmarkUrl = $flagUrl;
                 } else {
-                    $fsurl = $furl;
+                    $flagSubstantiveUrl = $flagUrl;
                 }
             }
             /// Find the url for the subscribe link
             /// Urls are used because we mayb leave the page and the object would not stay
             if ($subscribe = $d->find('css', '.subscribe a')) {
-                $surl = $subscribe->getAttribute('href');
+                $subscribeUrl = $subscribe->getAttribute('href');
             }
             $url = $starter->getAttribute('href');
             $ids = explode('d=', $url);
 
             $options       = array(
-                'c'      => $this->c,
-                'author' => isset($aname) ? $aname : '',
+                'container'      => $this->container,
+                'author' => isset($authorName) ? $authorName : '',
                 'url'    => $url,
-                'aurl'   => isset($aurl) ? $aurl : '',
-                'rurl'   => isset($rurl) ? $rurl : '',
-                'surl'   => isset($surl) ? $surl : '',
-                'fburl'  => isset($fburl) ? $fburl : '',
-                'fsurl'  => isset($fsurl) ? $fsurl : '',
+                'authorUrl'   => isset($autherUrl) ? $autherUrl : '',
+                'replyUrl'   => isset($replyUrl) ? $replyUrl : '',
+                'subscribeUrl'   => isset($subscribeUrl) ? $subscribeUrl : '',
+                'flagBookmarkUrl'  => isset($flagBookmarkUrl) ? $flagBookmarkUrl : '',
+                'flagSubstantiveUrl'  => isset($flagSubstantiveUrl) ? $flagSubstantiveUrl : '',
                 'id'     => $ids[1],
                 'title'  => $starter->getText()
             );
-            $discussions[] = new \Auto\Discussion($options);
+            $discussions[] = new Discussion($options);
         }
 
         return $discussions;
+    }
+
+    public function teacherInteract($grade){
+        $this->container->logHelper->action($this->title . ': Starting teacher interaction');
+        $this->view();
+        $this->changeDisplayFormat();
+        $this->createDiscussion();
+        $discussions = $this->getDiscussions();
+        foreach ($discussions as $discussion) {
+            $viewDiscussion = !rand(0, 9);
+            /// 10% of the time actually view a forum discussion
+            if ($viewDiscussion) {
+                $discussion->view();
+                /// 20% of the time create a random reply to a forum post
+                $reply = rand(0, 4);
+                if ($reply) {
+                    $discussion->randReply();
+                }
+                $this->view();
+            } else {
+                $this->container->logHelper->action($this->title . ': Skipping discussion ' . $discussion->getTitle());
+            }
+        }
     }
 }

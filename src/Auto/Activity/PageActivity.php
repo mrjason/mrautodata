@@ -25,7 +25,7 @@ class PageActivity extends Activity {
      * Add the required fields for the page activity type in the resource creation screen
      */
     public function fillOutRequiredFields() {
-        $field = $this->c->p->findField('id_page');
-        $field->setValue($this->c->ch->getRandParagraph());
+        $field = $this->container->page->findField('id_page');
+        $field->setValue($this->container->contentHelper->getRandParagraph());
     }
 }

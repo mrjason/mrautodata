@@ -35,10 +35,10 @@ class FolderviewCourse extends Course {
     public function clickAddActivity() {
         $this->turnEditingOn();
 
-        if ($addActivity = $this->c->p->findLink('Add Resource')) {
+        if ($addActivity = $this->container->page->findLink('Add Resource')) {
             $addActivity->click();
         } else {
-            $this->c->l->error($this->fullname . ': Could not find the add activity link');
+            $this->container->logHelper->error($this->fullname . ': Could not find the add activity link');
         }
     }
 
@@ -50,8 +50,8 @@ class FolderviewCourse extends Course {
      * @return bool|\Behat\Mink\NodeElement The activity creation node on the page or false if it is not found
      */
     public function getCreateAcitivty($activity) {
-        if ($el = $this->c->p->find('css', 'div#' . $activity->getCssId() . ' a')) {
-            return $el;
+        if ($element = $this->container->page->find('css', 'div#' . $activity->getCssId() . ' a')) {
+            return $element;
         }
         return false;
     }

@@ -25,25 +25,26 @@ class CalculatedsimpleQuestion extends Question {
      * If the answer isn't set then generate a random number between 1 and 5.
      */
     public function answer() {
-        if (!isset($this->field)) {
-            $this->getField();
-        }
+        $this->answerSetup();
 
         if (isset($this->field)) {
-            $this->c->l->action($this->title . ': Answering with answer ' . $this->answer);
-            $this->field->setValue($this->answer);
+            /// I want to replace this with Fabian's expression language https://github.com/symfony/symfony/pull/8913 whenever it
+            /// is released
+            eval('$answer = '.$this->answer.';');
+            $this->container->logHelper->action($this->title . ': Answering with answer ' . $this->answer);
+            $this->field->setValue((string)$answer);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getField() {
+    public function getAnswerField() {
         if ($field = $this->qdiv->find('css', '.answer input')) {
             $this->field = $field;
-            return $this->field;
+            return true;
         } else {
-            $this->c->l->action($this->title . ': Could not find answer field');
+            $this->container->logHelper->action($this->title . ': Could not find answer field');
         }
         return false;
     }
@@ -52,15 +53,8 @@ class CalculatedsimpleQuestion extends Question {
      * Get the answer value that has been added to the question text or return generate a random number between 0 and 5 if it can't be found.
      * @return string The answer to the question.
      */
-    public function getAnswer() {
-        if ($answer = $this->qdiv->find('css', '.mrqueanswer')) {
-            $this->answer = $answer->getText();
-            $this->c->l->action($this->title . ': Found mrqueanswer set to ' . $this->answer);
-        } else {
-            $this->answer = (string)rand(0, 5);
-            $this->c->l->action($this->title . ': Created random answer ' . $this->answer);
-        }
-
-        return $this->answer;
+    public function getRandomAnswer() {
+        $this->answer = (string)rand(0, 5);
+        $this->container->logHelper->action($this->title . ': Created random answer ' . $this->answer);
     }
 }

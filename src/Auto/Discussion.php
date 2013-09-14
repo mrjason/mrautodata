@@ -27,7 +27,7 @@ class Discussion {
     /**
      * @var Container containing all variables for the session, page, log helper and content helper.
      */
-    protected $c;
+    protected $container;
     /**
      * @var string The url to the discussion view page
      */
@@ -35,23 +35,23 @@ class Discussion {
     /**
      * @var string The url to the author's profile page
      */
-    protected $aurl;
+    protected $authorUrl;
     /**
      * @var string The url to the replies field
      */
-    protected $rurl;
+    protected $replyUrl;
     /**
      * @var string The url to the subscribe or unsubscribe link
      */
-    protected $surl;
+    protected $subscribeUrl;
     /**
      * @var string The url to mark or unmark a discussion as substantitive
      */
-    protected $fsurl;
+    protected $flagSubstantiveUrl;
     /**
      * @var string The url to bookmark or unbookmark the discussion
      */
-    protected $fburl;
+    protected $flagBookmarkUrl;
 
     /**
      * Consturctor for the class
@@ -68,8 +68,8 @@ class Discussion {
      * View the discussion within a forum
      */
     public function view() {
-        $this->c->l->action($this->title. ': Viewing discussion');
-        $this->c->visit($this->url);
+        $this->container->logHelper->action($this->title. ': Viewing discussion');
+        $this->container->visit($this->url);
     }
 
     /**
@@ -80,23 +80,23 @@ class Discussion {
      * @param string $subject for a manual type this is the subject to be used.
      */
     public function create($type = 'sentence', $subject = '') {
-        if ($btn = $this->c->p->findButton('Add a new discussion topic')) { /// Standard
+        if ($button = $this->container->page->findButton('Add a new discussion topic')) { /// Standard
             $msg = 'Creating discussion for a standard forum';
-        } else if ($btn = $this->c->p->findButton('Add a new question')) { /// QA forum
+        } else if ($button = $this->container->page->findButton('Add a new question')) { /// QA forum
             if ($type != 'manual') {
                 $type = 'question';
             }
             $msg = 'Creating discussion for a QA forum type';
-        } else if ($btn = $this->c->p->findButton('Add a new topic')) { /// news or blog forum
+        } else if ($button = $this->container->page->findButton('Add a new topic')) { /// news or blog forum
             $msg = 'Creating news or blog forum topic';
         }
-        if (!empty($btn)) {
-            $this->c->l->action($msg);
-            $btn->click();
-            $this->c->reloadPage($this->title);
+        if (!empty($button)) {
+            $this->container->logHelper->action($msg);
+            $button->click();
+            $this->container->reloadPage($this->title);
             $this->post($type, $subject);
         } else {
-            $this->c->l->action($this->title. ': Could not find any discussion button to click on');
+            $this->container->logHelper->action($this->title. ': Could not find any discussion button to click on');
         }
     }
 
@@ -109,41 +109,41 @@ class Discussion {
      * @param string $text for a manual type this is the subject to be used.
      */
     public function post($type = 'sentence', $text = '') {
-        $this->c->l->action('Creating post');
-        if ($subject = $this->c->p->findField('id_subject')) {
+        $this->container->logHelper->action('Creating post');
+        if ($subject = $this->container->page->findField('id_subject')) {
             switch ($type) {
                 case 'sentence':
-                    $subject->setValue($this->c->ch->getRandQuestion($type));
+                    $subject->setValue($this->container->contentHelper->getRandQuestion($type));
                     break;
                 case 'question':
-                    $subject->setValue($this->c->ch->getRandSentence($type));
+                    $subject->setValue($this->container->contentHelper->getRandSentence($type));
                     break;
                 case 'manual':
                     $subject->setValue($text);
                     break;
             }
         }
-        if ($message = $this->c->p->find('css', '#id_message')) {
+        if ($message = $this->container->page->find('css', '#id_message')) {
             if ($message->isVisible()) {
-                $message->setValue($this->c->ch->getRandParagraph());
+                $message->setValue($this->container->contentHelper->getRandParagraph());
             } else {
-                $this->c->l->error($this->title . ': id_message textarea is not visible');
+                $this->container->logHelper->error($this->title . ': id_message textarea is not visible');
             }
         }
-        if ($select = $this->c->p->findField('subscribe')) {
+        if ($select = $this->container->page->findField('subscribe')) {
             $select->selectOption('0');
         }
         /// Randomly add a file to the file area. Should happen 10% of the time.
         if (rand(0, 9) == 0) {
-            $this->c->ch->uploadRandFile($this->c->cf->filedir, 'english', 'pdf');
+            $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'english', 'pdf');
         }
-        if ($btn = $this->c->p->findButton('id_submitbutton')) {
-            $btn->click();
-            $this->c->reloadPage($this->title);
+        if ($button = $this->container->page->findButton('id_submitbutton')) {
+            $button->click();
+            $this->container->reloadPage($this->title);
         }
-        if ($continue = $this->c->p->findLink('Continue')) {
+        if ($continue = $this->container->page->findLink('Continue')) {
             $continue->click();
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         }
     }
 
@@ -152,18 +152,18 @@ class Discussion {
      * @access public
      */
     public function randReply() {
-        if ($posts = $this->c->p->findAll('css', 'div.forumpost')) {
+        if ($posts = $this->container->page->findAll('css', 'div.forumpost')) {
             $rand = rand(0, (count($posts) - 1));
-            $this->c->l->action($this->title. ': Replying to the ' . $rand . ' reply link');
+            $this->container->logHelper->action($this->title. ': Replying to the ' . $rand . ' reply link');
             if ($reply = $posts[$rand]->findLink('Reply')) {
                 $reply->click();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
                 $this->post('reply');
             } else {
-                $this->c->l->action($this->title . ': Could not find a reply link');
+                $this->container->logHelper->action($this->title . ': Could not find a reply link');
             }
         } else {
-            $this->c->l->action($this->title . ': Could not find posts');
+            $this->container->logHelper->action($this->title . ': Could not find posts');
         }
     }
 
@@ -193,27 +193,27 @@ class Discussion {
             foreach ($links as $id => $link) {
                 /// Moodle doesn't return to the paged view when you click on the forum link in the nav bar so we need to next to the page we were on.
                 for ($j = 1; $j < $next; $j++) {
-                    if ($el = $this->c->p->find("link=Next")) {
-                        $el->click("link=Next");
-                        $this->c->reloadPage($this->title);
+                    if ($element = $this->container->page->find("link=Next")) {
+                        $element->click("link=Next");
+                        $this->container->reloadPage($this->title);
                     }
                 }
-                if ($el = $this->c->p->find($link)) {
-                    $this->c->l->action($this->title . ': Clicked on link ' . $link);
-                    $el->click($link);
-                    $this->c->reloadPage($this->title);
+                if ($element = $this->container->page->find($link)) {
+                    $this->container->logHelper->action($this->title . ': Clicked on link ' . $link);
+                    $element->click($link);
+                    $this->container->reloadPage($this->title);
                     $this->rateDiscussionPosts();
-                    if ($el = $this->c->p->find("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a")) {
-                        $el->click("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a");
-                        $this->c->reloadPage($this->title);
+                    if ($element = $this->container->page->find("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a")) {
+                        $element->click("//div[@id='page']/div/div[@class='breadcrumb']/ul/li[5]/a");
+                        $this->container->reloadPage($this->title);
                     }
                 }
             }
             /// There is more than one page of forum data
-            if ($el = $this->c->p->find("link=Next")) {
-                $this->c->l->action($this->title . ': Clicked on Next page');
-                $el->click("link=Next");
-                $this->c->reloadPage($this->title);
+            if ($element = $this->container->page->find("link=Next")) {
+                $this->container->logHelper->action($this->title . ': Clicked on Next page');
+                $element->click("link=Next");
+                $this->container->reloadPage($this->title);
                 $next++;
             } else {
                 $next = false;
@@ -230,7 +230,7 @@ class Discussion {
         /// We need to make sure that the view of the forum is consistant.
         if ($this->selenium->getSelectedLabel("mode_jump") != "Display replies flat, with newest first") {
             $this->selenium->select("mode_jump", "label=Display replies flat, with newest first");
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         }
 
         $tables = $this->selenium->getXpathCount("//table");
@@ -238,7 +238,7 @@ class Discussion {
         for ($tableid = 1; $tableid < $tables; $tableid++) {
             $basexpath = "//table[$tableid]/tbody/tr[2]/td[2]/div[3]";
 
-            if ($el = $this->c->p->find("$basexpath/select")) {
+            if ($element = $this->container->page->find("$basexpath/select")) {
                 $options = $this->selenium->getSelectOptions("$basexpath/select");
                 $label   = "label=" . $options[rand(1, count($options) - 1)];
                 $this->selenium->select("$basexpath/select", $label);
@@ -246,11 +246,11 @@ class Discussion {
         }
 
         /// Skip the forum if there is no button to rate the posts. probably means ajax ratings
-        if ($el = $this->c->p->find("//input[@value='Send in my latest ratings']")) {
-            $el->click("//input[@value='Send in my latest ratings']");
-            $this->c->reloadPage($this->title);
-            $el->click("link=Continue");
-            $this->c->reloadPage($this->title);
+        if ($element = $this->container->page->find("//input[@value='Send in my latest ratings']")) {
+            $element->click("//input[@value='Send in my latest ratings']");
+            $this->container->reloadPage($this->title);
+            $element->click("link=Continue");
+            $this->container->reloadPage($this->title);
         }
     }
 
@@ -258,9 +258,9 @@ class Discussion {
      * This function is used to bookmark or unbookmark a discussion
      */
     public function bookmark() {
-        if ($el = $this->c->p->findLink($this->fburl)) {
-            $this->c->l->action($this->title . ': Bookmarked ' . $this->title);
-            $el->click();
+        if ($element = $this->container->page->findLink($this->flagBookmarkUrl)) {
+            $this->container->logHelper->action($this->title . ': Bookmarked ' . $this->title);
+            $element->click();
         }
     }
 
@@ -268,9 +268,9 @@ class Discussion {
      * This function is used to mark or unmark a discussion as substantative
      */
     public function substantive() {
-        if ($el = $this->c->p->findLink($this->fsurl)) {
-            $this->c->l->action($this->title . ': Marked as substantitive ' . $this->title);
-            $el->click();
+        if ($element = $this->container->page->findLink($this->flagSubstantiveUrl)) {
+            $this->container->logHelper->action($this->title . ': Marked as substantitive ' . $this->title);
+            $element->click();
         }
     }
 
@@ -278,10 +278,10 @@ class Discussion {
      * This function is used to click on the author's profile.
      */
     public function authorProfile() {
-        if ($el = $this->c->p->findLink($this->aurl)) {
-            $this->c->l->action($this->title . ': Visiting ' . $this->author . '\'s profile page');
-            $el->click();
-            $this->c->reloadPage($this->title);
+        if ($element = $this->container->page->findLink($this->authorUrl)) {
+            $this->container->logHelper->action($this->title . ': Visiting ' . $this->author . '\'s profile page');
+            $element->click();
+            $this->container->reloadPage($this->title);
         }
     }
 

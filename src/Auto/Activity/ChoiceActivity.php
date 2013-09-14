@@ -25,12 +25,12 @@ class ChoiceActivity extends Activity {
      */
     public function post() {
         $this->view();
-        if ($save = $this->c->p->findButton('Save my choice')) {
-            if ($answers = $this->c->p->findAll('named', array('radio', 'answer'))) {
+        if ($save = $this->container->page->findButton('Save my choice')) {
+            if ($answers = $this->container->page->findAll('named', array('radio', 'answer'))) {
                 $answers[rand(0, (count($answers) - 1))]->click();
             }
             $save->press();
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         }
     }
 
@@ -39,8 +39,8 @@ class ChoiceActivity extends Activity {
      */
     public function fillOutRequiredFields() {
         for ($i = 0; $i < 5; $i++) {
-            $field = $this->c->p->findField('id_option_' . $i);
-            $field->setValue($this->c->ch->getRandWord());
+            $field = $this->container->page->findField('id_option_' . $i);
+            $field->setValue($this->container->contentHelper->getRandWord());
         }
     }
 }

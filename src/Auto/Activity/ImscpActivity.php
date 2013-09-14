@@ -25,6 +25,6 @@ class ImscpActivity extends Activity {
      * Add the imscp file to the imscp creation screen
      */
     public function fillOutRequiredFields() {
-        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'imscp', 'zip');
+        $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'imscp', 'zip');
     }
 }

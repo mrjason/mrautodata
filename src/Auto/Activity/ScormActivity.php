@@ -25,6 +25,6 @@ class ScormActivity extends Activity {
      * Add the scorm file to the scorm creation screen
      */
     public function fillOutRequiredFields() {
-        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'scorm', 'zip');
+        $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'scorm', 'zip');
     }
 }

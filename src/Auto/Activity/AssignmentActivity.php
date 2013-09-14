@@ -30,73 +30,73 @@ class AssignmentActivity extends Activity {
      */
     public function post() {
         $this->view();
-        if ($btn = $this->c->p->findButton('Add submission')) { /// online assignment
-            $this->onlineText($btn);
-        } else if ($btn = $this->c->p->findButton('Edit my submission')) { /// online edit assignment
-            $this->onlineText($btn);
-        } else if ($btn = $this->c->p->findButton('Upload a file')) { /// single file upload
-            $btn->click();
-            $this->c->reloadPage($this->title);
-            $el = $this->c->p->findButton('Choose a file...');
-            $el->click();
-            $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
-            $save = $this->c->p->findButton('Save changes');
+        if ($button = $this->container->page->findButton('Add submission')) { /// online assignment
+            $this->onlineText($button);
+        } else if ($button = $this->container->page->findButton('Edit my submission')) { /// online edit assignment
+            $this->onlineText($button);
+        } else if ($button = $this->container->page->findButton('Upload a file')) { /// single file upload
+            $button->click();
+            $this->container->reloadPage($this->title);
+            $element = $this->container->page->findButton('Choose a file...');
+            $element->click();
+            $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
+            $save = $this->container->page->findButton('Save changes');
             $save->press();
-            $this->c->reloadPage($this->title); // single file upload has a continue screen we need to wait for reload on this.
-            if ($continue = $this->c->p->findButton('Continue')) {
+            $this->container->reloadPage($this->title); // single file upload has a continue screen we need to wait for reload on this.
+            if ($continue = $this->container->page->findButton('Continue')) {
                 $continue->press();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
             }
-        } else if ($btn = $this->c->p->findButton('Upload files')) { /// advanced file upload
-            $this->advancedFile($btn);
-        } else if ($btn = $this->c->p->findButton('Edit these files')) { /// advanced file upload second submission
-            $this->advancedFile($btn);
+        } else if ($button = $this->container->page->findButton('Upload files')) { /// advanced file upload
+            $this->advancedFile($button);
+        } else if ($button = $this->container->page->findButton('Edit these files')) { /// advanced file upload second submission
+            $this->advancedFile($button);
         }
-        $this->c->reloadPage($this->title);
+        $this->container->reloadPage($this->title);
 
-        if ($sendBtn = $this->c->p->findButton('Send for marking')) {
+        if ($sendBtn = $this->container->page->findButton('Send for marking')) {
             $sendBtn->click();
-            $this->c->reloadPage($this->title);
-            $continue = $this->c->p->findButton('Continue');
+            $this->container->reloadPage($this->title);
+            $continue = $this->container->page->findButton('Continue');
             $continue->click();
-            $this->c->reloadPage($this->title);
+            $this->container->reloadPage($this->title);
         }
     }
 
     /**
      * Post online text
      *
-     * @param \Behat\Mink\NodeElement $btn the \Behat\Mink\NodeElement for the button to click
+     * @param \Behat\Mink\NodeElement $button the \Behat\Mink\NodeElement for the button to click
      */
-    private function onlineText($btn) {
-        $btn->click();
-        $this->c->reloadPage($this->title);
-        if ($editor = $this->c->p->findField('id_text_editor')) {
+    private function onlineText($button) {
+        $button->click();
+        $this->container->reloadPage($this->title);
+        if ($editor = $this->container->page->findField('id_text_editor')) {
             if ($editor->isVisible()) {
-                $editor->setValue($this->c->ch->getRandEssay('html'));
+                $editor->setValue($this->container->contentHelper->getRandEssay('html'));
             } else {
-                $this->c->l->failure($this->title . ': id_texteditor textarea is not visible');
+                $this->container->logHelper->failure($this->title . ': id_texteditor textarea is not visible');
             }
         }
-        if ($submit = $this->c->p->findButton('id_submitbutton')) {
+        if ($submit = $this->container->page->findButton('id_submitbutton')) {
             $submit->click();
         }
-        $this->c->reloadPage($this->title);
+        $this->container->reloadPage($this->title);
     }
 
     /**
      * Upload a file to an advanced file type
      *
-     * @param \Behat\Mink\NodeElement $btn the \Behat\Mink\NodeElement for the button to click
+     * @param \Behat\Mink\NodeElement $button the \Behat\Mink\NodeElement for the button to click
      */
-    private function advancedFile($btn) {
-        $btn->click();
-        $this->c->reloadPage($this->title);
-        $this->c->ch->uploadRandFile($this->c->cf->filedir, 'math', 'pdf');
-        if ($save = $this->c->p->findButton('Save changes')) {
+    private function advancedFile($button) {
+        $button->click();
+        $this->container->reloadPage($this->title);
+        $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
+        if ($save = $this->container->page->findButton('Save changes')) {
             $save->press();
         }
-        $this->c->reloadPage($this->title);
+        $this->container->reloadPage($this->title);
     }
 
     /**
@@ -104,47 +104,47 @@ class AssignmentActivity extends Activity {
      *
      * @author Jason Hardin <jason@moodlerooms.com>
      */
-    public function grade() {
-        $this->c->reloadPage($this->title);
-        if ($el = $this->c->p->find('css', 'div.reportlink > a')) {
-            $el->click();
-            $this->c->reloadPage($this->title);
+    /*public function grade() {
+        $this->container->reloadPage($this->title);
+        if ($element = $this->container->page->find('css', 'div.reportlink > a')) {
+            $element->click();
+            $this->container->reloadPage($this->title);
         }
 
-        if (!$btn = $this->c->p->findLink('Update')) {
-            $btn = $this->c->p->findLink('Grade');
+        if (!$button = $this->container->page->findLink('Update')) {
+            $button = $this->container->page->findLink('Grade');
         }
-        $btn->click();
-        $this->c->reloadPage($this->title);
+        $button->click();
+        $this->container->reloadPage($this->title);
 
         $next = true;
-        $this->c->l->action($this->title . ': Grading ' . $this->title);
+        $this->container->logHelper->action($this->title . ': Grading ' . $this->title);
         while ($next) {
-            if ($el = $this->c->p->find('css', 'div#rubric-advancedgrading')) { /// Rubric grading
+            if ($element = $this->container->page->find('css', 'div#rubric-advancedgrading')) { /// Rubric grading
                 $cXpath   = "//table[@id='advancedgrading-criteria']/tbody/tr";
                 $criteria = $this->selenium->getXpathCount($cXpath);
                 for ($c = 1; $c <= $criteria; $c++) {
                     $lXpath = $cXpath . "[$c]/td[@class='levels']/table/tbody/tr/td";
                     $levels = $this->selenium->getXpathCount($lXpath);
                     $click  = $lXpath . '[' . rand(1, $levels) . ']';
-                    $this->c->l->action($this->title . ': clicking criteria level ' . $el->getText()); //($click.'/'));
-                    $el->click($click);
+                    $this->container->logHelper->action($this->title . ': clicking criteria level ' . $element->getText()); //($click.'/'));
+                    $element->click($click);
                 }
 
                 if (rand(0, 1)) {
-                    $this->selenium->type("//textarea[@id='id_submissioncomment_editor']", $this->c->ch->getRandParagraph());
+                    $this->selenium->type("//textarea[@id='id_submissioncomment_editor']", $this->container->contentHelper->getRandParagraph());
                 }
-                if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
-                    $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage($this->title);
+                if ($element = $this->container->page->find("//input[@value='Save and show next']")) {
+                    $element->click("//input[@value='Save and show next']");
+                    $this->container->reloadPage($this->title);
                 } else {
                     $next   = false;
-                    $button = $this->c->p->findButton('Save Changes');
+                    $button = $this->container->page->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                     break;
                 }
-            } else if ($el = $this->c->p->find('css', 'div#checklist-advancedgrading')) { /// Checklist grading
+            } else if ($element = $this->container->page->find('css', 'div#checklist-advancedgrading')) { /// Checklist grading
                 $gXpath = "//div[@id='advancedgrading-groups']/div";
                 $groups = $this->selenium->getXpathCount($gXpath);
                 print("there are $groups groups\n");
@@ -154,26 +154,26 @@ class AssignmentActivity extends Activity {
                     for ($i = 1; $i <= $items; $i++) {
                         if (rand(0, 1)) {
                             $click = $iXpath . '[' . $i . ']';
-                            $this->c->l->action($this->title . ': clicking group item ' . $el->getText()); //($click."/div[@class='definition']"));
-                            $el->click($click);
-                            if (rand(0, 1) && $el = $this->c->p->find($click . "/div[@class='remark']/textarea")) {
-                                $this->selenium->type($click . "/div[@class='remark']/textarea", $this->c->ch->getRandParagraph());
+                            $this->container->logHelper->action($this->title . ': clicking group item ' . $element->getText()); //($click."/div[@class='definition']"));
+                            $element->click($click);
+                            if (rand(0, 1) && $element = $this->container->page->find($click . "/div[@class='remark']/textarea")) {
+                                $this->selenium->type($click . "/div[@class='remark']/textarea", $this->container->contentHelper->getRandParagraph());
                             }
                         }
                     }
                     if (rand(0, 1)) {
-                        $this->selenium->type($click . "/div[@class='remark']/textarea", $this->c->ch->getRandParagraph());
+                        $this->selenium->type($click . "/div[@class='remark']/textarea", $this->container->contentHelper->getRandParagraph());
                     }
                 }
 
-                if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
-                    $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage($this->title);
+                if ($element = $this->container->page->find("//input[@value='Save and show next']")) {
+                    $element->click("//input[@value='Save and show next']");
+                    $this->container->reloadPage($this->title);
                 } else {
                     $next   = false;
-                    $button = $this->c->p->findButton('Save Changes');
+                    $button = $this->container->page->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                     break;
                 }
             } else {
@@ -181,28 +181,28 @@ class AssignmentActivity extends Activity {
                 $selects   = $this->selenium->getXpathCount($baseXpath . 'div'); /// last div is current grade
                 for ($i = 1; $i < $selects; $i++) {
                     $selectXpath = $baseXpath . "div[$i]/div[2]/select";
-                    if ($el = $this->c->p->find($selectXpath)) {
+                    if ($element = $this->container->page->find($selectXpath)) {
                         $options = $this->selenium->getSelectOptions($selectXpath);
                         $option  = $options[rand(1, count($options) - 1)];
-                        $this->c->l->action($this->title . ': Selecting ' . $option);
+                        $this->container->logHelper->action($this->title . ': Selecting ' . $option);
                         $this->selenium->select($selectXpath, "label=$option");
                     }
                 }
 
-                $this->selenium->type("//textarea[@id='id_submissioncomment_editor']", $this->c->ch->getRandParagraph());
+                $this->selenium->type("//textarea[@id='id_submissioncomment_editor']", $this->container->contentHelper->getRandParagraph());
 
-                if ($el = $this->c->p->find("//input[@value='Save and show next']")) {
-                    $el->click("//input[@value='Save and show next']");
-                    $this->c->reloadPage($this->title);
+                if ($element = $this->container->page->find("//input[@value='Save and show next']")) {
+                    $element->click("//input[@value='Save and show next']");
+                    $this->container->reloadPage($this->title);
                 } else {
                     $next   = false;
-                    $button = $this->c->p->findButton('Save Changes');
+                    $button = $this->container->page->findButton('Save Changes');
                     $button->click();
-                    $this->c->reloadPage($this->title);
+                    $this->container->reloadPage($this->title);
                     break;
                 }
             }
         }
-    }
+    }*/
 
 }

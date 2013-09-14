@@ -26,22 +26,22 @@ class GlossaryActivity extends Activity {
     public function post() {
         $this->view();
 
-        if ($el = $this->c->p->findButton('Add a new entry')) {
-            $el->click();
-            $this->c->l->action($this->title . ': Ading glossary entry to ' . $this->title);
-            $this->c->reloadPage($this->title);
-            if ($concept = $this->c->p->findField('concept')) {
-                $concept->setValue($this->c->ch->getRandWord());
+        if ($element = $this->container->page->findButton('Add a new entry')) {
+            $element->click();
+            $this->container->logHelper->action($this->title . ': Ading glossary entry to ' . $this->title);
+            $this->container->reloadPage($this->title);
+            if ($concept = $this->container->page->findField('concept')) {
+                $concept->setValue($this->container->contentHelper->getRandWord());
             }
-            if ($field = $this->c->p->findField('id_definition_editor')) {
-                $field->setValue($this->c->ch->getRandSentence('html'));
+            if ($field = $this->container->page->findField('id_definition_editor')) {
+                $field->setValue($this->container->contentHelper->getRandSentence('html'));
             }
-            if ($keyword = $this->c->p->findField('id_aliases')) {
-                $keyword->setValue($this->c->ch->getRandWord());
+            if ($keyword = $this->container->page->findField('id_aliases')) {
+                $keyword->setValue($this->container->contentHelper->getRandWord());
             }
-            if ($button = $this->c->p->findButton('Save changes')) {
+            if ($button = $this->container->page->findButton('Save changes')) {
                 $button->click();
-                $this->c->reloadPage($this->title);
+                $this->container->reloadPage($this->title);
             }
         }
     }

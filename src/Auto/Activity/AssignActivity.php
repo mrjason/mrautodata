@@ -104,11 +104,11 @@ class AssignActivity extends Activity {
                         $this->leaveRemarks($remarks);
                     } else if($gradeform = $this->container->page->find('css', '#guide-advancedgrading')) { /// marking guide'
                         $this->container->logHelper->action($this->title . ': Grading with marking guide grading form');
-                        $scores = $gradingform->findAll('css','.score');
+                        $scores = $gradeform->findAll('css','.score');
                         foreach($scores as $score){
                             $maxGrade = $score->find('css','.criteriondescriptionscore');
                             $grade = rand(0,$maxGrade->getText());
-                            $field = $score->findField('text');
+                            $field = $score->find('css','input');
                             $field->setValue((string)$grade);
                             $this->container->logHelper->action($this->title . ': Entering grade '.$grade);
                         }

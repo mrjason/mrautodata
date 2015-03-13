@@ -1,7 +1,6 @@
 <?php
 /**
  * SiteHelper class
- *
  * @package    Helper
  * @subpackage SiteHelper
  * @author     Jason Hardin <jason@moodlerooms.com>
@@ -13,7 +12,6 @@ use Symfony\Component\Console\Helper\Helper;
 
 /**
  * Used to contain gather information about the site to be processed
- *
  * @package    Helper
  * @subpackage Site
  * @author     Jason Hardin <jason@moodlerooms.com>
@@ -29,7 +27,7 @@ class SiteHelper extends Helper {
      * @return bool
      */
     public function getSiteAsArray($alias) {
-        $staticsite = $this->getHelper('config')->get('sites', $alias);
+        $staticsite = $this->getHelperSet()->get('config')->get('sites', $alias);
         if (isset($staticsite)) {
             return $staticsite;
         } else {

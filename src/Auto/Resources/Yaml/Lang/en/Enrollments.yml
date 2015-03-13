@@ -1,0 +1,444 @@
+- user: student
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student
+  course: Physics (F15)
+  group: Group A
+  role: student
+- user: student
+  course: English Writing (F15)
+  group: Group A
+  role: student
+- user: student
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student36
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student37
+  course: English Writing (F15)
+  group: Group A
+  role: student
+- user: student2
+  course: English Writing (F15)
+  group: Group A
+  role: student
+- user: student3
+  course: English Writing (F15)
+  group: Group B
+  role: student
+- user: student36
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student37
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student35
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student33
+  course: English Writing (F15)
+  group: Group A
+  role: student
+- user: student32
+  course: English Writing (F15)
+  group: Group A
+  role: student
+- user: student31
+  course: English Writing (F15)
+  group: Group B
+  role: student
+- user: student4
+  course: English Writing (F15)
+  group: Group B
+  role: student
+- user: student5
+  course: English Writing (F15)
+  group: Group B
+  role: student
+- user: student6
+  course: English Writing (F15)
+  group: Group B
+  role: student
+- user: student7
+  course: English Writing (F15)
+  group: Group C
+  role: student
+- user: student8
+  course: English Writing (F15)
+  group: Group C
+  role: student
+- user: student9
+  course: English Writing (F15)
+  group: Group C
+  role: student
+- user: student10
+  course: English Writing (F15)
+  group: Group C
+  role: student
+- user: student11
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student12
+  course: Human Anatomy (F15)
+  group: Group A
+  role: student
+- user: student13
+  course: Human Anatomy (F15)
+  group: Group B
+  role: student
+- user: student14
+  course: Human Anatomy (F15)
+  group: Group B
+  role: student
+- user: student15
+  course: Human Anatomy (F15)
+  group: Group C
+  role: student
+- user: student16
+  course: Human Anatomy (F15)
+  group: Group C
+  role: student
+- user: student17
+  course: Human Anatomy (F15)
+  group: Group C
+  role: student
+- user: student18
+  course: Physics (F15)
+  group: Group A
+  role: student
+- user: student19
+  course: Physics (F15)
+  group: Group A
+  role: student
+- user: student20
+  course: Physics (F15)
+  group: Group A
+  role: student
+- user: student21
+  course: Physics (F15)
+  group: Group B
+  role: student
+- user: student22
+  course: Physics (F15)
+  group: Group B
+  role: student
+- user: student23
+  course: Physics (F15)
+  group: Group B
+  role: student
+- user: student24
+  course: Physics (F15)
+  group: Group C
+  role: student
+- user: student25
+  course: Physics (F15)
+  group: Group C
+  role: student
+- user: student26
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student27
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student28
+  course: World Cultures (F15)
+  group: Group B
+  role: student
+- user: student29
+  course: World Cultures (F15)
+  group: Group B
+  role: student
+- user: student30
+  course: World Cultures (F15)
+  group: Group C
+  role: student
+- user: student31
+  course: World Cultures (F15)
+  group: Group C
+  role: student
+- user: student1
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student2
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student3
+  course: Human Anatomy (S14)
+  group: Group A
+  role: student
+- user: student4
+  course: Human Anatomy (S14)
+  group: Group C
+  role: student
+- user: student5
+  course: World Cultures (S14)
+  group: Group A
+  role: student
+- user: student6
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student7
+  course: Human Anatomy (S14)
+  group: Group B
+  role: student
+- user: student8
+  course: World Cultures (S14)
+  group: Group B
+  role: student
+- user: student9
+  course: Physics (S14)
+  group: Group A
+  role: student
+- user: student10
+  course: Human Anatomy (S14)
+  group: Group A
+  role: student
+- user: student11
+  course: World Cultures (S14)
+  group: Group C
+  role: student
+- user: student12
+  course: Human Anatomy (S14)
+  group: Group B
+  role: student
+- user: student13
+  course: World Cultures (S14)
+  group: Group A
+  role: student
+- user: student14
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student15
+  course: English Writing (S14)
+  group: Group A
+  role: student
+- user: student16
+  course: Human Anatomy (S14)
+  group: Group B
+  role: student
+- user: student17
+  course: World Cultures (S14)
+  group: Group A
+  role: student
+- user: student18
+  course: English Writing (S14)
+  group: Group A
+  role: student
+- user: student19
+  course: English Writing (S14)
+  group: Group B
+  role: student
+- user: student20
+  course: English Writing (S14)
+  group: Group C
+  role: student
+- user: student21
+  course: Human Anatomy (S14)
+  group: Group B
+  role: student
+- user: student22
+  course: Human Anatomy (S14)
+  group: Group A
+  role: student
+- user: student23
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student24
+  course: Human Anatomy (S14)
+  group: Group C
+  role: student
+- user: student25
+  course: Human Anatomy (S14)
+  group: Group B
+  role: student
+- user: student26
+  course: World Cultures (S14)
+  group: Group A
+  role: student
+- user: student27
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student28
+  course: English Writing (S14)
+  group: Group B
+  role: student
+- user: student29
+  course: English Writing (S14)
+  group: Group A
+  role: student
+- user: student30
+  course: Physics (S14)
+  group: Group C
+  role: student
+- user: student31
+  course: English Writing (S14)
+  group: Group B
+  role: student
+- user: student2
+  course: Physics (F14)
+  group: Group C
+  role: student
+- user: student3
+  course: Physics (F14)
+  group: Group C
+  role: student
+- user: student4
+  course: Human Anatomy (F14)
+  group: Group B
+  role: student
+- user: student5
+  course: Physics (F14)
+  group: Group A
+  role: student
+- user: student6
+  course: Human Anatomy (F14)
+  group: Group C
+  role: student
+- user: student7
+  course: Human Anatomy (F14)
+  group: Group A
+  role: student
+- user: student8
+  course: Physics (F14)
+  group: Group C
+  role: student
+- user: student9
+  course: English Writing (F14)
+  group: World Cultures (F14)
+  role: student
+- user: student10
+  course: World Cultures (F15)
+  group: Group B
+  role: student
+- user: student11
+  course: Physics (F14)
+  group: Group A
+  role: student
+- user: student12
+  course: Human Anatomy (F14)
+  group: Group C
+  role: student
+- user: student13
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student14
+  course: English Writing (F14)
+  group: Group A
+  role: student
+- user: student15
+  course: Human Anatomy (F14)
+  group: Group B
+  role: student
+- user: student16
+  course: English Writing (F14)
+  group: Group C
+  role: student
+- user: student37
+  course: English Writing (F14)
+  group: World Cultures (F14)
+  role: student
+- user: student36
+  course: World Cultures (F15)
+  group: Group B
+  role: student
+- user: student35
+  course: Physics (F14)
+  group: Group A
+  role: student
+- user: student12
+  course: Human Anatomy (F14)
+  group: Group C
+  role: student
+- user: student34
+  course: World Cultures (F15)
+  group: Group A
+  role: student
+- user: student33
+  course: English Writing (F14)
+  group: Group A
+  role: student
+- user: student32
+  course: Human Anatomy (F14)
+  group: Group B
+  role: student
+- user: student31
+  course: English Writing (F14)
+  group: Group C
+  role: student
+- user: teacher
+  course: Physics (S15)
+  role: teacher
+- user: teacher
+  course: Physics (F15)
+  role: teacher
+- user: teacher
+  course: Physics (S14)
+  role: teacher
+- user: teacher
+  course: Physics (F14)
+  role: teacher
+- user: teacher2
+  course: English Writing (S15)
+  role: teacher
+- user: teacher2
+  course: English Writing (F15)
+  role: teacher
+- user: teacher2
+  course: English Writing (S14)
+  role: teacher
+- user: teacher2
+  course: English Writing (F14)
+  role: teacher
+- user: teacher3
+  course: World Cultures (S15)
+  role: teacher
+- user: teacher3
+  course: World Cultures (F15)
+  role: teacher
+- user: teacher3
+  course: World Cultures (S14)
+  role: teacher
+- user: teacher3
+  course: World Cultures (F14)
+  role: teacher
+- user: teacher4
+  course: Human Anatomy (S15)
+  role: teacher
+- user: teacher4
+  course: Human Anatomy (F15)
+  role: teacher
+- user: teacher4
+  course: Human Anatomy (S14)
+  role: teacher
+- user: teacher4
+  course: Human Anatomy (F14)
+  role: teacher
+- user: teacher5
+  course: World Cultures (S15)
+  role: teacher
+- user: teacher5
+  course: World Cultures (F15)
+  role: teacher
+- user: teacher5
+  course: World Cultures (S14)
+  role: teacher
+- user: teacher5
+  course: World Cultures (F14)
+  role: teacher

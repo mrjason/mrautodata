@@ -8,8 +8,6 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Choice activity class
  */

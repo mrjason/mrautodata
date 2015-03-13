@@ -9,7 +9,6 @@
  */
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Auto\Container;
 use Auto\Joule2;
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,7 +35,7 @@ class TeacherCommand extends Command {
             ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Sets this execution into debug mode only using 1 student and 1 course')
             ->setName('teacher')
             ->setAliases(array('t'))
-            ->setDescription('Intereacts with 50% of all activities in a all courses a teacher is enrolled in for a site. Also attempts to grade the student submissions for interacted with activities.')
+            ->setDescription('Interacts with 50% of all activities in a all courses a teacher is enrolled in for a site. Also attempts to grade the student submissions for interacted with activities.')
             ->setHelp(<<<EOF
 You can request actions be taken on a specific site using the <comment>--site</comment> option:
 
@@ -136,16 +135,16 @@ EOF
 
                         foreach ($activities as $activity) {
                             $grade = rand(60, 100);
-                            if($activity->getType() == 'assign'){
-                            $j2->interactWithActivity($activity, $grade);
-                            $course->view();
+                            if ($activity->getType() == 'assign') {
+                                $j2->interactWithActivity($activity, $grade);
+                                $course->view();
                             }
                         }
                     }
                     $j2->logout();
                 }
                 if ($useconduit) {
-                    $fields['htmleditor'] = '1';
+                    $fields['htmleditor'] = '2';
                     try {
                         $conduit->user($fields, 'update');
                     } catch (Exception $e) {

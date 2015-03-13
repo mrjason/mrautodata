@@ -9,7 +9,6 @@
 
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Auto\Container;
 use Auto\Joule2;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * SetupSiteCommand enrolls the users in the correct courses for the nightly sales process.
@@ -29,13 +29,8 @@ class SetupSiteCommand extends Command {
         $this
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used (should be a alias)', 'all')
             ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'sales')
-            ->addOption('course', 'c', InputOption::VALUE_OPTIONAL, 'Course id start to perform actions on', 'Alg202,Alg 202 Flex')
-            ->addOption('userbegin', 'b', InputOption::VALUE_OPTIONAL, 'User id start to perform actions with', 0)
-            ->addOption('userend', 'e', InputOption::VALUE_OPTIONAL, 'User id end to perform actions with', 10)
-            ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'user')
-            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'The role the user is assigned in a course', 'student')
-            ->addOption('onlycourses', 'o', InputOption::VALUE_NONE, 'only courses')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created', '')
+            ->addOption('language', 'l', InputOption::VALUE_OPTIONAL, 'Sets the for any information entered by the user', 'EN')
             ->setName('setupsite')
             ->setAliases(array('su'))
             ->setDescription('%command.name% executes a series of Conduit RestFul web service requests to setup a site to work with the sales nightly command. The script also logs in as the user and upload a user profile picture.')
@@ -52,25 +47,16 @@ You can request actions be taken on a specific set of site using the <comment>--
 
   <info>.%application.name% %command.name% --type batch1</info>
 
-You can request the user to be enrolled in a specific course(s) using the <comment>--course</comment> option, each course shoudl eb separated by a comma and uses the course shortname:
+You can request that the user's password be set to something specific when adding them to the site by using the <comment>--password</comment> option:
 
-  <info>.%application.name% %command.name% --course MATH203,ACME New Hire Orientation,pptc1</info>
-  
-You can also request the the post fix and number of users created begins at a certain number by using the <comment>--userbegin</comment> option:
+  <info>.%application.name% %command.name% --password demo</info>
 
-  <info>.%application.name% %command.name% --userbegin 0
-    
-You can also request the the post fix and number of users created ends at a certain number minus one by using the <comment>--userend</comment> option:
+You can request that the content posted by the user be made in a specific language by using the <comment>--language</comment>
+option:
 
-  <info>.%application.name% %command.name% --userend 10
-  
-You can also request that all users being created are created using a specific username prefix by using the <comment>--username</comment> option:
+  <info>.%application.name% %command.name% --language EN</info>
 
-  <info>.%application.name% %command.name% --username user</info>
-  
-You can also request that the users are only enrolled in courses but not created or have their profile image uploaded by using the <comment>--onlycourse</comment> option:
-
-  <info>.%application.name% %command.name% --onlycourse</info>
+Languages currently supported are EN = English, ES = Spanish
 EOF
             );
     }
@@ -81,8 +67,12 @@ EOF
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $accounts = ['student'=>37,
+                     'teacher'=>12];
+
         $sitesused = $input->getOption('site');
         $batch     = $input->getOption('type');
+        $yaml = new Parser();
 
         if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
@@ -90,59 +80,74 @@ EOF
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
-        $onlycourses = $input->getOption('onlycourses');
         $conduit     = $this->getHelper('conduit');
-        $role        = $input->getOption('role');
-        $inputcourse = $input->getOption('course');
-        $courses     = explode(',', $inputcourse);
-        $content     = $this->getHelper('content');
-        $groups      = array('Group A', 'Group B', 'Group C');
-        $begin       = $input->getOption('userbegin');
-        $end         = $input->getOption('userend');
+
+        $lang        = $input->getOption('language');
+        try {
+            $courses     = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Courses.yml'));
+        } catch (ParseException $e) {
+            printf("Unable to parse the YAML string: %s", $e->getMessage());
+        }
+
+        try {
+            $enrollments = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Enrollments.yml'));
+        } catch (ParseException $e) {
+            printf("Unable to parse the YAML string: %s", $e->getMessage());
+        }
+
+        try {
+            $groups      = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Groups.yml'));
+        } catch (ParseException $e) {
+            printf("Unable to parse the YAML string: %s", $e->getMessage());
+        }
         $log         = $this->getHelper('log');
         $cfg         = $this->getHelper('config');
-        $j2          = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
-        $username    = $input->getOption('username');
-
-        if (!$password = $input->getOption('password')) {
-            $password = $cfg->get('users', $username);
-        }
+        $content     = $this->getHelper('content');
+        $j2       = new Joule2(new Container($cfg, $content, $log));
 
         $conduit->setToken($cfg->get('conduit', 'token'));
 
         foreach ($sites as $site) {
             print('Setting up site ' . $site->url . "\n");
-
+            $j2->setSite($site);
             $conduit->setUrl($site->url);
-            $user = $this->getHelper('user');
-            if ($begin != $end) {
-                $user->setUserIds(array($begin, $end));
-            }
-            $user->setUsername($username);
-            $user->setPassword($password);
-            $user->setRole($role);
-            $users = $user->getUsers();
+
             foreach ($courses as $useless => $course) {
-                foreach ($groups as $userless => $group) {
-                    $conduit->groups($course, $group);
+                $course['format'] = 'topic';
+                $course['groupmode'] = 1;
+                $course['visible'] = 1;
+                $course['enablecompletion'] = 1;
+                $course['startdate'] = time();
+                $conduit->course($course);
+                foreach($groups as $useless =>$group){
+                    $group['course'] = $course['shortname'];
+                    $conduit->group($group);
                 }
             }
-            if (!$onlycourses) {
-                $j2->setSite($site);
-            }
 
-            foreach ($users as $user) {
-                if (!$onlycourses) {
+        /// Add users to the site, upload picture and enroll them in the courses.
+            foreach($accounts as $username => $value){
+                if (!$password = $input->getOption('password')) {
+                    $password = $cfg->get('users', $username);
+                }
+
+                $user = $this->getHelper('user');
+                $user->loadUsers();
+                $user->setUserIds(array(0, $value));
+                $user->setUsername($username);
+                $user->setPassword($password);
+                $users = $user->getUsers();
+
+                foreach ($users as $user) {
                     $conduituser = array(
                         'username'    => $user->username,
                         'password'    => $password,
-                        'firstname'   => $content->getNameByID($user->index),
-                        'lastname'    => $content->getNameByID($user->index, 'l'),
+                        'firstname'   => $user->firstname,
+                        'lastname'    => $user->lastname,
                         'idnumber'    => $user->id,
                         'email'       => $user->email,
                         'city'        => 'Baltimore, MD',
                         'country'     => 'US',
-                        'htmleditor'  => '1',
                         'trackforums' => '1'
                     );
                     $conduit->user($conduituser, 'update');
@@ -151,19 +156,28 @@ EOF
                         $j2->logout();
                     }
                 }
+            }
 
-                foreach ($courses as $useless => $course) {
-                    $conduit->enroll($user->username, $course, $role);
-                    if (isset($user->group)) {
-                        $conduit->groups_members($course, $user->group, $user->username);
-                    }
+            foreach ($enrollments as $useless => $enrollment) {
+                $enrollment['status'] = 1;
+
+                if(isset($enrollment['group'])){
+                    $group = $enrollment['group'];
+                    unset($enrollment['group']);
+                }
+                $conduit->enroll($enrollment);
+
+                if(isset($group)) {
+                    $groupMember = array(
+                        'group'  => $group,
+                        'user'   => $enrollment['user'],
+                        'course' => $enrollment['course']
+                    );
+                    $conduit->group_member($groupMember);
                 }
             }
-
-            if (!$onlycourses) {
-                $j2->teardown();
-                $j2->cleanup();
-            }
+            $j2->teardown();
+            $j2->cleanup();
         }
     }
 }

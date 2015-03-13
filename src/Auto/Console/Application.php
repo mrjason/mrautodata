@@ -5,7 +5,7 @@ namespace Auto\Console;
 use Auto\Auto;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Finder\Finder;
-use \Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Yaml;
 
 class Application extends BaseApplication {
     /**

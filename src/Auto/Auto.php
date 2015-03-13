@@ -26,11 +26,11 @@ class Auto {
             throw new \RuntimeException('Failed to find a directory to store the config file, refer to the README.md');
         }
         $this->setConfigFile($configDir . '/.Autoconfig.yml')
-            ->setDefaultConfigFile(__DIR__ . '/Resources/Yaml/ConfigDefault.yml')
-            ->setEmailAdminsConfigFile(__DIR__ . '/Resources/Yaml/ConfigEmailAdmins.yml')
-            ->setStaticConfigFile(__DIR__ . '/Resources/Yaml/ConfigStatic.yml')
-            ->setSitesConfigFile(__DIR__ . '/Resources/Yaml/ConfigSites.yml')
-            ->setUsersConfigFile(__DIR__ . '/Resources/Yaml/ConfigUsers.yml');
+            ->setDefaultConfigFile(__DIR__ . '/Resources/Yaml/Config/ConfigDefault.yml')
+            ->setEmailAdminsConfigFile(__DIR__ . '/Resources/Yaml/Config/ConfigEmailAdmins.yml')
+            ->setStaticConfigFile(__DIR__ . '/Resources/Yaml/Config/ConfigStatic.yml')
+            ->setSitesConfigFile(__DIR__ . '/Resources/Yaml/Config/ConfigSites.yml')
+            ->setUsersConfigFile(__DIR__ . '/Resources/Yaml/Config/ConfigUsers.yml');
     }
 
     /**

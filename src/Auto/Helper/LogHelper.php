@@ -45,12 +45,12 @@ class LogHelper extends Helper {
      * Load up the Log helper with the directory
      */
     public function init() {
-        $this->containerfg    = $this->getHelperSet()->get('config');
-        $this->dir    = $this->containerfg->get('dirs', 'log');
-        $transport    = \Swift_SmtpTransport::newInstance($this->containerfg->get('mail', 'host'), $this->containerfg->get('mail', 'port'), $this->containerfg->get('mail', 'secure'))
+        $this->containerfg = $this->getHelperSet()->get('config');
+        $this->dir         = $this->containerfg->get('dirs', 'log');
+        $transport         = \Swift_SmtpTransport::newInstance($this->containerfg->get('mail', 'host'), $this->containerfg->get('mail', 'port'), $this->containerfg->get('mail', 'secure'))
             ->setUsername($this->containerfg->get('mail', 'username'))
             ->setPassword($this->containerfg->get('mail', 'password'));
-        $this->mailer = \Swift_Mailer::newInstance($transport);
+        $this->mailer      = \Swift_Mailer::newInstance($transport);
     }
 
     /**
@@ -189,16 +189,15 @@ class LogHelper extends Helper {
 
     /**
      * Given a site object check if there the site failed.  Failure is defined by a site not having created an action file or having created a failure log file.
-     *
      * @return bool|string
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function failed() {
         if (!file_exists($this->site->afile)) {
-            return 'action file doesn\'t exist named: '. $this->site->afile;
+            return 'action file doesn\'t exist named: ' . $this->site->afile;
         }
-        if(file_exists($this->site->ffile)) {
-            return 'failure file does exist named: '.$this->site->ffile;
+        if (file_exists($this->site->ffile)) {
+            return 'failure file does exist named: ' . $this->site->ffile;
         }
 
         return false;

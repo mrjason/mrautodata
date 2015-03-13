@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * Numerical question type class.
  */
@@ -45,7 +43,7 @@ class NumericalQuestion extends Question {
         return false;
     }
 
-    public function getRandomAnswer(){
+    public function getRandomAnswer() {
         $this->answer = (string)rand(0, 5);
         $this->container->logHelper->action($this->title . ': Creating random answer');
     }

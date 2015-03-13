@@ -9,7 +9,6 @@
  */
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Auto\Container;
 use Auto\Joule2;
 use Symfony\Component\Console\Input\InputArgument;
@@ -122,7 +121,7 @@ EOF
                         'email'      => $user->email,
                         'city'       => 'Baltimore, MD',
                         'country'    => 'US',
-                        'htmleditor' => '1'
+                        'htmleditor' => '2'
                     );
                     $conduit->updateUser($conduituser);
                     if ($j2->login($user)) {
@@ -154,7 +153,7 @@ EOF
                         'email'      => $user->email,
                         'city'       => 'Baltimore, MD',
                         'country'    => 'US',
-                        'htmleditor' => '1'
+                        'htmleditor' => '2'
                     );
                     $conduit->updateUser($conduituser);
                     if ($j2->login($user)) {

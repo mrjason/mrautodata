@@ -97,10 +97,8 @@ class Joule2 {
             if ($password = $this->container->page->findField('password')) {
                 $password->setValue($this->user->password);
             }
-            if ($button = $this->container->page->findButton('Login')) {
+            if ($button = $this->container->page->findButton('Log in')) {
                 $button->press();
-                $this->container->logHelper->action($this->site->url . ': Logged in with username ' . $this->user->username);
-                return true;
             } else {
                 $this->container->logHelper->failure($this->site->url . ': Could not find login button');
                 return false;
@@ -114,6 +112,8 @@ class Joule2 {
             $this->container->logHelper->failure($this->site->url . ': Error in Login for ' . $this->user->username . ' ' . $this->container->page->find('css', 'div.loginerrors > span')->getText());
             return false;
         }
+        $this->container->logHelper->action($this->site->url . ': Logged in with username ' . $this->user->username);
+        return true;
     }
 
     /**
@@ -140,7 +140,7 @@ class Joule2 {
         $this->container->logHelper->action($this->site->url . ': Getting all courses');
         /// Lets try my Moodle first as this seems the most common list of courses that Sale directors don't change.
         $this->container->visit('/my');
-        $courses   = array();
+        $courses        = array();
         $elementCourses = $this->container->page->findAll('css', 'div.course_title > h2.title > a');
 
         $coursecount = count($elementCourses) + 1;
@@ -148,8 +148,8 @@ class Joule2 {
         /// If My moodle had nothing lets try the front page for the list of courses.
         if ($coursecount == 1) {
             $this->container->visit();
-            $elementCourses   = $this->container->page->findAll('css', 'div.coursebox > div.info > h3 > a');
-            $coursecount = count($elementCourses) + 1;
+            $elementCourses = $this->container->page->findAll('css', 'div.coursebox > div.info > h3 > a');
+            $coursecount    = count($elementCourses) + 1;
         }
 
         if ($coursecount > 1) {
@@ -157,10 +157,10 @@ class Joule2 {
                 $url       = $element->getAttribute('href');
                 $ids       = preg_split('/id=/', $url);
                 $options   = array(
-                    'container'        => $this->container,
-                    'url'      => $url,
-                    'fullname' => $element->getText(),
-                    'id'       => $ids[1]
+                    'container' => $this->container,
+                    'url'       => $url,
+                    'fullname'  => $element->getText(),
+                    'id'        => $ids[1]
                 );
                 $course    = new \Auto\Course\Course($options);
                 $courses[] = $course;
@@ -188,13 +188,13 @@ class Joule2 {
      * Executes the interact method of the activity object passed.
      *
      * @param object $activity The activity object to interact with.
-     * @param int $grade The grade to give the activity.
+     * @param int    $grade    The grade to give the activity.
      *
      * @return bool
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     public function interactWithActivity($activity, $grade) {
-        switch($this->user->role){
+        switch ($this->user->role) {
             case 'teacher':
                 $activity->teacherInteract($grade);
                 break;
@@ -239,17 +239,23 @@ class Joule2 {
      * @param $filename The file to be uploaded in the demo files directory
      */
     public function addProfilePicture($filename) {
-        try {
-            $this->container->logHelper->action($this->site->url . ': Editing Profile');
-            $this->container->visit('/user/edit.php');
-            $this->container->contentHelper->addFile($this->container->cfg->filedir . '/' . $filename);
-            $button = $this->container->page->findButton('Update profile');
-
-            $button->press();
-        } catch (Exception $e) {
-            //do nothing because the likely issue is an alert that we can't handle.
+        $fullpathfile = $this->container->cfg->filedir . '/' . $filename;
+        if(file_exists($fullpathfile)) {
+            try {
+                $this->container->logHelper->action($this->site->url . ': Editing Profile');
+                $this->container->visit('/user/edit.php');
+                $pictureLink = $this->container->page->find('css', '#id_moodle_picture a');
+                $pictureLink->click();
+                $this->container->reloadPage($this->site->url);
+                $this->container->contentHelper->addFile($fullpathfile);
+                $this->container->session->wait(5000);
+                $button = $this->container->page->findButton('Update profile');
+                $button->press();
+            } catch (Exception $e) {
+                //do nothing because the likely issue is an alert that we can't handle.
+            }
+            $this->container->reloadPage($this->site->url);
         }
-        $this->container->reloadPage($this->site->url);
     }
 
     /**

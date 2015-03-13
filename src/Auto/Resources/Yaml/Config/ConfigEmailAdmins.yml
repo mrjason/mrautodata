@@ -1,0 +1,7 @@
+emailadmins:
+  admin1:
+    email: "jason@moodlerooms.com"
+    name: "Jason Hardin"
+  admin2:
+    email: "abraden@moodlerooms.com"
+    name: "Andy Braden"

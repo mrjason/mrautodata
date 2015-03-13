@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\CalculatedsimpleQuestion;
-
 /**
  * Calculated question type class.
  */

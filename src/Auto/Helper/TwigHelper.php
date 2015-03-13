@@ -2,7 +2,7 @@
 
 namespace Auto\Helper;
 
-use \Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Console\Helper\Helper;
 
 /**
  * @package    Helper
@@ -37,11 +37,11 @@ class TwigHelper extends Helper {
         }
 
         $twig = new \Twig_Environment(new \Twig_Loader_Filesystem($skeletonDir), array(
-                                                                                      'debug'            => true,
-                                                                                      'cache'            => false,
-                                                                                      'strict_variables' => true,
-                                                                                      'Autoescape'       => false,
-                                                                                 ));
+            'debug'            => true,
+            'cache'            => false,
+            'strict_variables' => true,
+            'Autoescape'       => false,
+        ));
 
         file_put_contents($target, $twig->render($template, $parameters));
     }

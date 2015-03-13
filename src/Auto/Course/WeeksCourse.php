@@ -8,8 +8,6 @@
 
 namespace Auto\Course;
 
-use Auto\Course\Course;
-
 /**
  * Base course class for interacting with a course in Moodle.
  */

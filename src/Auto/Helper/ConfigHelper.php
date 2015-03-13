@@ -10,23 +10,20 @@
 
 namespace Auto\Helper;
 
-use \Symfony\Component\Console\Helper\Helper;
-use \Symfony\Component\Yaml\Yaml;
-
-
+use Symfony\Component\Console\Helper\Helper;
 
 /**
  * Class ConfigHelper
- * @package Auto\Helper
+ * @package    Auto\Helper
  * @author     Mark Nielsen <mark@moodlerooms.com>
  */
 class ConfigHelper extends Helper {
     /**
      * Array of configuration options
-     *
      * @var array
      */
     protected $config = array();
+    protected $lang = "EN";
 
     /**
      * Returns the canonical name of this helper.
@@ -51,7 +48,6 @@ class ConfigHelper extends Helper {
 
     /**
      * Return the config variable
-     *
      * @return array
      */
     public function getConfig() {
@@ -91,6 +87,14 @@ class ConfigHelper extends Helper {
         }
 
         return $this->config[$section];
+    }
+
+    public function setLanguage($lang){
+        $this->lang = $lang;
+    }
+
+    public function getLanguage(){
+        return $this->lang;
     }
 }
 

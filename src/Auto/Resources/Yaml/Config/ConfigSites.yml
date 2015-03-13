@@ -1,0 +1,214 @@
+sites:
+  j2:
+    url: joule2.dev
+    type: [local]
+    owner:
+      email: admin@localhost.com
+      name: "Local Admin"
+    sendemail: 0
+  p2:
+    url: preview2.mroomstest.net
+    type: [qa]
+    owner:
+      email: cgreen@moodlerooms.com
+      name: "Cecelia Green"
+    sendemail: 0
+  ac:
+    url: accessibility.mroomstest.net
+    type: [qa]
+  qa2:
+    url: qa2.mroomstest.net
+    type: [qa]
+    owner:
+      email: cgreen@moodlerooms.com
+      name: "Cecelia Green"
+    sendemail: 0
+  corp:
+    url: corporate.mroomstest.net
+    type: [sales,nabatch1,nightly,na,demo]
+    owner:
+      email: andy@moodlerooms.com
+      name: "Andy Braden"
+    sendemail: 0
+  hed:
+    url: hed.mroomstest.net
+    type: [sales,nabatch1,nightly,na,demo]
+    owner:
+      email: andy@moodlerooms.com
+      name: "Andy Braden"
+    sendemail: 0
+  k12:
+    url: k12.mroomstest.net
+    type: [sales,nabatch2,nightly,na,demo]
+    owner:
+      email: andy@moodlerooms.com
+      name: "Andy Braden"
+    sendemail: 0
+  ab:
+    url: andy2.mroomstest.net
+    type: [sales,nabatch2,nightly,na]
+    owner:
+      email: andy@moodlerooms.com
+      name: "Andy Braden"
+    sendemail: 0
+  be:
+    url: beenet-sandbox.mrooms.net
+    type: [sales,apacbatch1,nightly,apac,demo]
+    owner:
+      email: andy@moodlerooms.com
+      name: "Andy Braden"
+    sendemail: 0
+  bk:
+    url: beckywebster.mroomstest.net
+    type: [sales,nabatch3,nightly,na]
+    owner:
+      email: becky@moodlerooms.com
+      name: "Becky Webster"
+    sendemail: 0
+  cft:
+    url: configtest.mroomstest.net
+    type: [support,nabatch4,nightly,na]
+    owner:
+      email: terriann@moodlerooms.com
+      name: "Terri Ann Bennet"
+    sendemail: 0
+  fyl:
+    url: foongyee-sandbox.mrooms.net
+    type: [sales,apacbatch1,nightly,apac]
+    owner:
+      email: FoongYee.Leong@blackboard.com
+      name: "Foong Yee Leong"
+    sendemail: 0
+  gm:
+    url: gleidson-sandbox.mrooms.net
+    type: [sales,lacbatch1,nightly,lac]
+    owner:
+      email: Gleidson.Medeiros@blackboard.com
+      name: "Gleidson L. Medeiros"
+    sendemail: 0
+  rf:
+    url: rfrancus-sandbox.mrooms.net
+    type: [sales,nabatch4,nightly,na]
+    owner:
+      email: rfrancus@moodlerooms.com
+      name: "Ryan Francus"
+    sendemail: 0
+  js:
+    url: jsmith-sandbox.mrooms.net
+    type: [sales,nabatch4,nightly,na]
+    owner:
+      email: jsmith@moodlerooms.com
+      name: "Jessica Smith"
+    sendemail: 0
+  ja:
+    url: judsonaungst.mroomstest.net
+    type: [sales,nabatch6,nightly,na]
+    owner:
+      email: judson@moodlerooms.com
+      name: "Judson Aungst"
+    sendemail: 0
+  jh:
+    url: jhardin-sandbox.mrooms.net
+    type: [sales,nabatch6,nightly,na]
+    owner:
+      email: jason.hardin@blackboard.com
+      name: "Jason Hardin"
+    sendemail: 0
+  jm:
+    url: jessiemerryman.mroomstest.net
+    type: [sales,nabatch7,nightly,na]
+    owner:
+      email: jason.hardin@blackboard.com
+      name: "Jessie Merryman"
+    sendemail: 0
+  lc:
+    url: lcarr-sandbox.mrooms.net
+    type: [sales,emeabatch1,nightly,emea]
+    owner:
+      email: lcarr@moodlerooms.com
+      name: "Lewis Carr"
+    sendemail: 0
+  l2:
+    url: learn2.moodlerooms.com
+    type: [training,nabatch7,nightly,na]
+    owner:
+      email: rdesantis@moodlerooms.com
+      name: "Rebecca Desantis"
+    sendemail: 0
+  lsn:
+    url: lsnext-sandbox.mrooms.net
+    type: [training,nabatch7,nightly,na]
+    owner:
+      email: rdesantis@moodlerooms.com
+      name: "Rebecca Desantis"
+    sendemail: 0
+  mb:
+    url: mbailye-sandbox.mrooms.net
+    type: [sales,apacbatch1,nightly,apac]
+    owner:
+      email: Kahiwa.Sebire@blackboard.com
+      name: "Kahiwa Sebire"
+    sendemail: 0
+  nc:
+    url: ncobb-sandbox.mrooms.net
+    type: [sales,emeabatch1,nightly,emea]
+    owner:
+      email: ncobb@moodlerooms.com
+      name: "Nathan Cobb"
+    sendemail: 0
+  ra:
+    url: randary-sandbox.mrooms.net
+    type: [sales,nabatch6,nightly,apac]
+    owner:
+      email: rebecca.andary@blackboard.com
+      name: "Rebecca Andary"
+    sendemail: 0
+  sh:
+    url: shutton-sandbox.mrooms.net
+    type: [sales,emeabatch1,nightly,emea]
+    owner:
+      email: Stewart.Hutton@blackboard.com
+      name: "Stewart Hutton"
+    sendemail: 0
+  th:
+    url: tommyhermann.mroomstest.net
+    type: [sales,nabatch9,nightly,na]
+    owner:
+      email: thermann@moodlerooms.com
+      name: "Thomas Hermann"
+    sendemail: 0
+  tv:
+    url: thavey2.mrooms.net
+    type: [sales,nabatch10,nightly,na]
+    owner:
+      email: thavey@moodlerooms.com
+      name: "Trevor Havey"
+    sendemail: 0
+  ts:
+    url: tstike2.mroomstest.net
+    type: [marketing,nabatch10,nightly,na]
+    owner:
+      email: tstike@moodlerooms.com
+      name: "Tyler Stike"
+    sendemail: 0
+  d2c:
+    url: demo2corp.moodlerooms.com
+    type: [public,demo]
+    owner:
+      email: jason.hardin@blackboard.com
+      name: "Jason Hardin"
+    sendemail: 0
+  d2h:
+    url: demo2hied.moodlerooms.com
+    type: [public,demo]
+    owner:
+      email: jason.hardin@blackboard.com
+      name: "Jason Hardin"
+    sendemail: 0
+  d2k:
+    url: demo2k12.moodlerooms.com
+    type: [public,demo]
+    owner:
+      email: jason.hardin@blackboard.com
+      name: "Jason Hardin"
+    sendemail: 0

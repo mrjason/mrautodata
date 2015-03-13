@@ -8,8 +8,6 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Moodle 2.3 assignment activity.
  * @todo Add grading support
@@ -27,24 +25,28 @@ class AssignActivity extends Activity {
     public function post() {
         $this->view();
         $buttonName = 'Add submission';
-        $button = $this->container->page->findButton($buttonName);
+        $button     = $this->container->page->findButton($buttonName);
 
         if (!$button) {
             $buttonName = 'Edit my submission';
-            $button = $this->container->page->findButton($buttonName);
+            $button     = $this->container->page->findButton($buttonName);
         }
 
         if ($button) {
             $button->press();
-            $this->container->logHelper->action($this->title . ': Clicked button '.$buttonName);
+            $this->container->logHelper->action($this->title . ': Clicked button ' . $buttonName);
             $this->container->reloadPage($this->title);
+
+            $editor = $this->container->page->find('css', '.editor_atto_content');
+            $editor->setValue($this->container->contentHelper->getRandEssay('html'));
+            /*
             if ($editor = $this->container->page->findField('id_onlinetext_editor')) {
                 if ($editor->isVisible()) {
                     $editor->setValue($this->container->contentHelper->getRandEssay('html'));
                 } else {
                     $this->container->logHelper->failure($this->title . ': id_onlinetext_editor textarea is not visible');
                 }
-            }
+            }*/
             $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
             if ($save = $this->container->page->findButton('Save changes')) {
                 $save->press();
@@ -55,64 +57,64 @@ class AssignActivity extends Activity {
         }
     }
 
-    public function teacherInteract($grade){
+    public function teacherInteract($grade) {
         $this->view();
         $this->grade($grade);
     }
 
-    public function grade($grade){
-        if($link = $this->container->page->find('css','.submissionlinks > a')){
+    public function grade($grade) {
+        if ($link = $this->container->page->find('css', '.submissionlinks > a')) {
             $link->click();
             $this->container->logHelper->action($this->title . ': Viewing grading and submissions screen');
             $this->container->reloadPage($this->title);
             $gradeButtons = $this->container->page->findAll('css', 'td.cell.c5 > a');
-            if(!empty($gradeButtons[0])){
+            if (!empty($gradeButtons[0])) {
                 $gradeButtons[0]->click();
                 $this->container->logHelper->action($this->title . ': Navigating to grade first student');
                 $this->container->reloadPage($this->title);
 
                 $next = true;
-                while($next){
-                    if($field = $this->container->page->findField('grade')){ // standard grading
+                while ($next) {
+                    if ($field = $this->container->page->findField('grade')) { // standard grading
                         $this->container->logHelper->action($this->title . ': Grading standard way');
-                        $label = $this->container->page->find('css','#fitem_id_grade .fitemtitle > label');
+                        $label    = $this->container->page->find('css', '#fitem_id_grade .fitemtitle > label');
                         $maxGrade = str_replace('Grade out of ', '', $label->getText());
-                        $grade = rand(0,$maxGrade);
+                        $grade    = rand(0, $maxGrade);
                         $field->setValue((string)$grade);
-                        $this->container->logHelper->action($this->title . ': Setting grade to '.$grade);
+                        $this->container->logHelper->action($this->title . ': Setting grade to ' . $grade);
                     } else if ($gradeform = $this->container->page->find('css', '#rubric-advancedgrading')) { /// Rubric grading
                         $this->container->logHelper->action($this->title . ': Grading with rubric grading form');
-                        $criterion = $gradeform->findAll('css','.criterion');
-                        foreach($criterion as $criteria){
-                            $levels = $criteria->findAll('css','.level');
-                            $count = count($levels)-1;
-                            $selectedLevel = rand(0,$count);
+                        $criterion = $gradeform->findAll('css', '.criterion');
+                        foreach ($criterion as $criteria) {
+                            $levels        = $criteria->findAll('css', '.level');
+                            $count         = count($levels) - 1;
+                            $selectedLevel = rand(0, $count);
                             $levels[$selectedLevel]->click();
-                            $this->container->logHelper->action($this->title . ': Clicking level '.$selectedLevel);
+                            $this->container->logHelper->action($this->title . ': Clicking level ' . $selectedLevel);
                         }
-                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $remarks = $gradeform->findAll('css', '.remark textarea');
                         $this->leaveRemarks($remarks);
                     } else if ($gradeform = $this->container->page->find('css', '#checklist-advancedgrading')) { /// Checklist grading
                         $this->container->logHelper->action($this->title . ': Grading with checklist grading form');
-                        $items = $gradeform->findAll('css','.item');
+                        $items = $gradeform->findAll('css', '.item');
                         foreach ($items as $item) {
-                            if(rand(0,1)){
+                            if (rand(0, 1)) {
                                 $item->click();
                             }
                         }
-                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $remarks = $gradeform->findAll('css', '.remark textarea');
                         $this->leaveRemarks($remarks);
-                    } else if($gradeform = $this->container->page->find('css', '#guide-advancedgrading')) { /// marking guide'
+                    } else if ($gradeform = $this->container->page->find('css', '#guide-advancedgrading')) { /// marking guide'
                         $this->container->logHelper->action($this->title . ': Grading with marking guide grading form');
-                        $scores = $gradeform->findAll('css','.score');
-                        foreach($scores as $score){
-                            $maxGrade = $score->find('css','.criteriondescriptionscore');
-                            $grade = rand(0,$maxGrade->getText());
-                            $field = $score->find('css','input');
+                        $scores = $gradeform->findAll('css', '.score');
+                        foreach ($scores as $score) {
+                            $maxGrade = $score->find('css', '.criteriondescriptionscore');
+                            $grade    = rand(0, $maxGrade->getText());
+                            $field    = $score->find('css', 'input');
                             $field->setValue((string)$grade);
-                            $this->container->logHelper->action($this->title . ': Entering grade '.$grade);
+                            $this->container->logHelper->action($this->title . ': Entering grade ' . $grade);
                         }
-                        $remarks = $gradeform->findAll('css','.remark textarea');
+                        $remarks = $gradeform->findAll('css', '.remark textarea');
                         $this->leaveRemarks($remarks);
                     }
 
@@ -126,12 +128,12 @@ class AssignActivity extends Activity {
                         }
                     }
 
-                    if (($fileFeedback = $this->container->page->find('css','#header_file')) && rand(0, 50) == 0) {
+                    if (($fileFeedback = $this->container->page->find('css', '#header_file')) && rand(0, 50) == 0) {
                         $this->container->logHelper->action($this->title . ': Leaving file feedback');
                         $this->container->contentHelper->uploadRandFile($this->container->cfg->filedir, 'math', 'pdf');
                     }
 
-                    if($button = $this->container->page->findButton('Save and show next')){
+                    if ($button = $this->container->page->findButton('Save and show next')) {
                         $this->container->reloadPage($this->title);
                     } else {
                         $next   = false;
@@ -144,9 +146,9 @@ class AssignActivity extends Activity {
         }
     }
 
-    public function leaveRemarks($remarks){
-        foreach($remarks as $remark){
-            if(rand(0,10) == 0){
+    public function leaveRemarks($remarks) {
+        foreach ($remarks as $remark) {
+            if (rand(0, 10) == 0) {
                 $this->container->logHelper->action($this->title . ': Leaving a remark');
                 $remark->setValue($this->container->contentHelper->getRandTeacherComment());
             }

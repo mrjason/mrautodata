@@ -9,7 +9,7 @@
 
 namespace Auto\Helper;
 
-use \Symfony\Component\Console\Helper\DialogHelper as BaseDialogHelper;
+use Symfony\Component\Console\Helper\DialogHelper as BaseDialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,9 +40,9 @@ class DialogHelper extends BaseDialogHelper {
         /** @var $formatter \Symfony\Component\Console\Helper\FormatterHelper */
         $formatter = $this->getHelperSet()->get('formatter');
         $output->writeln(array(
-                              '',
-                              $formatter->formatBlock($text, $style, true),
-                              '',
-                         ));
+            '',
+            $formatter->formatBlock($text, $style, true),
+            '',
+        ));
     }
 }

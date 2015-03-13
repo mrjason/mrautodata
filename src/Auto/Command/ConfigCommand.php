@@ -8,7 +8,6 @@
  */
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -81,10 +80,10 @@ EOF
 
         if ($update) {
             $output->writeln(array(
-                                  '',
-                                  '<info>Only configuring missing configurations.</info>',
-                                  '',
-                             ));
+                '',
+                '<info>Only configuring missing configurations.</info>',
+                '',
+            ));
         }
 
         $help = array(
@@ -101,9 +100,9 @@ EOF
             $dialog->writeSection($output, sprintf('Section: [%s]', $section));
             if (!empty($help[$section])) {
                 $output->writeln(array(
-                                      sprintf('<comment>%s</comment>', $help[$section]),
-                                      '',
-                                 ));
+                    sprintf('<comment>%s</comment>', $help[$section]),
+                    '',
+                ));
             }
             $newConfigOptions = array();
             foreach ($configOptions as $configName => $configValue) {
@@ -121,9 +120,9 @@ EOF
                     $newConfigOptions[$configName] = $currentValue;
                 } else {
                     $newConfigOptions[$configName] = $dialog->askAndValidate($output, $dialog->getQuestion(sprintf('%s', $configName), $configValue), array(
-                                                                                                                                                           $validate,
-                                                                                                                                                           'notEmpty'
-                                                                                                                                                      ), false, $configValue);
+                        $validate,
+                        'notEmpty'
+                    ), false, $configValue);
                     $newConfigRead                 = true;
                 }
             }
@@ -134,9 +133,9 @@ EOF
 
         $dialog->writeSection($output, 'Writing to configuration file');
         $output->writeln(array(
-                              'Generated YAML:',
-                              "<comment>$yaml</comment>",
-                         ));
+            'Generated YAML:',
+            "<comment>$yaml</comment>",
+        ));
 
         if (!$newConfigRead) {
             $output->writeln('<info>Didn not read any values from you, skipping writing to file.</info>');

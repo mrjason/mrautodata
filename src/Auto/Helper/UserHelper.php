@@ -9,6 +9,7 @@
 namespace Auto\Helper;
 
 use Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * UserHelper Class to assist with setting up the moodle user data
@@ -16,51 +17,52 @@ use Symfony\Component\Console\Helper\Helper;
 class UserHelper extends Helper {
     /**
      * ids to append to the username
-     *
      * @var array
      */
     private $ids = array();
     /**
      * The username for the user also login
-     *
      * @var string
      */
-    private $username = 'user';
-    /**
-     * The user's role in the Moodle courses
-     *
-     * @var string
-     */
-    private $role = 'student';
+    private $basename = 'user';
     /**
      * The user's password to login with
-     *
      * @var string
      */
     private $password = '';
 
     /**
      * Groups in a course
-     *
      * @var array
      */
     private $groups = array('Group A', 'Group B', 'Group C');
     /**
      * Number of user's to create
-     *
      * @var int
      */
     private $index = 0;
+
     /**
-     * The Moodle role shortname for a student in a course.
-     *
-     * @var array
+     * @var mixed Load of the users file in the YAML resources
      */
-    private $studentroles = array('student');
+    private $names;
+
+    public function loadUsers($lang = "EN"){
+        $yaml = new Parser();
+        $filename =  __DIR__ . '/../Resources/Yaml/Lang/EN/Users.yml';
+
+        if(file_exists(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Users.yml')){
+            $filename = __DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Users.yml';
+        }
+        try {
+            $this->names = $yaml->parse(file_get_contents($filename));
+        } catch (ParseException $e) {
+            printf("Unable to parse the YAML string: %s", $e->getMessage());
+        }
+    }
 
     /**
      * Return An array of users based on the ids assigned or the current username.
-     *
      * @return array Array of User objects.
      */
     public function getUsers() {
@@ -68,37 +70,69 @@ class UserHelper extends Helper {
 
         if (!empty($this->ids)) {
             foreach ($this->ids as $id) {
-                $user           = new \stdClass();
-                $user->username = $this->username . $id;
-                $user->password = $this->password;
-                $user->role     = $this->role;
-                $user->email    = $user->username . '@dev.mroomstest.net';
-                $user->id       = $this->role . $this->username . rand();
-                $user->index    = $id;
-                if (in_array($user->role, $this->studentroles)) {
-                    if ($id < count($this->groups)) {
-                        $user->group = $this->groups[$id];
-                    } else {
-                        $user->group = $this->groups[($id % count($this->groups))];
-                    }
+                if($id > 0) {
+                    $username = $this->basename . ($id+1);
+                } else {
+                    $username = $this->basename;
                 }
+                $name = $this->names[$this->basename][$id];
+
+                $user            = new \stdClass();
+                $user->username  = $username;
+                $user->firstname = $name['firstname'];
+                $user->lastname  = $name['lastname'];
+                $user->password  = $this->password;
+                $user->email     = $username . '@dev.mroomstest.net';
+                $user->id        = $this->basename . rand();
+                $user->index     = $id;
                 $users[] = $user;
             }
         } else {
-            $user           = new \stdClass();
-            $user->username = $this->username;
-            $user->password = $this->password;
-            $user->role     = $this->role;
-            $user->email    = $user->username . '@dev.mroomstest.net';
-            $user->id       = $this->role . $this->username . rand();
-            $user->index    = $this->index;
-            if (in_array($user->role, $this->studentroles)) {
-                $user->group = $this->groups[0];
+            $users = $this->getRandomNamedUsers();
+        }
+        return $users;
+    }
+
+    public function getRandomNamedUsers(){
+        $users = array();
+
+        if (!empty($this->ids)) {
+            foreach ($this->ids as $id) {
+                $randFirst = rand(0, count($this->names['firstname']) - 1);
+                $randLast  = rand(0, count($this->names['lastname']) - 1);
+                if($id > 0) {
+                    $username = $this->basename . $id;
+                } else {
+                    $username = $this->basename;
+                }
+
+                $user            = new \stdClass();
+                $user->username  = $username;
+                $user->firstname = $this->names['firstname'][$randFirst];
+                $user->lastname  = $this->names['lastname'][$randLast];
+                $user->password  = $this->password;
+                $user->email     = $username . '@dev.mroomstest.net';
+                $user->id        = $this->basename . rand();
+                $user->index     = $id;
+                $users[] = $user;
             }
+        } else {
+            $randFirst = rand(0, count($this->names->firstname) - 1);
+            $randLast  = rand(0, count($this->names->lastname) - 1);
+            $user            = new \stdClass();
+
+            $user->username  = $this->basename;
+            $user->firstname = $this->names['firstname'][$randFirst];
+            $user->lastname  = $this->names['lastname'][$randLast];
+            $user->password  = $this->password;
+            $user->email     = $user->username . '@dev.mroomstest.net';
+            $user->id        = $this->basename . rand();
+            $user->index     = $this->index;
 
             $users[] = $user;
         }
         return $users;
+
     }
 
     /**
@@ -107,13 +141,13 @@ class UserHelper extends Helper {
      * @param $username The username or prefix to create users from.
      */
     public function setUsername($username) {
-        $this->username = $username;
+        $this->basename = $username;
     }
 
     /**
      * Set the array of ids to use for creating users.
      *
-     * @param array $ids Ids to be added to the end of the username
+     * @param array $ids        Ids to be added to the end of the username
      * @param bool  $continuous Are the id's continuous and can be looped through?
      */
     public function setUserIds(array $ids, $continuous = true) {
@@ -134,15 +168,6 @@ class UserHelper extends Helper {
      */
     public function setIndex($index) {
         $this->index = $index;
-    }
-
-    /**
-     * Set the user's Moodle shortname role
-     *
-     * @param $role Moodle shortname role
-     */
-    public function setRole($role) {
-        $this->role = $role;
     }
 
     /**

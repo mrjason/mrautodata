@@ -7,10 +7,10 @@
  */
 namespace Auto;
 
-use Behat\Mink\Session,
-    Behat\Mink\Driver\ZombieDriver,
-    Behat\Mink\Driver\SahiDriver,
-    Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Driver\SahiDriver;
+use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Driver\ZombieDriver;
+use Behat\Mink\Session;
 
 /**
  * A Container class to contain all of the variables that are used by the majority of the other classes in Auto.
@@ -40,19 +40,21 @@ class Container {
     /**
      * Constructor for the Container object
      *
-     * @param ConfigHelper  $cfg ConfigHelper object to grab all of the server settings.
-     * @param LogHelper     $logHelper   Create a new LogHelper object and pass it here
-     * @param ContentHelper $contentHelper  ContentHelper object
+     * @param ConfigHelper  $cfg           ConfigHelper object to grab all of the server settings.
+     * @param LogHelper     $logHelper     Create a new LogHelper object and pass it here
+     * @param ContentHelper $contentHelper ContentHelper object
      */
     public function __construct($cfg, $contentHelper, $logHelper) {
+        $this->cfg            = new \stdClass();
         $this->cfg->delay     = $cfg->get('server', 'delay');
         $this->cfg->driver    = $cfg->get('server', 'driver');
         $this->cfg->verbose   = $cfg->get('notifications', 'verbose');
         $this->cfg->emaillogs = $cfg->get('notifications', 'emaillogs');
         $this->cfg->filedir   = $cfg->get('dirs', 'file');
         $this->cfg->ddir      = $cfg->get('dirs', 'download');
-        $this->contentHelper = $contentHelper;
-        $this->logHelper = $logHelper;
+        $this->cfg->lang      = $cfg->getLanguage();
+        $this->contentHelper  = $contentHelper;
+        $this->logHelper      = $logHelper;
         $this->logHelper->init();
 
         try {
@@ -70,7 +72,7 @@ class Container {
             }
             $this->session = new Session($driver);
             $this->session->start();
-            $this->contentHelper->setup($this);
+            $this->contentHelper->setUp($this);
         } catch (Exception $e) {
             $this->logHelper->action($e->msg);
             $this->cleanup();
@@ -115,12 +117,12 @@ class Container {
     /**
      * Simple function to get the page content into the internal page variable. This also checks for a PLD alert dialog and closes it.
      */
-    public function reloadPage($pageTitle ='') {
+    public function reloadPage($pageTitle = '') {
         $this->page = $this->session->getPage();
 
         if ($pldDialog = $this->page->find('css', '#local_pld_alert')) {
-            if($button = $pldDialog->findButton('Close')){
-                $this->logHelper->action($pageTitle.': Closing PLD Alert');
+            if ($button = $pldDialog->findButton('Close')) {
+                $this->logHelper->action($pageTitle . ': Closing PLD Alert');
                 $button->press();
             }
             $this->page = $this->session->getPage();
@@ -134,9 +136,17 @@ class Container {
      * @param string $url the url to go to with a / prefix or the full http://basesiteurl
      */
     public function visit($url = '') {
+        $themename = 'theme=clean';
         if (strripos($url, $this->baseUrl) === false) {
             $url = $this->baseUrl . $url;
         }
+        // Append the theme name in order to use a common theme instead of whatever the admin has set for the site
+        if (strripos('?', $url) === false) {
+            $url = $url . '?' . $themename;
+        } else {
+            $url = $url . '&' . $themename;
+        }
+
         $this->logHelper->action('Visiting ' . $url);
         $this->session->visit($url);
         $this->reloadPage();

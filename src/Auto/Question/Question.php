@@ -78,9 +78,9 @@ class Question {
         $this->answerSetup();
     }
 
-    public function answerSetup(){
+    public function answerSetup() {
         if (!isset($this->answer)) {
-            if(!$this->getAnswer()) {
+            if (!$this->getAnswer()) {
                 $this->getRandomAnswer();
             }
         }
@@ -141,7 +141,8 @@ class Question {
         return false;
     }
 
-    public function getRandomAnswer(){}
+    public function getRandomAnswer() {
+    }
 
     /**
      * Get the Mink object for the check button to check the answer if it exists on the page. Return false if it doesn't exist.
@@ -174,8 +175,7 @@ class Question {
         $this->answer();
     }
 
-
-    public function answerRandomly(){
+    public function answerRandomly() {
         $this->getRandomAnswer();
         $this->answer();
     }
@@ -184,5 +184,6 @@ class Question {
      * Return the field that will be used to answer the question
      * @return bool|\Behat\Mink\Element The field to put the answer in.
      */
-    public function getAnswerField() {}
+    public function getAnswerField() {
+    }
 }

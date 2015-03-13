@@ -8,8 +8,6 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Assignment for Moodle 2.2 class
  */
@@ -101,7 +99,6 @@ class AssignmentActivity extends Activity {
 
     /**
      * This function is used to grade all users assignments in a course.  This doesn't check if a user actually submitted an assignment before grading the assignment.
-     *
      * @author Jason Hardin <jason@moodlerooms.com>
      */
     /*public function grade() {

@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * Calculated Simple question type class.
  */
@@ -30,7 +28,7 @@ class CalculatedsimpleQuestion extends Question {
         if (isset($this->field)) {
             /// I want to replace this with Fabian's expression language https://github.com/symfony/symfony/pull/8913 whenever it
             /// is released
-            eval('$answer = '.$this->answer.';');
+            eval('$answer = ' . $this->answer . ';');
             $this->container->logHelper->action($this->title . ': Answering with answer ' . $this->answer);
             $this->field->setValue((string)$answer);
         }

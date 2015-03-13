@@ -1,0 +1,64 @@
+- fullname: English Writing
+  shortname: English 101 (F15)
+  category: 2015/Fall
+  coursetemplate: English Writing Template
+- fullname: Physics
+  shortname: Physics (F15)
+  category: 2015/Fall
+  coursetemplate: PhysicsTemplate
+- fullname: World Cultures
+  shortname: World Cultures (F15)
+  coursetemplate: World Cultures Template
+  category: 2015/Fall
+- fullname: Human Anatomy
+  shortname: Human Anatomy (F15)
+  coursetemplate: Human Anatomy Template
+  category: 2015/Fall
+- fullname: English Writing
+  shortname: English 101 (S15)
+  category: 2015/Spring
+  coursetemplate: English Writing Template
+- fullname: Physics
+  shortname: Physics (S15)
+  category: 2015/Spring
+  coursetemplate: PhysicsTemplate
+- fullname: World Cultures
+  shortname: World Cultures (S15)
+  coursetemplate: World Cultures Template
+  category: 2015/Spring
+- fullname: Human Anatomy
+  shortname: Human Anatomy (S15)
+  coursetemplate: Human Anatomy Template
+  category: 2015/Spring
+- fullname: English Writing
+  shortname: English Writing (F14)
+  category: 2014/Fall
+  coursetemplate: English Writing Template
+- fullname: Physics
+  shortname: Physics (F14)
+  category: 2014/Fall
+  coursetemplate: PhysicsTemplate
+- fullname: World Cultures
+  shortname: World Cultures (F14)
+  coursetemplate: World Cultures Template
+  category: 2014/Fall
+- fullname: Human Anatomy
+  shortname: Human Anatomy (F14)
+  coursetemplate: Human Anatomy Template
+  category: 2014/Fall
+- fullname: English Writing
+  shortname: English Writing (S14)
+  category: 2014/Spring
+  coursetemplate: English Writing Template
+- fullname: Physics
+  shortname: Physics (S14)
+  category: 2014/Spring
+  coursetemplate: PhysicsTemplate
+- fullname: World Cultures
+  shortname: World Cultures (S14)
+  coursetemplate: World Cultures Template
+  category: 2014/Spring
+- fullname: Human Anatomy
+  shortname: Human Anatomy (S14)
+  coursetemplate: Human Anatomy Template
+  category: 2014/Spring

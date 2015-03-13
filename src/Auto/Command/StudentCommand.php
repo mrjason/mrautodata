@@ -8,7 +8,6 @@
  */
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Auto\Container;
 use Auto\Joule2;
 use Symfony\Component\Console\Input\InputArgument;
@@ -140,7 +139,7 @@ EOF
                     $j2->logout();
                 }
                 if ($useconduit) {
-                    $fields['htmleditor'] = '1';
+                    $fields['htmleditor'] = '2';
                     try {
                         $conduit->user($fields, 'update');
                     } catch (Exception $e) {

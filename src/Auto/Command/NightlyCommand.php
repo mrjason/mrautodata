@@ -10,7 +10,6 @@
 
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Auto\Container;
 use Auto\Joule2;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,7 +30,7 @@ class NightlyCommand extends Command {
             ->addOption('site', 's', InputOption::VALUE_OPTIONAL, 'Specific site to be used, use an alias', 'all')
             ->addOption('batch', 'b', InputOption::VALUE_OPTIONAL, 'Specific batch of sites to be used', 'nightly')
             ->addOption('totalusers', 't', InputOption::VALUE_OPTIONAL, 'Total number of users to be selected from.  Must be a multiple of 7', 7)
-            ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'user')
+            ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'student')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created')
             ->setName('nightly')
             ->setAliases(array('n'))
@@ -75,10 +74,6 @@ EOF
         $cfg        = $this->getHelper('config');
         $j2         = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
         $useconduit = $cfg->get('conduit', 'enabled');
-        if ($useconduit) {
-            $conduit = $this->getHelper('conduit');
-            $conduit->setToken($cfg->get('conduit', 'token'));
-        }
         $username = $input->getOption('username');
         if (!$password = $input->getOption('password')) {
             $password = $cfg->get('users', $username);
@@ -86,33 +81,23 @@ EOF
 
         foreach ($sites as $site) {
             try {
-                if ($useconduit) {
-                    $conduit->setUrl($site->url);
-                }
-
                 $j2->setSite($site);
-                $user = $this->getHelper('user');
+                $userHelper = $this->getHelper('user');
 
                 $numusers  = $input->getOption('totalusers') / 7;
                 $dayofweek = date('w') + 1;
                 $startuser = $numusers * $dayofweek;
                 $enduser   = $numusers * $dayofweek + $numusers;
                 $userIds   = array($startuser, $enduser);
-                $user->setUserIds($userIds);
-                $user->setUsername($username);
-                $user->setPassword($password);
+                $userHelper->setUserIds($userIds);
+                $userHelper->setUsername($username);
+                $userHelper->setPassword($password);
 
                 $users = $user->getUsers();
 
                 foreach ($users as $user) {
                     if ($useconduit) {
-                        $fields = array('username' => $user->username, 'htmleditor' => '0');
-                        try {
-                            $conduit->user($fields, 'update');
-                        } catch (Exception $e) {
-                            print_r($e);
-                            /// hopefully this continues without doing anything.
-                        }
+                        //set html editor
                     }
                     if ($j2->login($user)) {
                         $courses = $j2->getCourses(); // Might want to cache this for all users if we can assume they are enrolled in the same courses.
@@ -121,25 +106,20 @@ EOF
                             $course->view();
                             $activities = $course->getActivities();
                             foreach ($activities as $activity) {
-                                $interact = !rand(0, 4);
-                                if ($interact) {
-                                    $grade = rand(60, 100);
-                                    $j2->interactWithActivity($activity, $grade);
-                                    $course->view();
-                                } else {
-                                    $log->action($course->getFullname() . ': Skipped activity ' . $activity->getTitle());
-                                }
+                                // $interact = !rand(0, 4);
+                                //  if ($interact) {
+                                $grade = rand(60, 100);
+                                $j2->interactWithActivity($activity, $grade);
+                                $course->view();
+                                //  } else {
+                                //     $log->action($course->getFullname() . ': Skipped activity ' . $activity->getTitle());
+                                // }
                             }
                         }
                         $j2->logout();
                     }
                     if ($useconduit) {
-                        $fields['htmleditor'] = '1';
-                        try {
-                            $conduit->user($fields, 'update');
-                        } catch (Exception $e) {
-                            /// hopefully this continues without doing anything.
-                        }
+                        //reset html editor
                     }
                 }
                 $j2->teardown();

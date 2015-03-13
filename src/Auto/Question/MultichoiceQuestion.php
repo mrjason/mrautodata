@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * Multichoice question type class.
  */
@@ -27,6 +25,7 @@ class MultichoiceQuestion extends Question {
         $this->answerSetup();
 
         foreach ($this->field as $field) {
+            $this->container->logHelper->action($field->getText());
             if (substr($field->getText(), 3) == $this->answer) {
                 $this->container->logHelper->action($this->title . ': Correctly answering with answer having value ' . $this->answer);
                 $field->click();
@@ -38,15 +37,17 @@ class MultichoiceQuestion extends Question {
      * {@inheritdoc}
      */
     public function getAnswerField() {
-        if ($fields = $this->qdiv->findAll('css', '.answer label')) {
+        if ($fields = $this->qdiv->findAll('css', '.answer > label')) {
+            print_r($fields);
             $this->field = $fields;
             return $this->field;
         }
         return false;
     }
 
-    public function getRandomAnswer(){
+    public function getRandomAnswer() {
         $this->answer = rand(1, count($this->field) - 1);
+        print_r($this->answer);
         $this->container->logHelper->action($this->title . ': Created random answer ' . $this->answer);
     }
 }

@@ -8,8 +8,7 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity,
-    Auto\Discussion;
+use Auto\Discussion;
 
 /**
  * Forum base activity.
@@ -34,7 +33,6 @@ class ForumActivity extends Activity {
     public function interact() {
         $this->container->logHelper->action($this->title . ': Starting interaction');
         $this->view();
-        $this->changeDisplayFormat();
         /// 20% of the time create a discussion
         $createDiscussion = !rand(0, 4);
         if ($createDiscussion) {
@@ -65,24 +63,8 @@ class ForumActivity extends Activity {
      */
     public function post() {
         $this->view();
-        $this->changeDisplayFormat();
         $this->createDiscussion();
         $this->view();
-    }
-
-    /**
-     * This function changes the current view format for advanced forums
-     *
-     * @param string $label The select label to change the forums view tos
-     */
-    public function changeDisplayFormat($label = 'Default') {
-        if ($element = $this->container->page->findField('displayformat')) {
-            $this->container->logHelper->action($this->title. ': Changing display value ' . $element->getValue() . ' to default');
-            if ($element->getValue() != $label) {
-                $element->selectOption($label);
-                $this->container->reloadPage($this->title);
-            }
-        }
     }
 
     /**
@@ -141,16 +123,16 @@ class ForumActivity extends Activity {
             $ids = explode('d=', $url);
 
             $options       = array(
-                'container'      => $this->container,
-                'author' => isset($authorName) ? $authorName : '',
-                'url'    => $url,
-                'authorUrl'   => isset($autherUrl) ? $autherUrl : '',
-                'replyUrl'   => isset($replyUrl) ? $replyUrl : '',
-                'subscribeUrl'   => isset($subscribeUrl) ? $subscribeUrl : '',
-                'flagBookmarkUrl'  => isset($flagBookmarkUrl) ? $flagBookmarkUrl : '',
-                'flagSubstantiveUrl'  => isset($flagSubstantiveUrl) ? $flagSubstantiveUrl : '',
-                'id'     => $ids[1],
-                'title'  => $starter->getText()
+                'container'          => $this->container,
+                'author'             => isset($authorName) ? $authorName : '',
+                'url'                => $url,
+                'authorUrl'          => isset($autherUrl) ? $autherUrl : '',
+                'replyUrl'           => isset($replyUrl) ? $replyUrl : '',
+                'subscribeUrl'       => isset($subscribeUrl) ? $subscribeUrl : '',
+                'flagBookmarkUrl'    => isset($flagBookmarkUrl) ? $flagBookmarkUrl : '',
+                'flagSubstantiveUrl' => isset($flagSubstantiveUrl) ? $flagSubstantiveUrl : '',
+                'id'                 => $ids[1],
+                'title'              => $starter->getText()
             );
             $discussions[] = new Discussion($options);
         }
@@ -158,10 +140,9 @@ class ForumActivity extends Activity {
         return $discussions;
     }
 
-    public function teacherInteract($grade){
+    public function teacherInteract($grade) {
         $this->container->logHelper->action($this->title . ': Starting teacher interaction');
         $this->view();
-        $this->changeDisplayFormat();
         $this->createDiscussion();
         $discussions = $this->getDiscussions();
         foreach ($discussions as $discussion) {

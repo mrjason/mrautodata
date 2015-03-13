@@ -8,8 +8,6 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Url activity class. Extends the activity and does everything by default.
  */

@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * Short answer question type class.
  */
@@ -35,10 +33,10 @@ class MatchQuestion extends Question {
                     $text = $options[$j]->getText();
                     if ($text == $this->answer[$i]) {
                         $this->container->logHelper->action($this->title . ': Correctly answering with answer ' . $this->answer[$i] . ' value is '
-                        . $j);
+                            . $j);
                         $this->field[$i]->selectOption($j);
                     }
-            }
+                }
             }
         } else {
             $this->answerRandomly();
@@ -48,10 +46,9 @@ class MatchQuestion extends Question {
     /**
      * Loop through each field, find the options in the select and then text if the text for the option matches the answer
      * and if so select that value
-     *
      * @author Jason Hardin <jason@moodlerooms.com>
      */
-    public function answerRandomly(){
+    public function answerRandomly() {
         for ($i = 0; $i < count($this->field); $i++) {
             foreach ($this->field as $field) {
                 $options  = $field->findAll('css', 'option');

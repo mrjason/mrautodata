@@ -8,8 +8,6 @@
  */
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Quiz activity class.
  */
@@ -38,7 +36,7 @@ class QuizActivity extends Activity {
             'Re-attempt quiz'
         );
 
-        $grade = rand(50,100);
+        $grade = rand(50, 100);
         /// continue quiz attempt
         foreach ($buttons as $button) {
             if ($button = $this->container->page->findButton($button)) {
@@ -51,7 +49,7 @@ class QuizActivity extends Activity {
 
                     foreach ($questions as $question) {
                         $rand = rand(0, 100);
-                        if($rand <= $grade){
+                        if ($rand <= $grade) {
                             $question->answerCorrect();
                         } else {
                             $question->answerRandomly();
@@ -82,9 +80,9 @@ class QuizActivity extends Activity {
             $classname = '\Auto\Question\\' . ucfirst($classes[1] . 'Question');
             if (class_exists($classname)) {
                 $options     = array(
-                    'container'        => $this->container,
-                    'qdiv'     => $q,
-                    'qclasses' => $classes
+                    'container' => $this->container,
+                    'qdiv'      => $q,
+                    'qclasses'  => $classes
                 );
                 $questions[] = new $classname($options);
             }
@@ -126,7 +124,7 @@ class QuizActivity extends Activity {
         }
     }
 
-    public function teacherInteract($grade){
+    public function teacherInteract($grade) {
         /// This should point to grade
     }
 

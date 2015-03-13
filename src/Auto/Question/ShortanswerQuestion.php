@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * Short answer question type class.
  */
@@ -46,7 +44,7 @@ class ShortanswerQuestion extends Question {
         return false;
     }
 
-    public function getRandomAnswer(){
+    public function getRandomAnswer() {
         $this->answer = $this->container->contentHelper->getRandSentence();
         $this->container->logHelper->action($this->title . ': Created random answer ' . $this->answer);
     }

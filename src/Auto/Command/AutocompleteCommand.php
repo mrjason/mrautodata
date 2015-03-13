@@ -5,7 +5,6 @@
 
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,8 +22,8 @@ class AutocompleteCommand extends Command {
     protected function configure() {
         $this
             ->setDefinition(array(
-                                 new InputArgument('command_name', InputArgument::OPTIONAL, 'A command name to generate Autocomplete options for'),
-                            ))
+                new InputArgument('command_name', InputArgument::OPTIONAL, 'A command name to generate Autocomplete options for'),
+            ))
             ->setName('Autocomplete')
             ->setDescription('Helps with Autocompletion')
             ->setHelp(<<<EOT

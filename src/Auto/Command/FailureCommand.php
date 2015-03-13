@@ -8,7 +8,6 @@
  */
 namespace Auto\Command;
 
-use Auto\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -63,10 +62,10 @@ EOF
         foreach ($sites as $site) {
             $log->setSite($site);
             if ($reason = $log->failed()) {
-                $failure = new \stdClass();
-                $failure->site = $site->url;
+                $failure         = new \stdClass();
+                $failure->site   = $site->url;
                 $failure->reason = $reason;
-                $failures[] = $failure;
+                $failures[]      = $failure;
             } else {
                 $log->delete();
             }
@@ -89,7 +88,7 @@ EOF
             $msg = '<p>The following sites failed for the listed reason:</p><ul>';
 
             foreach ($failures as $failure) {
-                $msg .= '<li>' . $failure->site . ' failed because '.$failure->reason.'</il>';
+                $msg .= '<li>' . $failure->site . ' failed because ' . $failure->reason . '</il>';
             }
             $msg .= '</ul>';
             $log->send($subject, $msg, $to);

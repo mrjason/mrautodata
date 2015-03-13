@@ -8,8 +8,6 @@
  */
 namespace Auto\Question;
 
-use Auto\Question\Question;
-
 /**
  * True False question type class.
  */
@@ -51,7 +49,7 @@ class TruefalseQuestion extends Question {
         return false;
     }
 
-    public function getRandomAnswer(){
+    public function getRandomAnswer() {
         $this->answer = rand(0, 1);
         $this->container->logHelper->action($this->title . ': Created random answer ' . $this->answer);
     }

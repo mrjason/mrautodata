@@ -68,7 +68,7 @@ class Discussion {
      * View the discussion within a forum
      */
     public function view() {
-        $this->container->logHelper->action($this->title. ': Viewing discussion');
+        $this->container->logHelper->action($this->title . ': Viewing discussion');
         $this->container->visit($this->url);
     }
 
@@ -96,7 +96,7 @@ class Discussion {
             $this->container->reloadPage($this->title);
             $this->post($type, $subject);
         } else {
-            $this->container->logHelper->action($this->title. ': Could not find any discussion button to click on');
+            $this->container->logHelper->action($this->title . ': Could not find any discussion button to click on');
         }
     }
 
@@ -154,7 +154,7 @@ class Discussion {
     public function randReply() {
         if ($posts = $this->container->page->findAll('css', 'div.forumpost')) {
             $rand = rand(0, (count($posts) - 1));
-            $this->container->logHelper->action($this->title. ': Replying to the ' . $rand . ' reply link');
+            $this->container->logHelper->action($this->title . ': Replying to the ' . $rand . ' reply link');
             if ($reply = $posts[$rand]->findLink('Reply')) {
                 $reply->click();
                 $this->container->reloadPage($this->title);
@@ -285,7 +285,7 @@ class Discussion {
         }
     }
 
-    public function getTitle(){
+    public function getTitle() {
         return $this->title;
     }
 }

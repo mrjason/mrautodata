@@ -21,7 +21,7 @@ class Activity {
     /**
      * @var string the value for the id attribute for the link in the course
      */
-    protected $courseLinkId;
+    protected $cssid;
     /**
      * @var string the title of the activity
      */
@@ -84,7 +84,7 @@ class Activity {
         $this->post();
     }
 
-    public function teacherInteract($grade){
+    public function teacherInteract($grade) {
         /// Usually the teacher does nothing unless overridden
     }
 
@@ -193,7 +193,8 @@ class Activity {
      * @return bool Return the link object or false if the link doesn't exist on the page.
      */
     public function getCourseLink() {
-        if ($li = $this->container->page->find('css', '#' . $this->courseLinkId)) {
+        $this->container->logHelper->action($this->cssid);
+        if ($li = $this->container->page->find('css', '#' . $this->cssid)) {
             if ($link = $li->findLink($this->title)) {
                 return $link;
             }
@@ -224,7 +225,7 @@ class Activity {
      * @param string $cssId
      */
     public function setCssId($cssId) {
-        $this->courseLinkId = $cssId;
+        $this->cssid = $cssId;
     }
 
     /**
@@ -232,7 +233,7 @@ class Activity {
      * @return string The id attribute for the course link to the activity
      */
     public function getCssId() {
-        return $this->courseLinkId;
+        return $this->cssid;
     }
 
     /**
@@ -252,7 +253,7 @@ class Activity {
         return $this->title;
     }
 
-    public function getType(){
+    public function getType() {
         return $this->type;
     }
 }

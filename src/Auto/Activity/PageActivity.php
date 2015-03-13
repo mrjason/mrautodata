@@ -9,8 +9,6 @@
 
 namespace Auto\Activity;
 
-use Auto\Activity\Activity;
-
 /**
  * Page activity class. Extends the activity and does everything by default.
  */

@@ -8,7 +8,7 @@
  */
 namespace Auto\Helper;
 
-use \Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Console\Helper\Helper;
 
 /**
  * Validates the configuration values.

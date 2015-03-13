@@ -72,39 +72,21 @@ class ConduitHelper extends Helper {
     /**
      * Course Conduit web service interactions happen in this method
      *
-     * @param \stdClass $course A course object with the variables that are needed to perform the action on the course
-     * @param string    $action Create, update or delete action on the couse
+     * @param array $fields fields to be passed to conduit.
+     * @param string    $action Create, update or delete action on the course
      *
      * @return bool|string Response from the server
      * @throws Exception Exception if there is an exception thrown by Guzzle
      */
-    public function course($course, $action = 'create') {
+    public function course($fields, $action = 'create') {
         $this->service = 'course';
         switch ($action) {
             case 'update':
             case 'create':
-                $fields = array(
-                    'shortname'        => $course->shortname,
-                    'fullname'         => $course->fullname,
-                    'idnumber'         => $course->idnumber,
-                    'format'           => $course->format,
-                    'category'         => $course->category,
-                    'groupmode'        => $course->groupmode,
-                    'visible'          => $course->visible,
-                    'enablecompletion' => $course->enablecompletion,
-                    'coursetemplate'   => $course->coursetemplate
-                );
-                $this->setXML($action, $fields);
-                break;
             case 'delete':
-                $fields = array('shortname' => $course->shortname);
                 $this->setXML($action, $fields);
                 break;
             case 'get_course':
-                $fields = array(
-                    'field' => 'shortname',
-                    'value' => $course->shortname
-                );
                 $this->addPostFields($fields);
                 break;
         }
@@ -128,23 +110,10 @@ class ConduitHelper extends Helper {
      * @return bool|string
      * @throws Exception
      */
-    public function enroll($user, $course, $role, $start = 0, $end = 0) {
+    public function enroll($fields, $action = 'create') {
         $this->service = 'enroll';
-        $fields        = array(
-            'course' => $course,
-            'user'   => $user,
-            'role'   => $role,
-            'status' => '0'
-        );
-        if ($start) {
-            $fields['start'] = $start;
-        }
 
-        if ($end) {
-            $fields['end'] = $end;
-        }
-
-        $this->setXML('create', $fields);
+        $this->setXML($action, $fields);
 
         if ($response = $this->send()) {
             return $response;
@@ -154,23 +123,18 @@ class ConduitHelper extends Helper {
     }
 
     /**
-     * Create, update or delete a group in a course
-     *
-     * @param $course
-     * @param $group
+     * Create, Update or delete groups in a course
+     * @param        $fields
+     * @param string $action
      *
      * @return bool|string
      * @throws Exception
+     * @author Jason Hardin <jason@moodlerooms.com>
      */
-    public function groups($course, $group) {
+    public function group($fields, $action = 'create') {
         $this->service = 'groups';
-        $fields        = array(
-            'course'      => $course,
-            'group'       => $group,
-            'description' => 'This is a student group called ' . $group
-        );
 
-        $this->setXML('create', $fields);
+        $this->setXML($action, $fields);
 
         if ($response = $this->send()) {
             return $response;
@@ -182,22 +146,17 @@ class ConduitHelper extends Helper {
     /**
      * Create, Update or delete group membership in a course.
      *
-     * @param $course
-     * @param $group
-     * @param $user
+     * @param        $fields
+     * @param string $action
      *
      * @return bool|string
      * @throws Exception
+     * @author Jason Hardin <jason@moodlerooms.com>
      */
-    public function groups_members($course, $group, $user) {
+    public function group_member($fields, $action = 'create') {
         $this->service = 'groups_members';
-        $fields        = array(
-            'course' => $course,
-            'group'  => $group,
-            'user'   => $user
-        );
 
-        $this->setXML('create', $fields);
+        $this->setXML($action, $fields);
 
         if ($response = $this->send()) {
             return $response;
@@ -266,15 +225,14 @@ class ConduitHelper extends Helper {
 
     /**
      * Send the webservice request
-     *
      * @return bool|string
      */
     private function send() {
         $this->setBasePostFields();
         $client = new Client('http://' . $this->url . '/blocks/conduit/webservices/rest/', array(
-                                                                                                'curl.CURLOPT_CONNECTTIMEOUT' => 100,
-                                                                                                'curl.CURLOPT_TIMEOUT'        => 60,
-                                                                                           ));
+            'curl.CURLOPT_CONNECTTIMEOUT' => 100,
+            'curl.CURLOPT_TIMEOUT'        => 60,
+        ));
         try {
             $request = $client->post('http://' . $this->url . '/blocks/conduit/webservices/rest/' . $this->service . '.php')
                 ->addPostFields($this->postFields);

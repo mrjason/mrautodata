@@ -32,11 +32,12 @@ class NightlyCommand extends Command {
             ->addOption('totalusers', 't', InputOption::VALUE_OPTIONAL, 'Total number of users to be selected from.  Must be a multiple of 7', 7)
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'Login username perform actions with', 'student')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'Sets the password for the user\'s being created')
+            ->addOption('language', 'l', InputOption::VALUE_OPTIONAL, 'Sets the for any information entered by the user', 'EN')
             ->setName('nightly')
             ->setAliases(array('n'))
             ->setDescription('Command executes a series of Moodle actions for sites and a number of users based on the day of the week.  This is intended to be run nightly to generate report data.')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command executes a series of Moodle actions as a datageneration:
+The <info>%command.name%</info> command executes a series of Moodle actions as a data generation:
 
   <info>%application.name% %command.name%</info>
 
@@ -51,6 +52,20 @@ You can also request actions be taken by a total number of users divided by 7 (u
 You can also request actions be taken by a specific username using the <comment>--username</comment> option:
 
   <info>%application.name% %command.name% site --username user</info>
+
+You can set the password to login as for the user by using the <comment>--password</comment>
+option:
+
+  <info>.%application.name% %command.name% --password foobar</info>
+
+Languages currently supported are EN = English, ES = Spanish, JA = Japanese
+
+You can request that the content posted by the user be made in a specific language by using the <comment>--language</comment>
+option:
+
+  <info>.%application.name% %command.name% --language EN</info>
+
+Languages currently supported are EN = English, ES = Spanish, JA = Japanese
 EOF
             );
     }
@@ -63,20 +78,22 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output) {
         $sitesused = $input->getOption('site');
         $batch     = $input->getOption('batch');
+        $lang      = $input->getOption('language');
+        $username  = $input->getOption('username');
 
         if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
         } else {
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
+$useconduit = 0;
+        $logHelper = $this->getHelper('log');
+        $cfgHelper = $this->getHelper('config');
+        $cfgHelper->setLanguage($lang);
+        $j2  = new Joule2(new Container($cfgHelper, $this->getHelper('content'), $logHelper));
 
-        $log        = $this->getHelper('log');
-        $cfg        = $this->getHelper('config');
-        $j2         = new Joule2(new Container($cfg, $this->getHelper('content'), $log));
-        $useconduit = $cfg->get('conduit', 'enabled');
-        $username = $input->getOption('username');
         if (!$password = $input->getOption('password')) {
-            $password = $cfg->get('users', $username);
+            $password = $cfgHelper->get('users', $username);
         }
 
         foreach ($sites as $site) {
@@ -93,13 +110,11 @@ EOF
                 $userHelper->setUsername($username);
                 $userHelper->setPassword($password);
 
-                $users = $user->getUsers();
+                $users = $userHelper->getUsers();
 
                 foreach ($users as $user) {
-                    if ($useconduit) {
-                        //set html editor
-                    }
                     if ($j2->login($user)) {
+                        $j2->setHtmlEditor('textarea');
                         $courses = $j2->getCourses(); // Might want to cache this for all users if we can assume they are enrolled in the same courses.
 
                         foreach ($courses as $course) {
@@ -108,18 +123,18 @@ EOF
                             foreach ($activities as $activity) {
                                 // $interact = !rand(0, 4);
                                 //  if ($interact) {
-                                $grade = rand(60, 100);
-                                $j2->interactWithActivity($activity, $grade);
-                                $course->view();
+                                if($activity->getType() == 'glossary') {
+                                    $grade = rand(60, 100);
+                                    $j2->interactWithActivity($activity, $grade);
+                                    $course->view();
+                                }
                                 //  } else {
                                 //     $log->action($course->getFullname() . ': Skipped activity ' . $activity->getTitle());
                                 // }
                             }
                         }
+                        $j2->setHtmlEditor('atto');
                         $j2->logout();
-                    }
-                    if ($useconduit) {
-                        //reset html editor
                     }
                 }
                 $j2->teardown();

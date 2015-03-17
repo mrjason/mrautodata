@@ -89,11 +89,11 @@ class ConfigHelper extends Helper {
         return $this->config[$section];
     }
 
-    public function setLanguage($lang){
+    public function setLanguage($lang) {
         $this->lang = $lang;
     }
 
-    public function getLanguage(){
+    public function getLanguage() {
         return $this->lang;
     }
 }

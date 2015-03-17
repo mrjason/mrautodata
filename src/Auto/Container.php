@@ -121,7 +121,7 @@ class Container {
         $this->page = $this->session->getPage();
 
         if ($pldDialog = $this->page->find('css', '#local_pld_alert')) {
-            if ($button = $pldDialog->findButton('Close')) {
+            if ($pldDialog->isVisible() && $button = $pldDialog->findButton('Close')) {
                 $this->logHelper->action($pageTitle . ': Closing PLD Alert');
                 $button->press();
             }

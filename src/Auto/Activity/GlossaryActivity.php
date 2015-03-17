@@ -26,7 +26,7 @@ class GlossaryActivity extends Activity {
 
         if ($element = $this->container->page->findButton('Add a new entry')) {
             $element->click();
-            $this->container->logHelper->action($this->title . ': Ading glossary entry to ' . $this->title);
+            $this->container->logHelper->action($this->title . ': Adding glossary entry to ' . $this->title);
             $this->container->reloadPage($this->title);
             if ($concept = $this->container->page->findField('concept')) {
                 $concept->setValue($this->container->contentHelper->getRandWord());

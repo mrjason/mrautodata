@@ -166,7 +166,7 @@
   course: World Cultures (F15)
   group: Group C
   role: student
-- user: student1
+- user: student32
   course: World Cultures (F15)
   group: Group A
   role: student
@@ -384,61 +384,61 @@
   role: student
 - user: teacher
   course: Physics (S15)
-  role: teacher
+  role: editingteacher
 - user: teacher
   course: Physics (F15)
-  role: teacher
+  role: editingteacher
 - user: teacher
   course: Physics (S14)
-  role: teacher
+  role: editingteacher
 - user: teacher
   course: Physics (F14)
-  role: teacher
+  role: editingteacher
 - user: teacher2
   course: English Writing (S15)
-  role: teacher
+  role: editingteacher
 - user: teacher2
   course: English Writing (F15)
-  role: teacher
+  role: editingteacher
 - user: teacher2
   course: English Writing (S14)
-  role: teacher
+  role: editingteacher
 - user: teacher2
   course: English Writing (F14)
-  role: teacher
+  role: editingteacher
 - user: teacher3
   course: World Cultures (S15)
-  role: teacher
+  role: editingteacher
 - user: teacher3
   course: World Cultures (F15)
-  role: teacher
+  role: editingteacher
 - user: teacher3
   course: World Cultures (S14)
-  role: teacher
+  role: editingteacher
 - user: teacher3
   course: World Cultures (F14)
-  role: teacher
+  role: editingteacher
 - user: teacher4
   course: Human Anatomy (S15)
-  role: teacher
+  role: editingteacher
 - user: teacher4
   course: Human Anatomy (F15)
-  role: teacher
+  role: editingteacher
 - user: teacher4
   course: Human Anatomy (S14)
-  role: teacher
+  role: editingteacher
 - user: teacher4
   course: Human Anatomy (F14)
-  role: teacher
+  role: editingteacher
 - user: teacher5
   course: World Cultures (S15)
-  role: teacher
+  role: editingteacher
 - user: teacher5
   course: World Cultures (F15)
-  role: teacher
+  role: editingteacher
 - user: teacher5
   course: World Cultures (S14)
-  role: teacher
+  role: editingteacher
 - user: teacher5
   course: World Cultures (F14)
-  role: teacher
+  role: editingteacher

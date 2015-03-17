@@ -189,12 +189,13 @@ class Joule2 {
      *
      * @param object $activity The activity object to interact with.
      * @param int    $grade    The grade to give the activity.
+     * @param string $role     The user's role in the course (student or teacher)
      *
      * @return bool
      * @author Jason Hardin <jason@moodlerooms.com>
      */
-    public function interactWithActivity($activity, $grade) {
-        switch ($this->user->role) {
+    public function interactWithActivity($activity, $grade, $role = 'student') {
+        switch ($role) {
             case 'teacher':
                 $activity->teacherInteract($grade);
                 break;
@@ -240,9 +241,10 @@ class Joule2 {
      */
     public function addProfilePicture($filename) {
         $fullpathfile = $this->container->cfg->filedir . '/' . $filename;
-        if(file_exists($fullpathfile)) {
+        if (file_exists($fullpathfile)) {
             try {
-                $this->container->logHelper->action($this->site->url . ': Editing Profile');
+                $this->container->logHelper->action($this->site->url . ': Editing user profile to upload user profile image '
+                    .$filename);
                 $this->container->visit('/user/edit.php');
                 $pictureLink = $this->container->page->find('css', '#id_moodle_picture a');
                 $pictureLink->click();
@@ -256,6 +258,24 @@ class Joule2 {
             }
             $this->container->reloadPage($this->site->url);
         }
+    }
+
+    /**
+     * Set the text editor for the user to allow the script to access the text area and insert HTML text
+     *
+     * @param string $editor Value to be set for the the Moodle select field for the editor (atto, textarea, tinymce)
+     *
+     * @author Jason Hardin <jason@moodlerooms.com>
+     */
+    public function setHtmlEditor($editor){
+        $this->container->logHelper->action($this->site->url . ': Editing user profile setting HTML Editor to '.$editor);
+        $this->container->visit('/user/edit.php');
+
+        $field = $this->container->page->findField('id_preference_htmleditor');
+        $field->selectOption($editor);
+
+        $button = $this->container->page->findButton('Update profile');
+        $button->press();
     }
 
     /**

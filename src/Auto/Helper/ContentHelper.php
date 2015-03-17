@@ -44,7 +44,7 @@ class ContentHelper extends Helper {
      * Setup the helper because construct is called with no variables early on in the Application processing and configuration
      *
      * @param \Auto\Container $c     configured container to access logs and mink script
-     * @param $lang string
+     * @param                 $lang  string
      * @param                 string lang Language to load for content
      */
     public function setUp($c) {
@@ -136,7 +136,7 @@ class ContentHelper extends Helper {
      * @return string
      */
     public function getRandText($type, $output) {
-        $randnum = rand(0, (count($this[$type]) - 1));
+        $randnum = rand(0, (count($this->content[$type]) - 1));
 
         $text = $this->content[$type][$randnum];
 
@@ -153,7 +153,6 @@ class ContentHelper extends Helper {
 
     /**
      * Create a wiki body post in creole
-     *
      * @return string Wiki post
      */
     public function getWikiBody() {

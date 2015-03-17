@@ -56,7 +56,7 @@ option:
 
   <info>.%application.name% %command.name% --language EN</info>
 
-Languages currently supported are EN = English, ES = Spanish
+Languages currently supported are EN = English, ES = Spanish, JA = Japanese
 EOF
             );
     }
@@ -67,12 +67,14 @@ EOF
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $accounts = ['student'=>37,
-                     'teacher'=>12];
+        $accounts = [
+            'student' => 37,
+            'teacher' => 12
+        ];
 
         $sitesused = $input->getOption('site');
         $batch     = $input->getOption('type');
-        $yaml = new Parser();
+        $yaml      = new Parser();
 
         if ($sitesused == 'all') {
             $sites = $this->getHelper('site')->getSites($batch);
@@ -80,11 +82,11 @@ EOF
             $sites = array($this->getHelper('site')->getSiteAsObject($sitesused));
         }
 
-        $conduit     = $this->getHelper('conduit');
+        $conduit = $this->getHelper('conduit');
+        $lang    = $input->getOption('language');
 
-        $lang        = $input->getOption('language');
         try {
-            $courses     = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Courses.yml'));
+            $courses = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Courses.yml'));
         } catch (ParseException $e) {
             printf("Unable to parse the YAML string: %s", $e->getMessage());
         }
@@ -96,14 +98,15 @@ EOF
         }
 
         try {
-            $groups      = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Groups.yml'));
+            $groups = $yaml->parse(file_get_contents(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Groups.yml'));
         } catch (ParseException $e) {
             printf("Unable to parse the YAML string: %s", $e->getMessage());
         }
-        $log         = $this->getHelper('log');
-        $cfg         = $this->getHelper('config');
-        $content     = $this->getHelper('content');
-        $j2       = new Joule2(new Container($cfg, $content, $log));
+
+        $log     = $this->getHelper('log');
+        $cfg     = $this->getHelper('config');
+        $content = $this->getHelper('content');
+        $j2      = new Joule2(new Container($cfg, $content, $log));
 
         $conduit->setToken($cfg->get('conduit', 'token'));
 
@@ -112,21 +115,24 @@ EOF
             $j2->setSite($site);
             $conduit->setUrl($site->url);
 
-            foreach ($courses as $useless => $course) {
-                $course['format'] = 'topic';
-                $course['groupmode'] = 1;
-                $course['visible'] = 1;
-                $course['enablecompletion'] = 1;
-                $course['startdate'] = time();
-                $conduit->course($course);
-                foreach($groups as $useless =>$group){
-                    $group['course'] = $course['shortname'];
-                    $conduit->group($group);
+            foreach ($courses as $id => $course) {
+                $courses[$id]['format']           = 'topics';
+                $courses[$id]['groupmode']        = 1;
+                $courses[$id]['visible']          = 1;
+                $courses[$id]['enablecompletion'] = 1;
+                $courses[$id]['startdate']        = time();
+
+                foreach ($groups as $id => $group) {
+                    $groups[$id]['course'] = $course['shortname'];
                 }
             }
+            $log->action('Creating courses');
+            $conduit->bulkService('course', $courses);
+            $log->action('Creating groups');
+            $conduit->bulkService('groups', $groups);
 
-        /// Add users to the site, upload picture and enroll them in the courses.
-            foreach($accounts as $username => $value){
+            /// Add users to the site, upload picture and enroll them in the courses.
+            foreach ($accounts as $username => $value) {
                 if (!$password = $input->getOption('password')) {
                     $password = $cfg->get('users', $username);
                 }
@@ -150,7 +156,10 @@ EOF
                         'country'     => 'US',
                         'trackforums' => '1'
                     );
-                    $conduit->user($conduituser, 'update');
+
+                    $log->action('Creating user ' . $user->username . ' ' . $user->firstname . ' ' . $user->lastname);
+                    $conduit->user($conduituser);
+
                     if ($j2->login($user)) {
                         $j2->addProfilePicture('userpix/' . $user->username . '.jpg');
                         $j2->logout();
@@ -158,23 +167,28 @@ EOF
                 }
             }
 
-            foreach ($enrollments as $useless => $enrollment) {
-                $enrollment['status'] = 1;
+            $groupMembers = array();
+            foreach ($enrollments as $id => $enrollment) {
+                $enrollments[$id]['status'] = 0;
 
-                if(isset($enrollment['group'])){
+                if (isset($enrollment['group'])) {
                     $group = $enrollment['group'];
-                    unset($enrollment['group']);
+                    unset($enrollments[$id]['group']);
                 }
-                $conduit->enroll($enrollment);
 
-                if(isset($group)) {
-                    $groupMember = array(
+                if (isset($group)) {
+                    $groupMembers[] = array(
                         'group'  => $group,
                         'user'   => $enrollment['user'],
                         'course' => $enrollment['course']
                     );
-                    $conduit->group_member($groupMember);
                 }
+            }
+            $log->action('Creating enrollments');
+            $conduit->bulkService('enroll', $enrollments);
+            if (count($groupMembers) > 0) {
+                $log->action('Creating group members');
+                $conduit->bulkService('groups_members', $groupMembers);
             }
             $j2->teardown();
             $j2->cleanup();

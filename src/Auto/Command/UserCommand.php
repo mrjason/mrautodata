@@ -120,7 +120,7 @@ EOF
                 $userHelper->setUserIds(array($begin, $end));
             }
 
-            if($randomName) {
+            if ($randomName) {
                 $users = $userHelper->getRandomNamedUsers();
             } else {
                 $users = $userHelper->getUsers();

@@ -47,11 +47,11 @@ class UserHelper extends Helper {
      */
     private $names;
 
-    public function loadUsers($lang = "EN"){
-        $yaml = new Parser();
-        $filename =  __DIR__ . '/../Resources/Yaml/Lang/EN/Users.yml';
+    public function loadUsers($lang = "EN") {
+        $yaml     = new Parser();
+        $filename = __DIR__ . '/../Resources/Yaml/Lang/EN/Users.yml';
 
-        if(file_exists(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Users.yml')){
+        if (file_exists(__DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Users.yml')) {
             $filename = __DIR__ . '/../Resources/Yaml/Lang/' . $lang . '/Users.yml';
         }
         try {
@@ -70,8 +70,8 @@ class UserHelper extends Helper {
 
         if (!empty($this->ids)) {
             foreach ($this->ids as $id) {
-                if($id > 0) {
-                    $username = $this->basename . ($id+1);
+                if ($id > 0) {
+                    $username = $this->basename . ($id + 1);
                 } else {
                     $username = $this->basename;
                 }
@@ -85,7 +85,7 @@ class UserHelper extends Helper {
                 $user->email     = $username . '@dev.mroomstest.net';
                 $user->id        = $this->basename . rand();
                 $user->index     = $id;
-                $users[] = $user;
+                $users[]         = $user;
             }
         } else {
             $users = $this->getRandomNamedUsers();
@@ -93,14 +93,14 @@ class UserHelper extends Helper {
         return $users;
     }
 
-    public function getRandomNamedUsers(){
+    public function getRandomNamedUsers() {
         $users = array();
 
         if (!empty($this->ids)) {
             foreach ($this->ids as $id) {
                 $randFirst = rand(0, count($this->names['firstname']) - 1);
                 $randLast  = rand(0, count($this->names['lastname']) - 1);
-                if($id > 0) {
+                if ($id > 0) {
                     $username = $this->basename . $id;
                 } else {
                     $username = $this->basename;
@@ -114,12 +114,12 @@ class UserHelper extends Helper {
                 $user->email     = $username . '@dev.mroomstest.net';
                 $user->id        = $this->basename . rand();
                 $user->index     = $id;
-                $users[] = $user;
+                $users[]         = $user;
             }
         } else {
             $randFirst = rand(0, count($this->names->firstname) - 1);
             $randLast  = rand(0, count($this->names->lastname) - 1);
-            $user            = new \stdClass();
+            $user      = new \stdClass();
 
             $user->username  = $this->basename;
             $user->firstname = $this->names['firstname'][$randFirst];

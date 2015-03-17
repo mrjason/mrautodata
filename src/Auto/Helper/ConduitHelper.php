@@ -72,8 +72,8 @@ class ConduitHelper extends Helper {
     /**
      * Course Conduit web service interactions happen in this method
      *
-     * @param array $fields fields to be passed to conduit.
-     * @param string    $action Create, update or delete action on the course
+     * @param array  $fields fields to be passed to conduit.
+     * @param string $action Create, update or delete action on the course
      *
      * @return bool|string Response from the server
      * @throws Exception Exception if there is an exception thrown by Guzzle
@@ -90,6 +90,27 @@ class ConduitHelper extends Helper {
                 $this->addPostFields($fields);
                 break;
         }
+
+        if ($response = $this->send()) {
+            return $response;
+        } else {
+            throw new Exception($this->exception);
+        }
+    }
+
+    /**
+     * Course Conduit web service interactions happen in this method
+     *
+     * @param string $service    course, user, Enroll, groups, groups_members
+     * @param array  $fieldGroup fields to be passed to conduit.
+     * @param string $action     Create, update or delete action on the course
+     *
+     * @return bool|string Response from the server
+     * @throws Exception Exception if there is an exception thrown by Guzzle
+     */
+    public function bulkService($service, $fieldGroup, $action = 'create') {
+        $this->service = $service;
+        $this->setBulkXML($action, $fieldGroup);
 
         if ($response = $this->send()) {
             return $response;
@@ -124,6 +145,7 @@ class ConduitHelper extends Helper {
 
     /**
      * Create, Update or delete groups in a course
+     *
      * @param        $fields
      * @param string $action
      *
@@ -186,7 +208,7 @@ class ConduitHelper extends Helper {
     }
 
     /**
-     * Gnerate the XML for the webservice call
+     * Generate the XML for the webservice call
      *
      * @param $action
      * @param $fields
@@ -197,6 +219,24 @@ class ConduitHelper extends Helper {
             $this->xml .= '<mapping name="' . $map . '">' . $value . '</mapping>';
         }
         $this->xml .= '</datum></data>';
+    }
+
+    /**
+     * Generate the XML for the webservice call
+     *
+     * @param $action
+     * @param $fieldGroup
+     */
+    private function setBulkXML($action, $fieldGroup) {
+        $this->xml = '<?xml version="1.0" encoding="UTF-8"?><data>';
+        foreach ($fieldGroup as $fields) {
+            $this->xml .= '<datum action="' . $action . '">';
+            foreach ($fields as $map => $value) {
+                $this->xml .= '<mapping name="' . $map . '">' . $value . '</mapping>';
+            }
+            $this->xml .= '</datum>';
+        }
+        $this->xml .= '</data>';
     }
 
     /**
@@ -237,6 +277,9 @@ class ConduitHelper extends Helper {
             $request = $client->post('http://' . $this->url . '/blocks/conduit/webservices/rest/' . $this->service . '.php')
                 ->addPostFields($this->postFields);
         } catch (Guzzle\Http\Exception\BadResponseException $e) {
+            $this->exception = $e;
+            return false;
+        } catch (Guzzle\Http\Exception\CurlException $e) {
             $this->exception = $e;
             return false;
         }
